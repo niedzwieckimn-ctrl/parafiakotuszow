@@ -53,10 +53,14 @@ await mkdir(join(root, 'data'), { recursive: true });
 await writeFile(join(root, 'data', 'admin-content.json'), JSON.stringify(data, null, 2) + '\n');
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
-for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'script.js', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
+for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'script.js', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
   await cp(join(root, filename), join(output, filename));
 }
-for (const folder of ['assets', 'admin', 'data']) {
+for (const folder of ['assets', 'data']) {
   await cp(join(root, folder), join(output, folder), { recursive: true });
+}
+await mkdir(join(output,'admin'),{recursive:true});
+for (const filename of ['index.html','panel.css','panel.mjs','schema.mjs']) {
+  await cp(join(root,'admin',filename),join(output,'admin',filename));
 }
 console.log(`Gotowe: dist/ — ${data.announcements.length} ogłoszeń, ${data.gallery.length} zdjęć, ${data.intentions.length} dni intencji.`);

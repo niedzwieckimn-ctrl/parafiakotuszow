@@ -52,7 +52,6 @@
         <div class="opening-copy">
           <p class="opening-kicker"><img src="assets/muszla-jakubowa.svg" alt="" width="28" height="28"><span id="dailyWordLabel">Słowo otuchy na dziś</span></p>
           <h1 id="dailyWordHeading">Dobrze, że jesteś.</h1>
-          <p class="opening-welcome" id="homeWelcome">Nie musisz nieść wszystkich trosk samotnie. Zatrzymaj się na chwilę.</p>
           <div class="opening-word" id="dailyWordContent" hidden>
             <p class="liturgical-day" id="dailyWordDay"></p>
             <figure class="opening-quote"><blockquote id="dailyWordQuote"></blockquote><figcaption id="dailyWordReference"></figcaption></figure>
@@ -173,7 +172,6 @@
       <div class="important-grid shell-width" aria-label="Najważniejsze sprawy parafialne">
         <a href="#wydarzenia" data-page-link="wydarzenia"><strong>Msze i bieżące intencje →</strong><span>Sprawdź plan nabożeństw i najbliższe intencje.</span></a>
         <a href="#cmentarz" data-page-link="cmentarz"><strong>Cmentarz parafialny →</strong><span>Wyszukiwarka grobów i sprawy cmentarne.</span></a>
-        <a href="https://parafiakotuszow.pl/aktualnosci" target="_blank" rel="noopener"><strong>Oficjalny serwis parafii ↗</strong><span>Publikacje i komunikaty u źródła.</span></a>
       </div>
       <section class="admin-notices shell-width" aria-labelledby="admin-notices-title">
         <div class="section-heading compact section-heading-row">
@@ -417,6 +415,7 @@
       <section class="tour-shell shell-width" aria-label="Interaktywny spacer po kościele">
         <div class="tour-stage" id="tourStage" tabindex="0" aria-label="Widok wirtualnego spaceru. Użyj strzałek w lewo i w prawo, aby zmienić przystanek.">
           <img id="tourImage" src="assets/kosciol-brama.webp" alt="Widok kościoła przez zabytkową bramę" draggable="false">
+          <div id="tourHotspots" class="tour-hotspots" aria-label="Klikalne punkty w widoku kościoła"></div>
           <div class="tour-vignette"></div>
           <div class="tour-topbar">
             <span class="tour-counter"><strong id="tourIndex">01</strong> / <span id="tourTotal">10</span></span>
@@ -429,7 +428,7 @@
             </button>
             </div>
           </div>
-          <div class="drag-hint" id="dragHint">Przybliż zdjęcie, aby obejrzeć detale</div>
+          <div class="drag-hint" id="dragHint">Klikaj punkty w fotografii, aby zwiedzać</div>
         </div>
 
         <div class="tour-console">
@@ -458,10 +457,11 @@
           <div class="section-heading compact"><p class="eyebrow">Dodane przez parafię</p><h2>Galeria wspólnoty</h2></div>
           <div class="community-gallery-grid" id="communityGalleryGrid"></div>
         </div>
-        <p class="tour-note">Dziesięć różnych fotografii świątyni i jej detali, bez zdjęć okolicy. Zobacz cały kadr, przybliż lub uruchom pokaz zdjęć. Ujęcia z jubileuszu są oznaczone datą 2025. Fotograficzna prezentacja — nie panorama 360°. Przybliżanie kółkiem myszy: Ctrl + przewijanie.</p>
+        <p class="tour-note">Klikaj strzałki bezpośrednio w widoku, aby przechodzić między miejscami. Punkty „i” odkrywają detale. Spacer wykorzystuje fotografie — nie jest panoramą 360° ani modelem 3D. Przybliżanie: suwak lub Ctrl + przewijanie.</p>
       </section>
     </section>
   </main>
+  <dialog id="tourDetailDialog" class="tour-detail-dialog" aria-labelledby="tourDetailTitle"><button id="closeTourDetail" type="button" aria-label="Zamknij opis">Zamknij ×</button><h2 id="tourDetailTitle"></h2><p id="tourDetailText"></p><a id="tourDetailSource" target="_blank" rel="noopener">Źródło fotografii</a></dialog>
 
   <dialog class="history-dialog" id="historyDialog" aria-labelledby="historyDialogTitle">
     <button class="dialog-close" id="historyDialogClose" type="button" aria-label="Zamknij">×</button>

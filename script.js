@@ -1,7 +1,8 @@
 import { selectDailyWord, warsawDay } from './calendar.mjs';
 import { historyChapters } from './history-chapters.mjs';
 import { setupJourney } from './journey.mjs';
-import { additionalChurchPhotos } from './church-photos.mjs';
+import { additionalChurchPhotos, suppliedChurchPhotos } from './church-photos.mjs';
+import { setupHotspots } from './tour-hotspots.mjs';
 
 const pageTitles = {
   start: "Parafia św. Jakuba w Kotuszowie",
@@ -341,10 +342,11 @@ const scenes = [
   { image: "assets/kosciol-fasada.webp", alt: "Fasada i wieża kościoła św. Jakuba", kicker: "Przystanek drugi", title: "Fasada i wieża", description: "Czterokondygnacyjna wieża kryje w przyziemiu kruchtę. Ośmioboczny hełm z latarenką góruje nad Kotuszowem.", position: "50% 27%", source: "https://commons.wikimedia.org/wiki/File:Ko%C5%9Bci%C3%B3%C5%82_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" },
   { image: "assets/kosciol-detal-wejscia.webp", alt: "Kamienny portal wejściowy kościoła", kicker: "Przystanek trzeci", title: "Portal i detal kamieniarski", description: "Zatrzymaj się przy wejściu. Jasny kamień, łuk portalu i ślady czasu pokazują materialną historię świątyni.", position: "50% 50%", source: "https://commons.wikimedia.org/wiki/File:Kotuszow_kosciol_zdobienie_wejscia_p8212244.jpg" },
   { image: "assets/kosciol-wnetrze.webp", alt: "Nawa i prezbiterium kościoła św. Jakuba", kicker: "Przystanek czwarty", title: "Nawa i ołtarz", description: "Wnętrze prowadzi wzrok ku ołtarzowi głównemu z obrazem Matki Bożej Łaskawej, zwanej Kotuszowską.", position: "50% 38%", source: "https://commons.wikimedia.org/wiki/File:Wn%C4%99trze_ko%C5%9Bcio%C5%82a_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" },
-  {image:'assets/kosciol-z-lotu-ptaka.webp',alt:'Kościół św. Jakuba w Kotuszowie widziany z lotu ptaka',title:'Świątynia z lotu ptaka',description:'Spójrz na kościół z góry. Widać układ bryły, dachów i otoczenia świątyni. Fotografię publikuje oficjalny serwis parafii; nie podano autora ani daty wykonania.',source:'https://parafiakotuszow.pl',credit:'Serwis parafii Kotuszów · autor zdjęcia niepodany'}
+  {image:'assets/kosciol-z-lotu-ptaka.webp',alt:'Kościół św. Jakuba w Kotuszowie widziany z lotu ptaka',title:'Świątynia z lotu ptaka',description:'Widok z góry pokazuje układ bryły, dachów i otoczenia świątyni. Autor i data wykonania nie zostali podani u źródła.',source:'https://parafiakotuszow.pl',credit:'Źródło fotografii · autor niepodany'}
 ];
 ['EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL', 'EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL'].forEach((credit,index) => { scenes[index].credit = credit; });
 scenes.splice(4,0,...additionalChurchPhotos);
+scenes.push(...suppliedChurchPhotos);
 const baseSceneCount = scenes.length;
 
 const tourStage = document.querySelector("#tourStage");
@@ -368,6 +370,7 @@ let autoTourTimer = null;
 let sceneTimer = null;
 let fitView = true;
 const fitViewButton = document.querySelector('#fitViewButton');
+const hotspots = setupHotspots({stage:tourStage,image:tourImage,scenes,onNavigate:index=>{stopAutoTour();setScene(index);}});
 
 function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
 function renderTransform() {
@@ -375,6 +378,7 @@ function renderTransform() {
   panY = clamp(panY, -(zoom-1)*tourStage.clientHeight/2, (zoom-1)*tourStage.clientHeight/2);
   tourStage.classList.toggle('is-zoomed',zoom>1);
   tourImage.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`;
+  hotspots.align();
 }
 function renderScenePicker() {
   scenePicker.replaceChildren(...scenes.map((scene, index) => {
@@ -407,6 +411,7 @@ function setScene(index) {
   activeScene = (index + scenes.length) % scenes.length;
   const scene = scenes[activeScene];
   tourImage.style.opacity = "0";
+  document.getElementById('tourHotspots').hidden = true;
   window.clearTimeout(sceneTimer);
   sceneTimer = window.setTimeout(() => {
     tourImage.src = scene.image;
@@ -420,6 +425,8 @@ function setScene(index) {
     tourIndex.textContent = String(activeScene + 1).padStart(2, "0");
     resetView();
     tourImage.style.opacity = "1";
+    document.getElementById('tourHotspots').hidden = false;
+    hotspots.render(scene);
   }, 160);
   [...scenePicker.querySelectorAll("[data-scene]")].forEach((card, cardIndex) => {
     const active = cardIndex === activeScene;
@@ -592,7 +599,7 @@ function renderAdminContent(data) {
   if (!announcements.length) {
     const empty = document.createElement('p');
     empty.className = 'empty-state';
-    empty.textContent = 'Nie opublikowano jeszcze nowych ogłoszeń. Zobacz msze i intencje lub sprawdź oficjalny serwis parafii.';
+    empty.textContent = 'Nie opublikowano jeszcze nowych ogłoszeń. Zobacz msze i intencje.';
     noticeList.replaceChildren(empty);
   } else {
     noticeList.replaceChildren(...announcements.map((notice) => {
@@ -695,10 +702,9 @@ function renderDailyWord() {
   document.querySelector('#dailyWordDate').textContent = formatDate(selected.date);
   document.querySelector('#dailyWordReadings').href = selected.url;
   document.querySelector('#dailyWordContent').hidden = !selected.entry;
-  document.querySelector('#homeWelcome').hidden = !!selected.entry;
-  document.querySelector('#dailyWordLabel').textContent = selected.entry ? 'Słowo otuchy na dziś' : 'Dobrze, że jesteś z nami';
+  document.querySelector('#dailyWordLabel').textContent = selected.entry ? 'Słowo otuchy na dziś' : 'Czytania na dziś';
   if (!selected.entry) {
-    document.querySelector('#dailyWordHeading').textContent='Zatrzymaj się.\nJesteś u siebie.';
+    document.querySelector('#dailyWordHeading').textContent='Dobrze, że jesteś.';
     for (const id of ['dailyWordDay','dailyWordQuote','dailyWordReference','dailyWordReflection']) document.getElementById(id).textContent = '';
     return;
   }

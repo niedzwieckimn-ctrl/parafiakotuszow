@@ -1,0 +1,16 @@
+{
+  "name": "parafia-kotuszow",
+  "version": "4.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "admin:secrets": "node tools/admin-secrets.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "11.1.3",
+    "sharp": "0.35.5"
+  }
+}

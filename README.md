@@ -1,8 +1,8 @@
 # Parafia św. Jakuba w Kotuszowie
 
-Strona przygotowana do repozytorium GitHub i publikacji przez Netlify. Kod frontendu nie wymaga bibliotek. Budowanie używa Node.js 22 i polecenia `node build.mjs` (bez npm install).
+Strona przygotowana do repozytorium GitHub i publikacji przez Netlify. Publiczny frontend nie wymaga bibliotek. Budowanie używa Node.js 22 i polecenia `node build.mjs`. Netlify instaluje zależności serwerowego panelu z `package.json` i pliku blokady. Nie wysyłaj `node_modules` do repozytorium.
 
-**Wersja 3: lokalny projekt do oceny wyglądu.** Przed publiczną publikacją należy potwierdzić prawa do 13 nowych materiałów wizualnych, opisanych w `PRAWA-DO-NOWYCH-ZDJEC.md`. Publiczna dostępność zdjęcia i podpis autora nie zastępują zgody. Nie wdrożono strony ani nie zalogowano się do Twoich kont.
+**Wersja 4: własny panel administratora i punkty spaceru.** Przed publiczną publikacją należy potwierdzić prawa do 13 materiałów wizualnych wersji 3 oraz pięciu dostarczonych fotografii (wykaz w `PRAWA-DO-NOWYCH-ZDJEC.md` i `ZRODLA-I-LICENCJE.md`). Publiczna dostępność zdjęcia i podpis autora nie zastępują zgody. Nie wykonano push do GitHub ani wdrożenia na koncie właściciela.
 
 ## Publikacja w Netlify
 
@@ -18,15 +18,9 @@ Publikuj przez połączenie z GitHubem: sam upload statycznego folderu przez Net
 
 Panel jest pod adresem `/admin/`. Pozwala dodawać i zmieniać ogłoszenia, zdjęcia oraz dni z Mszami i intencjami. Zapis trafia do GitHuba, a Netlify publikuje go po zakończeniu kolejnego budowania. To trwa zwykle kilkadziesiąt sekund lub kilka minut.
 
-1. W `admin/config.yml` zamień `TWOJ_LOGIN_GITHUB/parafia-kotuszow` na dokładne `właściciel/repozytorium`. W razie innej gałęzi zmień `branch`.
-2. Na GitHubie wejdź w **Settings → Developer settings → OAuth Apps → New OAuth App**. Jako adres strony wpisz opublikowany adres Netlify lub domenę. **Authorization callback URL** ustaw dokładnie na `https://api.netlify.com/auth/done`.
-3. W Netlify wejdź w **Project configuration → Security → OAuth → Authentication Providers → Install provider → GitHub**. Wpisz tam Client ID i Client Secret utworzonej aplikacji. Sekret wpisujesz wyłącznie w Netlify, nigdy w repozytorium ani plikach strony.
-4. Nadaj osobom redagującym stronę prawo zapisu do repozytorium GitHub. Logowanie do panelu odbywa się ich kontem GitHub; strona nie ma wspólnego hasła.
-5. Po wdrożeniu otwórz `/admin/`, zaloguj się i opublikuj wpis. Gałąź musi pozwalać redaktorowi na zapis. Jeśli włączysz ochronę gałęzi wymagającą PR, skonfiguruj odpowiednio proces redakcyjny w Decap.
+Własny panel używa e-maila i hasła. Nie ładuje Decap ani nie wymaga konta GitHub od redaktora. Autoryzacja, sesje, walidacja i zapis do GitHub działają w Netlify Functions. Sekrety są pobierane wyłącznie z Netlify ENV. Definicja `admin/config.yml` pozostaje jako archiwum pól i nie jest publikowana.
 
-Oficjalne instrukcje: [Decap GitHub backend](https://decapcms.org/docs/github-backend/), [Netlify OAuth](https://docs.netlify.com/manage/security/secure-access-to-sites/oauth-provider-tokens/).
-
-Panel korzysta z Decap CMS 3.16.0 ładowanego z jsDelivr. Nie używa wycofywanego Git Gateway. Logowania i publikacji na Twoim koncie nie można sprawdzić przed podłączeniem repozytorium i OAuth.
+Pełna instrukcja konfiguracji ENV, generowania hasha, tokenu GitHub, testów i wycofania aktualizacji: [ADMIN-INSTRUKCJA.md](ADMIN-INSTRUKCJA.md). Repozytorium docelowe: `niedzwieckim-ctrl/parafiakotuszow`, gałąź `main`. Nie wykonano push ani deploy na Twoim koncie.
 
 ## Obsługa treści
 
@@ -62,7 +56,7 @@ Historia zaczyna się od ośmiu kafelków tematycznych. Dopiero wybór ścieżki
 
 Czytelnia zawiera siedem oryginalnych skanów stron 118–124 z książki Jana Wiśniewskiego (1929, domena publiczna). Nowe fotografie pokazują zniszczenia szkoły, ocalały dom, odbudowę i spotkanie na plebanii z Lechem Wałęsą. Dwie reprodukcje map z 1944 roku mają własne podpisy. Autorzy, daty i źródła są przy opisach; jeżeli źródło nie podało autora lub daty, nie są odgadywane. Prawa nowych materiałów wymagają potwierdzenia przed publicznym wdrożeniem.
 
-Zwiedzanie obejmuje 10 różnych fotografii kościoła i jego detali: bramę, fasadę, portal, nawę, ołtarz, dekorację z muszlą, chór, spojrzenie ku chórowi, elewację boczną i widok z lotu ptaka. Zdjęcia okolicy są wyłącznie w osobnej ścieżce krajobrazowej historii. Ujęcia z jubileuszu mają datę 2025, a nie dzisiejszą. Domyślnie pokazany jest cały kadr. Jest przybliżanie do 2,5×, przesuwanie, pokaz i pełny ekran; Ctrl + kółko zmienia przybliżenie. Na telefonie normalne przewijanie strony działa, dopóki zdjęcie nie zostało przybliżone. Nie jest to panorama 360°.
+Zwiedzanie obejmuje 15 fotografii kościoła i jego detali, w tym pięć dostarczonych przez użytkownika. Klikalne punkty wewnątrz widoku prowadzą od bramy przez wejście i nawę do ołtarza oraz otwierają opisy detali. Punkty pozostają wyrównane do fotografii po zmianie rozmiaru, przybliżeniu i przesunięciu. Zdjęcia okolicy są wyłącznie w osobnej ścieżce krajobrazowej historii. Ujęcia z jubileuszu mają datę 2025, a nie dzisiejszą; dat nowych zdjęć nie odgadywano. Domyślnie pokazany jest cały kadr. Jest przybliżanie do 2,5×, przesuwanie, pokaz i pełny ekran; Ctrl + kółko zmienia przybliżenie. Na telefonie normalne przewijanie strony działa, dopóki zdjęcie nie zostało przybliżone. Jest to spacer fotograficzny, nie panorama 360° ani model 3D.
 
 ## Edycja
 

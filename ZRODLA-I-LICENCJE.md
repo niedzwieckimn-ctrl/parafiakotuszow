@@ -6,7 +6,11 @@ Stan opracowania: 3 października 2026 r.
 
 Dodano 13 nowych zasobów: 11 różnych fotografii oraz 2 reprodukcje map. W zwiedzaniu jest teraz 10 różnych ujęć kościoła i jego detali, bez krajobrazów. Fotografie z jubileuszu mają datę 2025, nie są przedstawiane jako dzisiejsze. Archiwalne materiały przypisano do odpowiadających im tematów.
 
-Nowe źródła: [fotorelacja jubileuszu Bractwa](https://www.szydlow.pl/10-lat-bractwa-jakubowego-w-sluzbie-spolecznosci-lokalnej/) (tekst: Anna Wołczyńska, fotorelacja: Michał Kaczmarczyk wg artykułu), [historia Tomasza Skuzy](https://www.kotuszow.pl/index.php/historia), [Powiat Buski 1939–1945](https://www.powiatbuski1939-1945.pl/straty-materialne-kosciola/) oraz [oficjalny serwis parafii](https://parafiakotuszow.pl).
+Nowe źródła: [fotorelacja jubileuszu Bractwa](https://www.szydlow.pl/10-lat-bractwa-jakubowego-w-sluzbie-spolecznosci-lokalnej/) (tekst: Anna Wołczyńska, fotorelacja: Michał Kaczmarczyk wg artykułu), [historia Tomasza Skuzy](https://www.kotuszow.pl/index.php/historia), [Powiat Buski 1939–1945](https://www.powiatbuski1939-1945.pl/straty-materialne-kosciola/) oraz [źródło fotografii lotniczej](https://parafiakotuszow.pl).
+
+## Materiały przekazane przez użytkownika 3 października 2026
+
+Pięć fotografii: `obraz-maryi-detal.webp`, `liturgia-przy-oltarzu.webp`, `nawa-organy-wspolnota.webp`, `prezbiterium-front.webp`, `kosciol-od-prezbiterium.webp`. Oryginały zachowano bez zmian; wersje WebP służą do wyświetlania na stronie. Autorzy, daty wykonania i zgody na publikację nie zostały przekazane. Nie przypisano tym zdjęciom licencji CC ani nie odgadnięto autorstwa. Dwa pliki o nazwach `dekanat_staszow_16` i `dekanat_staszow_17` odpowiadają zdjęciom przy [opisie parafii w diecezji](https://diecezjasandomierska.pl/kotuszow-sw-jakuba-starszego-apostola/). Przed publiczną publikacją właściciel strony powinien potwierdzić uprawnienie do użycia wszystkich pięciu materiałów i uzupełnić podpisy.
 
 **Status nowych 13 materiałów: brak potwierdzonej publicznej licencji. Są w lokalnym podglądzie; przed publicznym wdrożeniem potrzebne są zgody lub zastąpienie ich materiałami z odpowiednimi prawami.** Pełne przyporządkowanie plików, źródeł i autorstwa jest w [PRAWA-DO-NOWYCH-ZDJEC.md](PRAWA-DO-NOWYCH-ZDJEC.md). Poniższe licencje Commons dotyczą wyłącznie wskazanych tam oryginalnych dziewięciu fotografii i muszli, nie całej paczki.
 
