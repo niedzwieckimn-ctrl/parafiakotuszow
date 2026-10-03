@@ -37,8 +37,8 @@ export function validateContent(name,input) {
     if(field.type==='masses') {
       if(!Array.isArray(value) || !value.length || value.length>30) fail(422,'Dodaj od 1 do 30 Mszy w jednym dniu.');
       result.masses=value.map(mass=>{
-        if(!mass || Object.keys(mass).some(key=>!['time','place','intention'].includes(key)) || typeof mass.time!=='string' || !/^([01]?\d|2[0-3]):[0-5]\d$/.test(mass.time) || !places.includes(mass.place) || typeof mass.intention!=='string' || !mass.intention.trim() || mass.intention.length>4000) fail(422,'Uzupełnij poprawną godzinę, miejsce i intencję każdej Mszy.');
-        return {time:mass.time,place:mass.place,intention:mass.intention.trim()};
+        if(!mass || Object.keys(mass).some(key=>!['time','place','intention'].includes(key)) || typeof mass.time!=='string' || !/^([01]?\d|2[0-3]):[0-5]\d$/.test(mass.time) || !places.includes(mass.place) || (mass.intention!==undefined && (typeof mass.intention!=='string' || mass.intention.length>4000 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(mass.intention)))) fail(422,'Uzupełnij poprawną godzinę i miejsce każdej Mszy.');
+        return {time:mass.time,place:mass.place,intention:(mass.intention||'').trim()};
       });continue;
     }
     if(value===undefined || value==='') {if(!field.optional) fail(422,`Uzupełnij: ${field.label}.`);result[field.name]='';continue;}
