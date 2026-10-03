@@ -73,6 +73,7 @@ collections:
       - {name: date, label: Data, widget: datetime, date_format: 'DD.MM.YYYY', time_format: false, format: 'YYYY-MM-DD'}
       - {name: published, label: Widoczne na stronie, widget: boolean, default: true}
       - {name: category, label: Rodzaj, widget: select, options: [Ogłoszenia, Nabożeństwa, Wydarzenia, Wspólnota], default: Ogłoszenia}
+      - {name: pinned, label: Ważne — pokaż przed pozostałymi ogłoszeniami, widget: boolean, default: false}
       - {name: summary, label: Krótki opis, widget: text}
       - {name: body, label: Pełna treść, widget: text, required: false, hint: 'Każdy akapit zacznij od nowej linii.'}
       - {name: image, label: Zdjęcie lub plakat, widget: image, required: false}
@@ -94,4 +95,4 @@ collections:
       - {name: author, label: Autor lub właściciel zbiorów, widget: string}
       - {name: license, label: Licencja lub zgoda na publikację, widget: string, hint: 'Np. zdjęcie własne parafii lub CC BY-SA 4.0. Dodawaj materiały z prawem do publikacji.'}
       - {name: source, label: Link do źródła, widget: string, required: false, pattern: ['^https?://.+', 'Podaj pełny adres https:// lub http://.']}
-      - {name: w_spacerze, label: Dodaj także jako przystanek spaceru, widget: boolean, default: false}
+      - {name: w_spacerze, label: Dodaj także do zwiedzania kościoła, widget: boolean, default: false, hint: 'Tylko fotografie świątyni, wnętrza i jej detali. Nie dodawaj tutaj zdjęć krajobrazu, okolicy ani innych miejscowości.'}
