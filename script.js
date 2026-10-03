@@ -5,6 +5,13 @@ import { setupJourney } from './journey.mjs';
 import { additionalChurchPhotos, suppliedChurchPhotos } from './church-photos.mjs';
 import { setupHotspots } from './tour-hotspots.mjs';
 import {albumImages,openAlbum,photoCount} from './community-album.mjs';
+import {massSchedule,matchesIntention} from './mass-schedule.mjs';
+import {attachPhotoGestures,openPhoto,setupPhotoLinks} from './photo-viewer.mjs';
+import {setupMobileHome} from './mobile-layout.mjs';
+import {setupPriests} from './priests.mjs';
+
+const mobileHome=setupMobileHome();
+setupPhotoLinks();
 
 const pageTitles = {
   start: "Parafia św. Jakuba w Kotuszowie",
@@ -82,6 +89,7 @@ const SOURCE = {
   niedziela: { label: "Niedziela — Uroczystości jakubowe w Kotuszowie", url: "https://www.niedziela.pl/artykul/60036/nd/Uroczystosci-jakubowe-w-Kotuszowie" },
   ekai: { label: "eKAI — wprowadzenie relikwii św. Jakuba", url: "https://www.ekai.pl/kotuszow-wprowadzenie-relikwii-sw-jakuba-do-zabytkowej-swiatyni-d604578/" },
 };
+setupPriests({getHistory:id=>historyEntries.find(entry=>entry.id===id),sources:SOURCE});
 
 const historyEntries = [
   {
@@ -303,9 +311,9 @@ function makeHistoryFigure(chapter) {
     const button = document.createElement('button');
     button.type = 'button'; button.className = 'scan-opener';
     button.setAttribute('aria-label', `Otwórz oryginalny skan strony ${chapter.page}`);
-    button.append(image); button.addEventListener('click', () => showScan(chapter.page));
+    button.append(image); button.addEventListener('click', () => openPhoto({image:chapter.image,title:chapter.caption,credit:chapter.credit}));
     figure.append(button);
-  } else figure.append(image);
+  } else {const button=document.createElement('button');button.type='button';button.className='scan-opener';button.setAttribute('aria-label','Pokaż obraz: '+chapter.caption);button.append(image);button.addEventListener('click',()=>openPhoto({image:chapter.image,title:chapter.caption,credit:chapter.credit}));figure.append(button);}
   const caption = document.createElement('figcaption');
   const text = document.createElement('span'); text.textContent = chapter.caption;
   const source = document.createElement('a');
@@ -365,23 +373,13 @@ const dragHint = document.querySelector("#dragHint");
 const autoTourButton = document.querySelector("#autoTourButton");
 let activeScene = 0;
 let zoom = Number(zoomRange.value);
-let panX = 0;
-let panY = 0;
-let dragStart = null;
 let autoTourTimer = null;
 let sceneTimer = null;
 let fitView = true;
 const fitViewButton = document.querySelector('#fitViewButton');
-const hotspots = setupHotspots({stage:tourStage,image:tourImage,scenes,onNavigate:index=>{stopAutoTour();setScene(index);}});
+const hotspots = setupHotspots({stage:tourStage,image:tourImage,scenes,onNavigate:index=>{stopAutoTour();setScene(index);},onDetail:point=>{stopAutoTour();tourGesture.zoomToPoint(point,3);dragHint.textContent=point.label+' — zbliżenie';}});
+const tourGesture=attachPhotoGestures(tourStage,tourImage,state=>{zoom=state.zoom;zoomRange.value=String(state.zoom);hotspots.align();});
 
-function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
-function renderTransform() {
-  panX = clamp(panX, -(zoom-1)*tourStage.clientWidth/2, (zoom-1)*tourStage.clientWidth/2);
-  panY = clamp(panY, -(zoom-1)*tourStage.clientHeight/2, (zoom-1)*tourStage.clientHeight/2);
-  tourStage.classList.toggle('is-zoomed',zoom>1);
-  tourImage.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`;
-  hotspots.align();
-}
 function renderScenePicker() {
   scenePicker.replaceChildren(...scenes.map((scene, index) => {
     const button = document.createElement("button");
@@ -403,11 +401,10 @@ function renderScenePicker() {
   tourTotal.textContent = String(scenes.length).padStart(2, "0");
 }
 function resetView() {
+  tourGesture.reset();
   zoom = 1;
   zoomRange.value = String(zoom);
-  panX = 0;
-  panY = 0;
-  renderTransform();
+  dragHint.textContent='Przybliż zdjęcie i przesuń, aby obejrzeć detale';
 }
 function setScene(index) {
   activeScene = (index + scenes.length) % scenes.length;
@@ -459,33 +456,9 @@ autoTourButton.addEventListener("click", () => {
   autoTourButton.textContent = "■ Stop";
   autoTourTimer = window.setInterval(() => setScene(activeScene + 1), 6000);
 });
-zoomRange.addEventListener("input", () => { zoom = Number(zoomRange.value); renderTransform(); });
-tourStage.addEventListener("pointerdown", (event) => {
-  if (event.target.closest("button") || zoom<=1) return;
-  dragStart = { x: event.clientX - panX, y: event.clientY - panY };
-  tourStage.setPointerCapture(event.pointerId);
-  dragHint.classList.add("is-hidden");
-});
-tourStage.addEventListener("pointermove", (event) => {
-  if (!dragStart) return;
-  panX = event.clientX - dragStart.x;
-  panY = event.clientY - dragStart.y;
-  renderTransform();
-});
-function endDrag(event) {
-  if (!dragStart) return;
-  dragStart = null;
-  if (tourStage.hasPointerCapture(event.pointerId)) tourStage.releasePointerCapture(event.pointerId);
-}
-tourStage.addEventListener("pointerup", endDrag);
-tourStage.addEventListener("pointercancel", endDrag);
-tourStage.addEventListener("wheel", (event) => {
-  if (!event.ctrlKey) return;
-  event.preventDefault();
-  zoom = clamp(zoom + (event.deltaY > 0 ? -0.05 : 0.05), 1, 2.5);
-  zoomRange.value = String(zoom);
-  renderTransform();
-}, { passive: false });
+zoomRange.addEventListener("input", () => tourGesture.setZoom(Number(zoomRange.value)));
+document.querySelector('#scanImage').addEventListener('click',()=>openPhoto({image:document.querySelector('#scanImage').getAttribute('src'),title:document.querySelector('#scanTitle').textContent,credit:SOURCE.book.label}));
+tourStage.addEventListener('pointerdown',event=>{if(!event.target.closest('button')&&autoTourTimer)stopAutoTour();});
 document.querySelector("#fullscreenButton").addEventListener("click", async () => {
   try {
     if (!document.fullscreenElement) await tourStage.requestFullscreen();
@@ -714,7 +687,7 @@ function renderDailyWord() {
   if (!selected.entry) {
     document.querySelector('#dailyWordHeading').textContent='Dzisiejsze czytania';
     for (const id of ['dailyWordDay','dailyWordQuote','dailyWordReference','dailyWordReflection']) document.getElementById(id).textContent = '';
-    return;
+    mobileHome.refresh();return;
   }
   const entry = selected.entry;
   document.querySelector('#dailyWordDay').textContent = entry.liturgicalDay;
@@ -726,6 +699,7 @@ function renderDailyWord() {
     document.querySelector('#dailyWordTextSource').href=entry.readingsUrl;
     document.querySelector('#dailyWordCalendarSource').href=entry.calendarUrl;
   }
+  mobileHome.refresh();
 }
 function refreshDatedContent() {
   if (displayedWordDate !== warsawDay() || Date.now() - lastContentRefreshAt >= 300000) {
@@ -744,24 +718,25 @@ function todayInWarsaw() {
 }
 function renderIntentions() {
   const today = todayInWarsaw();
-  const merged = new Map();
-  for (const day of remoteIntentions?.days || []) if (day.date >= today) merged.set(day.date, day);
-  // Wpis redaktora jest pełnym planem dnia i ma pierwszeństwo przed importem.
-  for (const day of localIntentions) if (day.date >= today) merged.set(day.date, day);
-  const days = [...merged.values()].sort((a,b) => a.date.localeCompare(b.date));
+  const days = massSchedule(localIntentions,remoteIntentions?.days||[],today);
+  const query=document.querySelector('#intentionSearch').value;
+  let found=0;
   const list = document.querySelector('#intentionsList');
   const status = document.querySelector('#intentionsStatus');
   const home = document.querySelector('#homeIntentions');
   list.replaceChildren();
   if (days.length) {
-    status.textContent = 'Plan najbliższych nabożeństw. Godziny przy poszczególnych intencjach uwzględniają opublikowane zmiany.';
+    status.textContent = 'Msze według stałego porządku i opublikowanych zmian. Bez wpisanej intencji: „Za parafian”. W święta sprawdź ogłoszenia parafialne.';
     for (const day of days) {
+      const visibleMasses=day.masses.filter(mass=>matchesIntention(mass,query));
+      if(!visibleMasses.length)continue;
+      found+=visibleMasses.length;
       const article = document.createElement('article');
       article.className = 'intention-day';
       const heading = document.createElement('h3');
-      heading.textContent = `${formatDate(day.date)} · ${day.title}`;
+      heading.textContent = `${formatDate(day.date)} · ${day.title||''}`;
       article.append(heading);
-      const masses = [...(day.masses || [])].sort((a,b) => a.time.padStart(5,'0').localeCompare(b.time.padStart(5,'0')));
+      const masses = visibleMasses;
       for (const mass of masses) {
         const row = document.createElement('div');
         row.className = 'intention-row';
@@ -794,7 +769,10 @@ function renderIntentions() {
     status.textContent = 'Nie udało się teraz sprawdzić intencji. Skorzystaj z odnośnika do serwisu parafii lub skontaktuj się telefonicznie.';
     home.textContent = 'Sprawdź intencje w serwisie parafii.';
   }
+  document.querySelector('#intentionSearchCount').textContent=`Znaleziono: ${found} ${found===1?'Msza':found%10>=2&&found%10<=4&&(found%100<12||found%100>14)?'Msze':'Mszy'}`;
+  if(!found){const empty=document.createElement('p');empty.className='empty-state';empty.textContent='Nie znaleziono Mszy. Spróbuj wpisać krótszy fragment intencji.';list.append(empty);}
 }
+document.querySelector('#intentionSearch').addEventListener('input',renderIntentions);
 async function loadIntentions() {
   try {
     const response = await fetch('/api/intencje', {headers:{Accept:'application/json'}});

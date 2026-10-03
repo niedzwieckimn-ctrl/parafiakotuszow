@@ -1,0 +1,33 @@
+.photo-opener{position:relative;display:block;width:100%;height:100%;padding:0;border:0;background:transparent;color:var(--ink);cursor:zoom-in}
+.opening-photo .photo-opener img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+.photo-opener>span{position:absolute;right:14px;top:14px;border-radius:8px;background:#fffef8ed;padding:8px 12px;font:600 .8rem var(--sans)}
+.photo-viewer{width:min(1100px,calc(100% - 24px));max-height:calc(100dvh - 24px);padding:16px;border:0;border-radius:18px;background:#f7f8f4;color:var(--ink);overflow:auto}
+.photo-viewer::backdrop{background:#152c22e8}.photo-viewer header,.photo-viewer footer{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.photo-viewer h2{font:600 1.1rem/1.4 var(--sans);margin:0;overflow-wrap:anywhere}.photo-viewer button{flex-shrink:0;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);font:600 .85rem var(--sans);cursor:pointer}
+.photo-viewer footer p{font-size:.8rem;line-height:1.5;overflow-wrap:anywhere;margin:12px 0}.photo-viewer-stage{position:relative;height:min(68dvh,750px);margin-block:14px;overflow:hidden;touch-action:none;background:#e9eee4;border-radius:10px}
+.photo-viewer-stage img{display:block;width:100%;height:100%;object-fit:contain;transform-origin:center;max-width:none;user-select:none;-webkit-user-drag:none}
+.intention-search-label{display:block;font-weight:600;margin:24px 0 8px}.intention-search{width:min(100%,600px);min-height:52px;border:1px solid #bdcbb4;border-radius:12px;background:#fff;padding:12px 14px;color:var(--ink);font:16px var(--sans)}
+.intention-day{border-radius:16px}.intention-day h3{font-family:var(--sans);font-size:1.1rem;font-weight:600;line-height:1.5}.intention-row{min-width:0}.intention-row p{overflow-wrap:anywhere}
+.priests-chronology{list-style:none;padding:0;margin:30px 0 0 8px;border-left:2px solid #bdd0b3;max-width:760px}.priests-chronology li{position:relative;padding:0 0 24px 24px}.priests-chronology li::before{content:'';position:absolute;width:10px;height:10px;border-radius:50%;background:#567649;top:7px;left:-6px}
+.priest-period{display:block;font:.85rem/1.5 var(--sans);color:#526c46}.priests-chronology button{display:block;min-height:44px;width:100%;border:0;background:transparent;text-align:left;color:var(--ink);font:600 1.15rem/1.5 var(--sans);padding:8px 0;cursor:pointer;overflow-wrap:anywhere}
+.priest-dialog p{font:1rem/1.8 var(--sans)}.priest-close{display:block;min-height:44px;margin:0 0 24px auto;border:1px solid var(--line);padding:10px 14px;border-radius:10px;background:white;color:var(--ink);cursor:pointer}.priest-source{display:block;margin:12px 0;font-size:.9rem;overflow-wrap:anywhere}.priest-dialog .priest-source-note{font-size:.8rem;color:var(--ink-soft)}
+.tour-stage{touch-action:none}.tour-hotspots{pointer-events:none}.tour-stage.is-zoomed .tour-hotspot{visibility:hidden}
+@media(max-width:700px){
+  .home-opening{display:flex;flex-direction:column;margin-top:0;padding:22px 0 26px;gap:18px;border-radius:0;isolation:auto;background:transparent}
+  .opening-copy{width:100%;padding:4px 4px 0;border:0;border-radius:0;background:transparent;box-shadow:none}
+  .opening-photo{position:relative;inset:auto;z-index:auto;order:0;width:100%;border-radius:16px;background:#e8eee0;overflow:visible}
+  .opening-photo:after{display:none}.opening-photo .photo-opener{height:auto;overflow:hidden;border-radius:16px}.opening-photo .photo-opener img{width:100%;height:auto;object-fit:contain;border-radius:0}
+  .opening-photo figcaption{position:static;display:block;max-width:none;padding:8px 2px;background:none;color:var(--ink-soft);font-size:11px;line-height:1.6;margin:0}.opening-photo figcaption span{display:none}
+  .home-opening>.opening-actions{width:100%;margin:0;gap:10px}.home-action{min-height:68px;border-radius:13px;padding:14px 12px}.home-action strong{font-size:14px}.home-action small{display:none}.home-action>span:last-child{font-size:18px}
+  #dailyWordHeading{font-size:27px;line-height:1.2;letter-spacing:-.03em;margin-bottom:14px}.opening-quote blockquote{font-size:18px;line-height:1.55}.opening-date,.liturgical-day{font-size:13px}.opening-kicker{font-size:11px}
+  .mobile-daily-details{width:100%;padding:0 4px}.mobile-daily-details .opening-reflection{margin-top:0}.mobile-daily-details .opening-reflection p{font-size:16px;line-height:1.75}
+  .opening-readings{font-size:14px;margin:16px 0 0}.daily-word-provenance{font-size:11px;line-height:1.7}
+  .journey-card{display:block;border-radius:16px}.journey-card>img{display:block;width:100%;height:230px;min-height:0;object-fit:contain;background:#edf0e7;padding:10px}.journey-card-copy{padding:18px}.journey-card strong{font-family:var(--sans);font-size:20px;line-height:1.35}.journey-card p{font-size:15px}
+  .chapter-tile{display:block;border-radius:14px}.chapter-tile img{display:block;width:100%;height:230px;object-fit:contain;background:#edf0e7;padding:10px}
+  .history-dialog .chapter-figure img,.history-photo img,.archive-layout>img,.discover-grid img,.landscape-grid img,.history-photo-grid img,.source-gallery img,.historical-gallery img,.history-cover img,.map-card img,.aerial-history img{height:auto;max-height:none;object-fit:contain}
+  .history-photo-grid figure,.source-gallery figure{min-width:0}.history-dialog{max-height:calc(100dvh - 20px);width:calc(100% - 20px);padding:24px 18px}.history-dialog h2{font-size:24px}
+  .invitation{display:block}.invitation>img{height:auto;min-height:0;max-height:300px;object-fit:contain;background:#edf0e7}.memory-art{min-height:0;height:140px;flex-direction:row}.invitation small{font-size:11px}
+  .tour-stage{height:520px}.zoom-control{display:none}.tour-controls{grid-template-columns:48px 48px;justify-content:center}.drag-hint{display:none}.tour-note{font-size:14px;line-height:1.65}.tour-toolset .tour-text-button{font-size:12px}.scene-card img,.scene-card:last-child img{object-fit:contain;background:#e9eee3}
+  .photo-viewer{width:calc(100% - 12px);max-height:calc(100dvh - 12px);padding:12px}.photo-viewer h2{font-size:15px}.photo-viewer-stage{height:65dvh}.photo-viewer header{align-items:flex-start}.photo-viewer footer p{font-size:11px}
+  .intentions-section{padding-top:24px}.intention-day{padding:18px}.intention-row{grid-template-columns:64px minmax(0,1fr);gap:12px}.intention-row time{font-size:19px}.intention-row p{font-size:16px;line-height:1.7}.intention-row small{font-size:13px;margin-top:6px}
+}

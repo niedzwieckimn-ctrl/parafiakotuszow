@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="tour.css">
+  <link rel="stylesheet" href="mobile.css">
   <script type="module" src="script.js"></script>
 </head>
 <body>
@@ -63,7 +64,7 @@
           <div class="opening-readings"><a id="dailyWordReadings" href="https://mateusz.pl/czytania/" target="_blank" rel="noopener">Przeczytaj dzisiejsze czytania ↗</a></div>
         </div>
         <figure class="opening-photo">
-          <img src="assets/kosciol-wnetrze.webp" alt="Wnętrze kościoła św. Jakuba w Kotuszowie, widok ku ołtarzowi" width="1800" height="1200" fetchpriority="high">
+          <button type="button" class="photo-opener" data-full-photo="assets/kosciol-wnetrze.webp" aria-label="Pokaż pełne zdjęcie wnętrza kościoła"><img src="assets/kosciol-wnetrze.webp" alt="Wnętrze kościoła św. Jakuba w Kotuszowie, widok ku ołtarzowi" width="1192" height="1800" fetchpriority="high"><span>Pokaż zdjęcie ⤢</span></button>
           <figcaption><span>Kościół św. Jakuba w Kotuszowie</span><a href="https://commons.wikimedia.org/wiki/File:Wn%C4%99trze_ko%C5%9Bcio%C5%82a_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" target="_blank" rel="noopener">Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</a></figcaption>
         </figure>
       </section>
@@ -113,6 +114,9 @@
           <a class="text-link" href="https://www.parafiakotuszow.pl/intencje" target="_blank" rel="noopener">Intencje w serwisie parafii</a>
         </div>
         <p class="intentions-status" id="intentionsStatus" role="status">Sprawdzanie najnowszych intencji…</p>
+        <label class="intention-search-label" for="intentionSearch">Szukaj w intencjach</label>
+        <input type="search" class="intention-search" id="intentionSearch" placeholder="Nazwisko lub fragment intencji" autocomplete="off">
+        <p id="intentionSearchCount" class="intentions-status" aria-live="polite"></p>
         <div class="intentions-list" id="intentionsList"></div>
       </section>
 
@@ -280,37 +284,9 @@
           <p class="eyebrow">Ludzie, którzy zostawili ślad</p>
           <h2 id="priests-title">Proboszczowie i budowniczowie wspólnoty</h2>
         </div>
-        <div class="story-grid">
-          <article class="story-card story-card-featured">
-            <span class="story-date">1945–2002</span>
-            <h3>Ks. kan. Antoni Sobczyk</h3>
-            <p>Przybył do spalonego i zaminowanego Kotuszowa 25 maja 1945 roku. Urządził kaplicę w kruchcie, zorganizował kuchnię dla mieszkańców i przez 57 lat prowadził odbudowę świątyni oraz życie parafii.</p>
-            <button class="text-link history-open" type="button" data-history-id="sobczyk">Poznaj historię odbudowy</button>
-          </article>
-          <article class="story-card">
-            <span class="story-date">do 1778</span>
-            <h3>Ks. Wawrzyniec Sapiński</h3>
-            <p>Odbudował wieżę i dzwonnicę, wyposażał kościół, ufundował dom dla duchownego i szpital oraz wprowadził Bractwo św. Józefa.</p>
-            <button class="text-link history-open" type="button" data-history-id="sapinski">Otwórz źródła</button>
-          </article>
-          <article class="story-card">
-            <span class="story-date">1778–1805</span>
-            <h3>Ks. Paweł Sosiński</h3>
-            <p>Dawny prebendarz, a później proboszcz. Wznosił zabudowania parafialne, plebanię i nowy ołtarz św. Józefa.</p>
-            <button class="text-link history-open" type="button" data-history-id="sosinski">Zobacz opowieść</button>
-          </article>
-          <article class="story-card">
-            <span class="story-date">XX–XXI wiek</span>
-            <h3>Ks. kan. Jerzy Sobczyk</h3>
-            <p>Rozwijał jakubowy charakter parafii, wspierał odtworzenie Małopolskiej Drogi św. Jakuba i wprowadzenie relikwii Apostoła do świątyni.</p>
-            <button class="text-link history-open" type="button" data-history-id="camino">Poznaj drogę św. Jakuba</button>
-          </article>
-        </div>
-        <details class="pastors-list">
-          <summary>Rozwiń zachowaną listę dawnych proboszczów</summary>
-          <p>W źródłach odnotowano m.in.: Pawła (1326), Pawła Lisieckiego (1677), Józefa Cmielińskiego (1748), Wawrzyńca Sapińskiego (do 1778), Pawła Sosińskiego (1778–1805), Antoniego Walczewskiego (1805–1826), Jana Skibickiego (do 1848), Kolomana Myrczyka (1848–1886), Marcelego Gąsiorowskiego (do 1892), Antoniego Toczyłowskiego (do 1899), Adolfa Zarzyckiego (1900–1913), Tomasza Czaplickiego (do 1915), Kazimierza Wilamowskiego (do 1919) i Jana Górkę. Daty pokazują stan zachowanych opracowań, a nie kompletny spis.</p>
-          <a class="text-link" href="https://www.kotuszow.pl/index.php/historia" target="_blank" rel="noopener">Przejdź do opracowania źródłowego</a>
-        </details>
+        <p>Od obecnego proboszcza do najstarszych zachowanych zapisów. Wybierz nazwisko, aby poznać jego historię i źródła.</p>
+        <ol class="priests-chronology" id="priestsChronology"></ol>
+        <p class="verification-note">Wykaz opiera się na zachowanych opracowaniach i nie jest kompletnym spisem. Tam, gdzie brakuje dat lub biografii, pozostawiamy tę informację otwartą.</p>
       </section>
 
       <section class="maps-section" aria-labelledby="maps-title" data-journey-panel="maps" hidden>
@@ -464,7 +440,7 @@
             </button>
             <div class="zoom-control">
               <label for="zoomRange">Przybliżenie</label>
-              <input id="zoomRange" type="range" min="1" max="2.5" step="0.05" value="1">
+              <input id="zoomRange" type="range" min="1" max="5" step="0.05" value="1">
             </div>
             <button class="tour-arrow" id="tourNext" type="button" aria-label="Następny widok">
               <svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
@@ -473,7 +449,7 @@
         </div>
 
         <div class="scene-picker" id="scenePicker" role="list" aria-label="Wybierz przystanek zwiedzania"></div>
-        <p class="tour-note">Klikaj strzałki na zdjęciu, aby przechodzić między miejscami. Punkty „i” odkrywają detale kościoła. Suwakiem przybliżysz wybrany widok.</p>
+        <p class="tour-note">Klikaj strzałki na zdjęciu, aby przechodzić między miejscami. Wybierz detal, aby go przybliżyć. Na telefonie powiększaj dwoma palcami i przesuwaj zdjęcie jednym palcem.</p>
       </section>
     </section>
   </main>

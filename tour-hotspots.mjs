@@ -14,7 +14,7 @@ export const tourPoints={
  'assets/wnetrze-ku-chorowi-2025.webp':[{x:50,y:30,label:'Organy i wspólnota',target:'assets/nawa-organy-wspolnota.webp'}],
  'assets/liturgia-przy-oltarzu.webp':[{x:50,y:34,label:'Obraz z bliska',target:'assets/obraz-maryi-detal.webp'}]
 };
-export function setupHotspots({stage,image,scenes,onNavigate}) {
+export function setupHotspots({stage,image,scenes,onNavigate,onDetail}) {
   const layer=document.getElementById('tourHotspots');
   const dialog=document.getElementById('tourDetailDialog');
   let current=null;
@@ -34,10 +34,10 @@ export function setupHotspots({stage,image,scenes,onNavigate}) {
     current={scene,points:defined || fallback};
     layer.replaceChildren(...current.points.map((point,index)=>{
       const button=document.createElement('button');button.type='button';button.className='tour-hotspot';button.dataset.point=String(index);button.setAttribute('aria-label',point.label);button.title=point.label;
-      const symbol=document.createElement('span');symbol.className='hotspot-symbol';symbol.textContent=point.target?'➜':'i';symbol.setAttribute('aria-hidden','true');
+      const symbol=document.createElement('span');symbol.className='hotspot-symbol';symbol.textContent=point.target?'➜':'⤢';symbol.setAttribute('aria-hidden','true');
       const label=document.createElement('span');label.className='hotspot-label';label.textContent=point.label;button.append(symbol,label);
       button.addEventListener('pointerdown',event=>event.stopPropagation());
-      button.addEventListener('click',()=>{if(point.target){const target=scenes.findIndex(item=>item.image===point.target);if(target>=0)onNavigate(target);}else{document.getElementById('tourDetailTitle').textContent=point.label;document.getElementById('tourDetailText').textContent=point.detail;const link=document.getElementById('tourDetailSource');link.href=scene.source || scene.image;link.textContent=scene.credit || 'Źródło fotografii';dialog.showModal();}});
+      button.addEventListener('click',()=>{if(point.target){const target=scenes.findIndex(item=>item.image===point.target);if(target>=0)onNavigate(target);}else onDetail?.(point);});
       return button;
     }));align();
   }

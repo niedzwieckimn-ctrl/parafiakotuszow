@@ -29,7 +29,7 @@ async function readCollection(name) {
     }
     if (name === 'intencje') {
       if (!/^\d{4}-\d{2}-\d{2}$/.test(record.date) || new Date(record.date + 'T12:00:00Z').toISOString().slice(0,10) !== record.date) throw new Error(`Błędny dzień nabożeństw: ${filename}`);
-      if (!Array.isArray(record.masses) || !record.masses.length || record.masses.some(mass => !/^([01]?\d|2[0-3]):[0-5]\d$/.test(mass.time) || !mass.intention?.trim())) throw new Error(`Uzupełnij godziny i intencje: ${filename}`);
+      if (!Array.isArray(record.masses) || !record.masses.length || record.masses.some(mass => !/^([01]?\d|2[0-3]):[0-5]\d$/.test(mass.time) || (mass.intention!==undefined && typeof mass.intention!=='string'))) throw new Error(`Uzupełnij poprawne godziny Mszy: ${filename}`);
       if (entries.some(entry => entry.date === record.date)) throw new Error(`Dwa wpisy intencji na ten sam dzień: ${record.date}. Połącz Msze w jednym wpisie.`);
     }
     if (name === 'slowo-na-dzis') {
@@ -55,7 +55,7 @@ await mkdir(join(root, 'data'), { recursive: true });
 await writeFile(join(root, 'data', 'admin-content.json'), JSON.stringify(data, null, 2) + '\n');
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
-for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'script.js', 'community-album.mjs', 'daily-word-client.mjs', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
+for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'mobile.css', 'script.js', 'photo-viewer.mjs', 'mass-schedule.mjs', 'priests.mjs', 'mobile-layout.mjs', 'community-album.mjs', 'daily-word-client.mjs', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
   await cp(join(root, filename), join(output, filename));
 }
 for (const folder of ['assets', 'data']) {
