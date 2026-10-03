@@ -1,4 +1,5 @@
-import { selectDailyWord, warsawDay } from './calendar.mjs';
+import { warsawDay } from './calendar.mjs';
+import { displayedWord,createAutomaticLoader } from './daily-word-client.mjs';
 import { historyChapters } from './history-chapters.mjs';
 import { setupJourney } from './journey.mjs';
 import { additionalChurchPhotos, suppliedChurchPhotos } from './church-photos.mjs';
@@ -693,18 +694,22 @@ let localIntentions = [];
 let remoteIntentions = null;
 let intentionsFailed = false;
 let dailyWords = [];
+const automaticWord=createAutomaticLoader({onChange:()=>renderDailyWord()});
 let displayedWordDate = '';
 let lastContentRefreshAt = Date.now();
 function renderDailyWord() {
-  const selected = selectDailyWord(dailyWords);
+  const selected = displayedWord(dailyWords,automaticWord.entry);
   displayedWordDate = selected.date;
   document.querySelector('#dailyWordDate').dateTime = selected.date;
   document.querySelector('#dailyWordDate').textContent = formatDate(selected.date);
   document.querySelector('#dailyWordReadings').href = selected.url;
   document.querySelector('#dailyWordContent').hidden = !selected.entry;
   document.querySelector('#dailyWordLabel').textContent = selected.entry ? 'Słowo otuchy na dziś' : 'Czytania na dziś';
+  document.querySelector('#dailyWordProvenance').hidden=selected.mode!=='automatic';
+  document.querySelector('#dailyWordNotice').hidden=selected.mode!=='readings'||!automaticWord.notice;
+  document.querySelector('#dailyWordNotice').textContent=automaticWord.notice;
   if (!selected.entry) {
-    document.querySelector('#dailyWordHeading').textContent='Dobrze, że jesteś.';
+    document.querySelector('#dailyWordHeading').textContent='Dzisiejsze czytania';
     for (const id of ['dailyWordDay','dailyWordQuote','dailyWordReference','dailyWordReflection']) document.getElementById(id).textContent = '';
     return;
   }
@@ -714,6 +719,11 @@ function renderDailyWord() {
   document.querySelector('#dailyWordQuote').textContent = `„${entry.quote}”`;
   document.querySelector('#dailyWordReference').textContent = entry.reference;
   document.querySelector('#dailyWordReflection').textContent = entry.reflection;
+  document.querySelector('#dailyWordReflectionLabel').textContent=selected.mode==='automatic'?'· refleksja autorska, opracowana automatycznie':'· refleksja autorska';
+  if(selected.mode==='automatic') {
+    document.querySelector('#dailyWordTextSource').href=entry.readingsUrl;
+    document.querySelector('#dailyWordCalendarSource').href=entry.calendarUrl;
+  }
 }
 function refreshDatedContent() {
   if (displayedWordDate !== warsawDay() || Date.now() - lastContentRefreshAt >= 300000) {
@@ -722,6 +732,7 @@ function refreshDatedContent() {
     renderIntentions();
     loadAdminContent();
     loadIntentions();
+    automaticWord.refresh();
   }
 }
 window.setInterval(refreshDatedContent, 30000);
@@ -804,3 +815,4 @@ setupJourney({openHistory,openChapter});
 loadAdminContent();
 loadIntentions();
 renderDailyWord();
+automaticWord.refresh();

@@ -34,11 +34,11 @@ Pełna instrukcja konfiguracji ENV, generowania hasha, tokenu GitHub, testów i 
 
 ### Słowo na dziś
 
-W panelu jest osobna kolekcja z wpisami przypisanymi do pełnych dat. Wybór daty zawsze używa `Europe/Warsaw`, niezależnie od strefy urządzenia. Otwarta strona sprawdza zmianę dnia co 30 sekund i po powrocie do karty. Nie przenosi cytatów na kolejny dzień ani rok. Brak zatwierdzonego wpisu oznacza tylko datę i link do czytań Mateusza na właściwy dzień, bez zastępczej refleksji.
+Od wersji 5 tekst tworzy się automatycznie przy pierwszej wizycie danego dnia. Funkcja `/api/slowo-na-dzis?date=RRRR-MM-DD` pobiera czytania z Mateusza i roczny kalendarz diecezji sandomierskiej z GCatholic, sprawdza datę i zgodność obchodu, wybiera dosłowny krótki fragment biblijny i składa autorską refleksję z reguł tematycznych. To generator regułowy, nie model AI. Nie potrzebuje klucza AI ani codziennego dodawania wpisów. Refleksje nie są kopiowane z cudzych komentarzy; sformułowania mogą powracać przy podobnych czytaniach.
 
-Każdy wpis wymaga potwierdzenia cytatu, roku/cyklu, kalendarza Polski, diecezji sandomierskiej i obchodów parafii. Dwa oddzielne przełączniki oznaczają sprawdzenie treści i lokalnego kalendarza. Budowanie pomija niezatwierdzone wpisy. Nie jest to automatycznie wyliczany kalendarz liturgiczny: odpowiedzialny redaktor zatwierdza datowane treści na podstawie aktualnego Ordo i miejscowych obchodów.
+Data używa `Europe/Warsaw`, niezależnie od strefy urządzenia. Otwarta strona sprawdza zmianę dnia co 30 sekund i po powrocie do karty. Pamięć podręczna ma osobny klucz dla każdej daty, roku i wersji generatora. Nie przenosi cytatów na następny dzień. Brak źródeł lub niepotwierdzona lokalna uroczystość oznacza datę i odnośnik do czytań, bez zmyślonej refleksji. GCatholic nie jest oficjalnym Ordo; znane miejscowe uroczystości i rozbieżności są chronione. Szczegóły i wyjątki opisuje `SLOWO-AUTOMATYCZNE.md`.
 
-Przygotowano wpisy na 3 i 4 października 2026. Cytaty i czytania są sprawdzone w Mateuszu, lecz **nie potwierdzono lokalnego Ordo**, więc `localCalendarVerified` jest wyłączone. Po sprawdzeniu przez parafię uzupełnij notatkę weryfikacji i zaznacz ten przełącznik. Przykład 3 października zachowuje tekst przekazany przez użytkownika. Refleksje są zawsze osobno podpisane jako autorskie.
+Panel „Słowo otuchy” pokazuje podgląd automatu. Lista plików jest listą opcjonalnych ręcznych poprawek, nie warunkiem działania. Można utworzyć poprawkę na konkretną datę; sprawdzony i opublikowany wpis ma pierwszeństwo. Dwa przełączniki nadal oznaczają rzeczywiste sprawdzenie cytatu/refleksji i lokalnego kalendarza przez redaktora — automat nie zaznacza ich za człowieka. Wcześniejsze pliki na 3 i 4 października 2026 zachowano bez zmian; ich brak lokalnego zatwierdzenia nie blokuje automatyki.
 
 ### Wiadomości i intencje
 

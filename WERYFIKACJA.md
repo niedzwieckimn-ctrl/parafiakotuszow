@@ -1,4 +1,15 @@
-# Weryfikacja lokalna wersji 4 — 3 października 2026
+# Weryfikacja lokalna wersji 5 — 3 października 2026
+
+- Publiczny build i 54 testy Node zaliczone: 32 dotychczasowe oraz 22 dotyczące automatycznego słowa. Dodatkowo 22 starsze kontrole i kontrola zasobów/historii zaliczone.
+- W rzeczywistych źródłach sprawdzono generowanie dla 3, 4 i 5 października 2026: różne czytania i teksty; 5 października nazwa wspomnienia Faustyny Kowalskiej pochodzi z kalendarza Sandomierza, tekst z czytań powszednich. Sprawdzono też wspomnienie Wincentego Kadłubka 9 października oraz brak automatycznie zgadywanych czytań w miejscową rocznicę poświęcenia 11 listopada.
+- Testy: dosłowność cytatu, brak kopiowania komentarzy, złe daty/rok/diecezja, niepełny kalendarz, uroczystości lokalne, cykl na granicy Adwentu, cache, awaria źródła, brak Blobs, równoległe wizyty, opóźniona odpowiedź starego dnia i północ w Warszawie, pierwszeństwo zatwierdzonej poprawki. Publiczna funkcja nie korzysta z GitHub ani sekretów administratora.
+- Podgląd przeglądarkowy na lokalnym serwerze: rzeczywiście pobrany i wygenerowany tekst widoczny u góry; właściwe źródła i datowany link. Szerokości 390 i 320 px bez przepełnienia poziomego (odpowiednio dokument 375 i 305 px plus pasek przewijania). Panel pokazuje automatyczny podgląd, opcjonalna poprawka otwiera istniejący wpis bez nadpisania. Sesja i repozytorium w tym podglądzie są izolowaną symulacją.
+- Nie przebudowano pozostałej części publicznej strony, nie zmieniono danych `content/` ani zdjęć. Nowy moduł klienta trafia do publicznego `dist`, biblioteki serwerowe i sekrety nadal nie.
+- Paczka zmian względem wersji 4; nie wykonano push do prawdziwego GitHub ani deployu Netlify. Nowa funkcja wymaga końcowego testu na domenie właściciela po deployu. Nie potwierdzono produkcyjnego bundlowania ani limitów planu. GCatholic jest źródłem zewnętrznym, nie oficjalnym Ordo; nieznane przeniesienia lokalne wymagają poprawki administratora.
+
+Uruchomienie i ograniczenia: `SLOWO-AUTOMATYCZNE.md`. Brak nowych ENV i kluczy AI.
+
+## Archiwalna weryfikacja wersji 4 — 3 października 2026
 
 - `node build.mjs`: poprawne budowanie publicznej strony. `node --test tests/*.test.mjs`: 32 testy, 32 zaliczone. Dodatkowo 22 wcześniejsze kontrole kalendarza/importu i kontrola lokalnych zasobów/historii zakończone powodzeniem.
 - Poprawne i błędne logowanie, ochrona wszystkich endpointów bez sesji, HttpOnly/Secure/SameSite=Strict, utrzymanie sesji po odświeżeniu, wygaśnięcie, zmiana hasha, wylogowanie unieważniające skopiowane cookie, CSRF i Origin.
@@ -30,6 +41,6 @@ Instrukcja ENV, tokenu, hasha, testów produkcyjnych i wycofania: `ADMIN-INSTRUK
 ## Do uruchomienia przez właściciela
 
 - GitHub, Netlify i domena według README; własny panel według ADMIN-INSTRUKCJA.md. Logowanie i publikacja produkcyjna wymagają testów na koncie właściciela. Dawne ustawienia OAuth nie są używane przez wersję 4.
-- Potwierdzenie lokalnego kalendarza dla przygotowanych wpisów Słowa na dziś. Dopóki redaktor tego nie zatwierdzi, sekcja pokazuje link do aktualnych czytań.
+- Ręczne poprawki Słowa na dziś wymagają potwierdzenia lokalnego kalendarza. Automat wersji 5 działa niezależnie; lokalne obchody wymagające innych czytań i niepotwierdzone źródła pozostają zabezpieczone zgodnie z SLOWO-AUTOMATYCZNE.md.
 - Wprowadzenie aktualnych intencji, jeżeli nadal nie ma ich u źródła. Ostatnie dostępne w czasie sprawdzania pochodziły z grudnia 2025.
 - Potwierdzenie praw do 13 materiałów wersji 3 oraz pięciu nowych fotografii użytkownika przed publicznym wdrożeniem. Wykaz w `PRAWA-DO-NOWYCH-ZDJEC.md` i `ZRODLA-I-LICENCJE.md`. Podpisy nie zastępują zgody. Kod, build i interakcje sprawdzono lokalnie; nie jest to potwierdzenie zgód na publikację.
