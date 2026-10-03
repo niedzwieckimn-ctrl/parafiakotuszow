@@ -2,6 +2,55 @@
 
 Stan opracowania: 3 października 2026 r.
 
+## Uzupełnienia wersji 2
+
+- Strona parafii i godziny: https://www.parafiakotuszow.pl/
+- Intencje: https://www.parafiakotuszow.pl/intencje — w dniu opracowania ostatni dostępny wpis obejmuje grudzień 2025; jest traktowany jako archiwalny.
+- Cmentarz: https://polskie-cmentarze.info/?fara_cmentarze_container_id=4520 (odnośnik podany przez parafię).
+- Ks. Jan Wiśniewski, *Historyczny opis kościołów, miast, zabytków i pamiątek w stopnickiem*, 1929, s. 118–124: https://bc.umcs.pl/dlibra/publication/1783/edition/1625 — domena publiczna.
+- Historia miejscowości: https://www.kotuszow.pl/index.php/historia
+- Ks. Antoni Sobczyk: https://www.szydlow.pl/arch/kurier/kurier_45.pdf — s. 16–17 (fizyczne strony PDF 12–13). Wspomnienia i zdjęcia źródłowe; starszych zdjęć z publikacji nie skopiowano.
+- Opracowanie naukowe: https://repozytorium.kul.pl/server/api/core/bitstreams/64662f35-e045-4560-96ac-0e9d8ed6e7d4/content
+- Uroczystości jakubowe: https://www.niedziela.pl/artykul/60036/nd/Uroczystosci-jakubowe-w-Kotuszowie
+- Relikwie (25 lipca 2021): https://www.ekai.pl/kotuszow-wprowadzenie-relikwii-sw-jakuba-do-zabytkowej-swiatyni-d604578/
+- Mapa Staszów H39, 1915: https://igrek.amzp.pl/details.php?id=10866 — tylko odnośnik do repozytorium.
+- Mapa Staszów–Raków XXIX–9, datowanie 1885–1917: https://rcin.org.pl/dlibra/publication/104117/edition/99631 — domena publiczna w opisie biblioteki, tylko odnośnik; skan nie został pobrany.
+- Warstwy archiwalne Geoportalu: https://www.geoportal.gov.pl/pl/dane/mapy/
+
+Datę budowy obecnego kościoła (1661) przyjęto za stroną diecezji. Dawne opracowanie Wiśniewskiego zawiera odmienne zapisy; skany zachowano bez korekty, jako dokument epoki. Liczba ocalałych domów po wojnie różni się między relacjami — w opowieści wyraźnie przypisano wartość wspomnieniu opublikowanemu w Kurierze.
+
+### Dodatkowe fotografie
+
+Wszystkie pliki zachowują poniższe licencje. Wygląd w kadrach zmienia wyłącznie CSS.
+
+Na stronie używane są lekkie kopie `.webp` tych samych dziewięciu fotografii (maksymalnie 1800 px dłuższy bok). Mechaniczna zmiana rozmiaru i kompresja nie zmieniają przedstawionych scen; nie użyto retuszu ani generowania. Poniższe autorstwo, źródła i licencje dotyczą również kopii WebP. Oryginalne pobrane JPEG pozostawiono w paczce.
+
+| Plik | Autor / rok | Licencja | Źródło |
+|---|---|---|---|
+| `assets/kosciol-detal-wejscia.jpg` | EwaRóża, 2015 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kotuszow_kosciol_zdobienie_wejscia_p8212244.jpg) |
+| `assets/krzyz-kotuszow.jpg` | EwaRóża, 2015 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Kotuszow_krzyz_p8212240.jpg) |
+| `assets/sady-kotuszow.jpg` | A.Budz., 2024 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Sady_mi%C4%99dzy_Szyd%C5%82owem_a_Kotuszowem_2024.jpg) |
+| `assets/chancza-wies.jpg` | Michał Derela (Pibwl), 18.08.2009 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Chancza_P1000541.JPG) |
+| `assets/zalew-chancza.jpg` | Agnieszka Kwiecień, Nova, 11.08.2011 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Zalew_Cha%C5%84cza_01.jpg) |
+| `assets/zalew-zyciny.jpg` | Dwxn, 13.04.2024 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:20240413_171746_Cha%C5%84cza_02.jpg) |
+| `assets/muszla-jakubowa.svg` | Maxxl2/MaxxL, na podstawie Jürgena Krausego, 31.05.2013 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) | [Escallop — Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Escallop.svg) |
+
+Sady są wersją 1920 px z mechanizmu skalowania Wikimedia. Pozostałe dodatkowe fotografie pobrano w oryginalnym rozmiarze. Nie wykonywano retuszu. SVG muszli jest niezmieniony; w CSS zastosowano obrót o 180° i przezroczystość. Zdjęcie zalewu przy Życinach przedstawia szerszą okolicę, nie wieś Kotuszów. Wycofano wcześniej omyłkowo przypisaną fotografię innego Kotuszowa w województwie łódzkim.
+
+## Słowo na dziś
+
+- 3 października 2026, Łk 10,20: https://mateusz.pl/czytania/2026/20261003.html — krótki dosłowny fragment (10 słów). Refleksja i tytuł pochodzą z przykładu użytkownika.
+- 4 października 2026, Mt 21,42: https://mateusz.pl/czytania/2026/20261004.html — krótki dosłowny fragment (10 słów). Refleksja jest współczesnym opracowaniem autorskim, nie cytatem biblijnym.
+- Ogólny cykl A / II na 2026: https://www.archidiecezjakatowicka.pl/images/ordo/2026/objasnienia2026.pdf — część ogólna; nie jest źródłem obchodów własnych diecezji sandomierskiej.
+
+Nie potwierdzono lokalnego Ordo. Wpisy czekają na zatwierdzenie kalendarza przez parafię i nie są pokazywane jako zatwierdzone Słowo na dziś. Zamiast nich działa odnośnik do aktualnej daty czytań.
+
+## Zasady opracowania historii
+
+Sześć obszernych rozdziałów stanowi współczesne opracowanie treści Wiśniewskiego, z krótkimi cytatami zachowującymi oryginalną pisownię. Pod każdym opisem wskazano autora, tytuł, rok, strony i bibliotekę. Pełny rozdział źródłowy jest dostępny jako siedem niezmienionych skanów (domena publiczna). Fotografie współczesne nie są przedstawiane jako archiwalne. Tekstów współczesnych artykułów i niejasno licencjonowanych fotografii nie przeniesiono w całości; podano opracowania faktów i odsyłacze. Samo oznaczenie źródła nie oznacza zgody na dowolne powielanie utworu.
+
+`assets/archiwum/kotuszow-1929-s118.png` do `s124.png`: siedem stron książki Jana Wiśniewskiego, Biblioteka Cyfrowa UMCS, domena publiczna. Pliki DjVu ze źródłowego wydania wyrenderowano do PNG bez retuszu i zmiany treści. Są to skany dokumentu, nie fotografie kościoła.
+
 ## Źródła merytoryczne
 
 - Diecezja Sandomierska, „Kotuszów – Św. Jakuba Starszego Apostoła”:  
