@@ -1,7 +1,10 @@
 import {collections,places} from './schema.mjs';
+import {warsawDay,readingsUrl} from '../calendar.mjs';
+import {validAutomaticWord} from '../daily-word-client.mjs';
 const $=selector=>document.querySelector(selector);
 const state={csrf:'',expiresAt:0,collection:'ogloszenia',files:[],filename:null,sha:null,dirty:false,busy:false,objects:[]};
 const schema=()=>collections.find(c=>c.name===state.collection);
+let automaticPreview=null,previewSequence=0,previewDate='';
 function message(text,error=false) {const target=$(state.csrf?'#dashboardStatus':'#loginStatus');target.textContent=text;target.className=`status ${error?'error':'success'}`;}
 function busy(value) {state.busy=value;$('#loginButton').disabled=value;$('#saveEntry').disabled=value;$('#deleteEntry').disabled=value;$('#newEntry').disabled=value;$('#logout').disabled=value;$('#confirmDelete').disabled=value;$('#collectionTabs').inert=value;$('#editorFields').inert=value;$('#entryList').inert=value;}
 async function api(path,options={}) {
@@ -13,7 +16,7 @@ async function api(path,options={}) {
   }
   return value;
 }
-function showLogin(text='') {state.csrf='';$('#dashboard').hidden=true;$('#loginScreen').hidden=false;$('#password').value='';$('#loginStatus').textContent=text;}
+function showLogin(text='') {state.csrf='';previewSequence++;automaticPreview=null;$('#dashboard').hidden=true;$('#loginScreen').hidden=false;$('#password').value='';$('#loginStatus').textContent=text;}
 async function enter(session) {
   state.csrf=session.csrf;state.expiresAt=session.expiresAt;
   $('#loginScreen').hidden=true;$('#dashboard').hidden=false;$('#password').value='';
@@ -25,19 +28,48 @@ $('#loginForm').addEventListener('submit',async event=>{event.preventDefault();b
 $('#showPassword').addEventListener('click',()=>{const reveal=$('#password').type==='password';$('#password').type=reveal?'text':'password';$('#showPassword').textContent=reveal?'Ukryj':'Pokaż';$('#showPassword').setAttribute('aria-pressed',String(reveal));$('#showPassword').setAttribute('aria-label',reveal?'Ukryj hasło':'Pokaż hasło');});
 function allowLeaving() {return !state.dirty || window.confirm('Masz niezapisane zmiany. Opuścić formularz?');}
 $('#logout').addEventListener('click',async()=>{if(!allowLeaving())return;busy(true);try{await api('logout',{method:'POST',body:'{}'});state.dirty=false;clearEditor();showLogin('Wylogowano bezpiecznie.');}catch(error){message(error.message,true);}finally{busy(false);}});
-function clearEditor() {for(const url of state.objects)URL.revokeObjectURL(url);state.objects=[];state.filename=null;state.sha=null;state.dirty=false;$('#editorForm').hidden=true;$('#editorFields').replaceChildren();$('#editorTitle').textContent='Wybierz wpis lub dodaj nowy';}
+function clearEditor() {for(const url of state.objects)URL.revokeObjectURL(url);state.objects=[];state.filename=null;state.sha=null;state.dirty=false;$('#editorForm').hidden=true;$('#editorFields').replaceChildren();$('#editorTitle').textContent=state.collection==='slowo-na-dzis'?'Automatyczne słowo i ręczne poprawki':'Wybierz wpis lub dodaj nowy';}
 async function choose(name,force=false) {
   if(state.busy && !force || !force && !allowLeaving())return;
   state.collection=name;clearEditor();$('#collectionTitle').textContent=schema().label;$('#entrySearch').value='';
   for(const tab of $('#collectionTabs').children){const active=tab.dataset.collection===name;tab.classList.toggle('active',active);tab.setAttribute('aria-current',String(active));}
-  $('#editorHint').textContent=name==='slowo-na-dzis'?'Wpis zmieni się automatycznie w dniu swojej daty (Europe/Warsaw). Publikuj dopiero po sprawdzeniu czytań i kalendarza lokalnego. Bez wpisu strona pokazuje tylko link do dzisiejszych czytań.':'Treść jest zapisywana w repozytorium. Szkice nie są widoczne na stronie, ale nie służą do przechowywania poufnych danych.';
-  busy(true);try{await loadList();message('Wybierz wpis lub przygotuj nowy.');}catch(error){message(error.message,true);}finally{busy(false);}
+  previewSequence++;automaticPreview=null;$('#automaticWordPreview').hidden=name!=='slowo-na-dzis';$('#automaticContent').hidden=true;
+  $('#newEntry').textContent=name==='slowo-na-dzis'?'+ Ręczna poprawka':'+ Nowy wpis';
+  $('#editorHint').textContent=name==='slowo-na-dzis'?'Słowo otuchy tworzy się automatycznie z czytań na bieżącą datę w Polsce. Nie musisz codziennie dodawać wpisu. Sprawdzona, opublikowana poprawka ma pierwszeństwo w swojej dacie.':'Treść jest zapisywana w repozytorium. Szkice nie są widoczne na stronie, ale nie służą do przechowywania poufnych danych.';
+  busy(true);try{await loadList();message(name==='slowo-na-dzis'?'Automatyka działa niezależnie od listy ręcznych wpisów.':'Wybierz wpis lub przygotuj nowy.');}catch(error){message(error.message,true);}finally{busy(false);}
+  if(name==='slowo-na-dzis'&&state.csrf)loadAutomaticPreview();
 }
+async function loadAutomaticPreview(){
+  const ticket=++previewSequence,date=warsawDay();
+  previewDate=date;automaticPreview=null;$('#automaticContent').hidden=true;
+  $('#automaticReadings').href=readingsUrl(date);$('#automaticCalendar').href=`https://gcatholic.org/calendar/${date.slice(0,4)}/PL-sand1-pl#${date.slice(5).replace('-','')}`;
+  $('#automaticStatus').textContent='Pobieranie czytań i tworzenie dzisiejszego tekstu…';
+  try{
+    const response=await fetch(`/api/slowo-na-dzis?date=${date}`,{cache:'no-cache',signal:AbortSignal.timeout(18000)}),data=await response.json();
+    if(ticket!==previewSequence||!state.csrf||state.collection!=='slowo-na-dzis'||date!==warsawDay())return;
+    if(!response.ok||!validAutomaticWord(data.entry,date)){
+      $('#automaticStatus').textContent=data.notice||'Nie udało się potwierdzić dzisiejszych źródeł. Strona pokaże odnośnik do czytań, nigdy cytat z poprzedniego dnia.';return;
+    }
+    automaticPreview=data.entry;$('#automaticContent').hidden=false;
+    $('#automaticStatus').textContent='Gotowe. Ten tekst jest dostępny na stronie bez zapisywania w panelu. Ręczna, sprawdzona poprawka może go zastąpić.';
+    for(const [id,key] of [['automaticHeading','title'],['automaticDay','liturgicalDay'],['automaticReference','reference'],['automaticReflection','reflection']])$('#'+id).textContent=automaticPreview[key];
+    $('#automaticQuote').textContent=`„${automaticPreview.quote}”`;
+    $('#automaticReadingUse').textContent=automaticPreview.readingUse==='weekday-memorial'?`Czytania dnia powszedniego: ${automaticPreview.readingsDay} (OWMR 358).`:'';
+  }catch{if(ticket===previewSequence&&state.csrf&&state.collection==='slowo-na-dzis')$('#automaticStatus').textContent='Źródła są chwilowo niedostępne. Ponownie otwórz tę zakładkę, aby spróbować jeszcze raz.';}
+}
+$('#correctAutomatic').addEventListener('click',async()=>{
+  if(state.busy||!automaticPreview||automaticPreview.date!==warsawDay()||!allowLeaving())return;
+  const data=Object.fromEntries(schema().fields.map(field=>[field.name,automaticPreview[field.name]??field.default??'']));
+  Object.assign(data,{published:false,reviewed:false,localCalendarVerified:false,verifiedAt:warsawDay()});
+  const existing=state.files.find(file=>file.filename===`${data.date}.json`);
+  if(existing){busy(true);try{const saved=await api(`content?collection=slowo-na-dzis&filename=${encodeURIComponent(existing.filename)}`);edit(saved.data,saved.filename||existing.filename,saved.sha);message('Dla tej daty już istnieje ręczny wpis. Otworzono go bez nadpisywania.');}catch(error){message(error.message,true);}finally{busy(false);}return;}
+  edit(data);state.dirty=true;message('Możesz poprawić tekst. Potwierdzenia weryfikacji i publikację zaznacz dopiero po sprawdzeniu.');
+});
 async function loadList(){const result=await api(`content?collection=${encodeURIComponent(state.collection)}`);state.files=result.files.sort((a,b)=>b.filename.localeCompare(a.filename,'pl'));renderList();}
-function renderList(){const query=$('#entrySearch').value.toLowerCase();const files=state.files.filter(file=>file.filename.toLowerCase().includes(query));$('#entryList').replaceChildren(...files.map(file=>{const b=document.createElement('button');b.type='button';b.className=`entry-button ${state.filename===file.filename?'active':''}`;b.textContent=file.filename.replace(/\.json$/,'');b.addEventListener('click',()=>openEntry(file.filename));return b;}));if(!files.length){const p=document.createElement('p');p.textContent='Brak wpisów.';$('#entryList').append(p);}}
+function renderList(){const query=$('#entrySearch').value.toLowerCase();const files=state.files.filter(file=>file.filename.toLowerCase().includes(query));$('#entryList').replaceChildren(...files.map(file=>{const b=document.createElement('button');b.type='button';b.className=`entry-button ${state.filename===file.filename?'active':''}`;b.textContent=file.filename.replace(/\.json$/,'');b.addEventListener('click',()=>openEntry(file.filename));return b;}));if(!files.length){const p=document.createElement('p');p.textContent=state.collection==='slowo-na-dzis'&&!query?'Brak ręcznych poprawek. Dzisiejszy tekst tworzy automat — podgląd obok.':'Brak wpisów.';$('#entryList').append(p);}}
 $('#entrySearch').addEventListener('input',renderList);
 async function openEntry(filename){if(state.busy || !allowLeaving())return;busy(true);try{const result=await api(`content?collection=${encodeURIComponent(state.collection)}&filename=${encodeURIComponent(filename)}`);edit(result.data,filename,result.sha);message('Wpis gotowy do edycji.');}catch(error){message(error.message,true);}finally{busy(false);}}
-const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Warsaw',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
+const today=warsawDay;
 $('#newEntry').addEventListener('click',()=>{if(!allowLeaving())return;const date=today();edit({date,published:false,verifiedAt:date,calendarScope:'PL-SANDOMIERZ-KOTUSZOW',readingsUrl:`https://mateusz.pl/czytania/${date.slice(0,4)}/${date.replaceAll('-','')}.html`,masses:[{time:'',place:places[0],intention:''}]});message('Nowy wpis. Uzupełnij pola; zaznacz publikację, kiedy będzie gotowy.');});
 function control(tag,attributes={}){const el=document.createElement(tag);Object.assign(el,attributes);return el;}
 function massRow(data={}) {
@@ -96,5 +128,5 @@ $('#cancelDelete').addEventListener('click',()=>$('#deleteDialog').close());
 $('#confirmDelete').addEventListener('click',async()=>{busy(true);try{await api('content',{method:'DELETE',body:JSON.stringify({collection:state.collection,filename:state.filename,sha:state.sha})});$('#deleteDialog').close();clearEditor();await loadList();message('Wpis usunięty. Netlify uruchomi publikację zmiany.');}catch(error){message(error.message,true);}finally{busy(false);}});
 window.addEventListener('beforeunload',event=>{if(state.dirty){event.preventDefault();event.returnValue='';}});
 document.addEventListener('visibilitychange',async()=>{if(!document.hidden && state.csrf){try{const session=await api('session/me');state.csrf=session.csrf;state.expiresAt=session.expiresAt;}catch(error){message(error.message,true);}}});
-setInterval(()=>{if(state.csrf && Date.now()>=state.expiresAt)showLogin('Sesja wygasła. Zaloguj się ponownie.');},30000);
+setInterval(()=>{if(state.csrf && Date.now()>=state.expiresAt)showLogin('Sesja wygasła. Zaloguj się ponownie.');else if(state.csrf&&state.collection==='slowo-na-dzis'&&!state.busy&&previewDate!==warsawDay())loadAutomaticPreview();},30000);
 try{const session=await api('session/me');await enter(session);}catch(error){showLogin(error.message==='Zaloguj się do panelu.'?'':error.message);}

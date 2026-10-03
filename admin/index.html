@@ -26,6 +26,12 @@
       <div class="workspace">
         <aside class="entries"><div class="entries-heading"><h2 id="collectionTitle">Ogłoszenia</h2><button id="newEntry" type="button" class="primary">+ Nowy wpis</button></div><label for="entrySearch" class="sr-only">Szukaj wpisu</label><input type="search" id="entrySearch" placeholder="Szukaj po nazwie pliku…"><div id="entryList"></div><p class="hint">Zapis uruchamia publikację strony. Zmiany pojawią się po zakończeniu budowania w Netlify.</p></aside>
         <section class="editor" aria-labelledby="editorTitle"><h2 id="editorTitle">Wybierz wpis lub dodaj nowy</h2><p id="editorHint">Szkice pozostają w repozytorium i nie są publikowane na stronie.</p>
+          <section id="automaticWordPreview" class="automatic-preview" hidden aria-labelledby="automaticTitle">
+            <p class="eyebrow">Tworzone samodzielnie przez system</p><h3 id="automaticTitle">Automatyczne słowo na dziś</h3>
+            <p id="automaticStatus" role="status" aria-live="polite"></p>
+            <div id="automaticContent" hidden><p id="automaticDay"></p><h3 id="automaticHeading"></h3><blockquote id="automaticQuote"></blockquote><p id="automaticReference"></p><p><strong>Myśl na dziś — opracowana automatycznie</strong></p><p id="automaticReflection"></p><p id="automaticReadingUse" class="field-hint"></p><button type="button" id="correctAutomatic">Przygotuj ręczną poprawkę</button></div>
+            <p class="field-hint"><a id="automaticReadings" target="_blank" rel="noopener">Czytania na dziś ↗</a> · <a id="automaticCalendar" target="_blank" rel="noopener">Kalendarz Sandomierza (GCatholic) ↗</a></p>
+          </section>
           <form id="editorForm" hidden><div id="editorFields"></div><div class="editor-actions"><button type="submit" id="saveEntry" class="primary">Zapisz zmiany</button><button type="button" id="deleteEntry" class="danger" hidden>Usuń wpis</button></div></form>
         </section>
       </div>
