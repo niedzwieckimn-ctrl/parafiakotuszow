@@ -1,1 +1,8 @@
-
+{
+  "title": "Przykładowe ogłoszenie — edytuj lub usuń",
+  "date": "2026-10-03",
+  "published": false,
+  "category": "Ogłoszenia",
+  "summary": "Tu wpisz krótki opis ogłoszenia.",
+  "body": "Tu wpisz pełną treść. Ten przykład jest ukryty na stronie."
+}
