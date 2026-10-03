@@ -2,6 +2,14 @@
 
 Stan opracowania: 3 października 2026 r.
 
+## Uzupełnienia wersji 3
+
+Dodano 13 nowych zasobów: 11 różnych fotografii oraz 2 reprodukcje map. W zwiedzaniu jest teraz 10 różnych ujęć kościoła i jego detali, bez krajobrazów. Fotografie z jubileuszu mają datę 2025, nie są przedstawiane jako dzisiejsze. Archiwalne materiały przypisano do odpowiadających im tematów.
+
+Nowe źródła: [fotorelacja jubileuszu Bractwa](https://www.szydlow.pl/10-lat-bractwa-jakubowego-w-sluzbie-spolecznosci-lokalnej/) (tekst: Anna Wołczyńska, fotorelacja: Michał Kaczmarczyk wg artykułu), [historia Tomasza Skuzy](https://www.kotuszow.pl/index.php/historia), [Powiat Buski 1939–1945](https://www.powiatbuski1939-1945.pl/straty-materialne-kosciola/) oraz [oficjalny serwis parafii](https://parafiakotuszow.pl).
+
+**Status nowych 13 materiałów: brak potwierdzonej publicznej licencji. Są w lokalnym podglądzie; przed publicznym wdrożeniem potrzebne są zgody lub zastąpienie ich materiałami z odpowiednimi prawami.** Pełne przyporządkowanie plików, źródeł i autorstwa jest w [PRAWA-DO-NOWYCH-ZDJEC.md](PRAWA-DO-NOWYCH-ZDJEC.md). Poniższe licencje Commons dotyczą wyłącznie wskazanych tam oryginalnych dziewięciu fotografii i muszli, nie całej paczki.
+
 ## Uzupełnienia wersji 2
 
 - Strona parafii i godziny: https://www.parafiakotuszow.pl/
@@ -47,7 +55,7 @@ Nie potwierdzono lokalnego Ordo. Wpisy czekają na zatwierdzenie kalendarza prze
 
 ## Zasady opracowania historii
 
-Sześć obszernych rozdziałów stanowi współczesne opracowanie treści Wiśniewskiego, z krótkimi cytatami zachowującymi oryginalną pisownię. Pod każdym opisem wskazano autora, tytuł, rok, strony i bibliotekę. Pełny rozdział źródłowy jest dostępny jako siedem niezmienionych skanów (domena publiczna). Fotografie współczesne nie są przedstawiane jako archiwalne. Tekstów współczesnych artykułów i niejasno licencjonowanych fotografii nie przeniesiono w całości; podano opracowania faktów i odsyłacze. Samo oznaczenie źródła nie oznacza zgody na dowolne powielanie utworu.
+Sześć obszernych rozdziałów stanowi współczesne opracowanie treści Wiśniewskiego, z krótkimi cytatami zachowującymi oryginalną pisownię. Pod każdym opisem wskazano autora, tytuł, rok, strony i bibliotekę. Pełny rozdział źródłowy jest dostępny jako siedem niezmienionych skanów (domena publiczna). Fotografie współczesne nie są przedstawiane jako archiwalne. Współczesne artykuły opisano własnymi słowami, z odsyłaczami. Fotografie o niepotwierdzonych prawach w wersji 3 są oznaczone w wykazie materiałów do lokalnego podglądu. Samo oznaczenie źródła nie oznacza zgody na powielanie utworu.
 
 `assets/archiwum/kotuszow-1929-s118.png` do `s124.png`: siedem stron książki Jana Wiśniewskiego, Biblioteka Cyfrowa UMCS, domena publiczna. Pliki DjVu ze źródłowego wydania wyrenderowano do PNG bez retuszu i zmiany treści. Są to skany dokumentu, nie fotografie kościoła.
 

@@ -1,5 +1,7 @@
 import { selectDailyWord, warsawDay } from './calendar.mjs';
 import { historyChapters } from './history-chapters.mjs';
+import { setupJourney } from './journey.mjs';
+import { additionalChurchPhotos } from './church-photos.mjs';
 
 const pageTitles = {
   start: "Parafia św. Jakuba w Kotuszowie",
@@ -18,7 +20,7 @@ const siteNav = document.querySelector("#siteNav");
 const routeAnnouncer = document.querySelector(".route-announcer");
 
 function currentRoute() {
-  const route = window.location.hash.slice(1).toLowerCase();
+  const route = window.location.hash.slice(1).toLowerCase().split('/')[0];
   return pageTitles[route] ? route : "start";
 }
 
@@ -148,7 +150,7 @@ const historyEntries = [
   {
     id: "1983", year: "1983", title: "Lech Wałęsa w Kotuszowie",
     teaser: "Niezwykły epizod zapisany w lokalnej historii.",
-    body: ["Lokalne opracowanie odnotowuje wizytę Lecha Wałęsy u ks. Antoniego Sobczyka w 1983 roku. To jeden z mniej znanych wątków pokazujących, że powojenna plebania była miejscem spotkań wykraczających poza granice parafii.", "Fotografie z tego wydarzenia pozostają w lokalnych zbiorach; strona prowadzi do ich właściciela, nie kopiuje ich bez określonej licencji."],
+    body: ["Lokalne opracowanie Tomasza Skuzy odnotowuje wizytę Lecha Wałęsy u ks. Antoniego Sobczyka w 1983 roku. To jeden z mniej znanych wątków pokazujących, że powojenna plebania była miejscem spotkań wykraczających poza granice parafii.", "W archiwum można obejrzeć dwie fotografie opublikowane przez serwis Kotuszow.pl. Jedna przedstawia spotkanie na plebanii, druga Lecha Wałęsę, biskupa Edwarda Materskiego i ks. Antoniego Sobczyka. Autor fotografii nie został wskazany w opracowaniu."],
     sources: [SOURCE.local],
   },
   {
@@ -179,16 +181,27 @@ function openHistory(id) {
     p.textContent = paragraph;
     return p;
   }));
-  const chapterIds = { '1326':'poczatki', '1595':'poczatki', '1647':'testament', '1661':'testament', '1681':'testament', sapinski:'sapinski', sosinski:'proboszczowie', '1818':'wspolnota' };
+  const illustrations = {
+    '1326': {image:'assets/archiwum/kotuszow-1929-s118.png',page:118,caption:'Wzmianka o proboszczu Pawle w książce z 1929 r. — nie fotografia XIV-wiecznego kościoła.',credit:SOURCE.book.label},
+    '1595': {image:'assets/archiwum/kotuszow-1929-s118.png',page:118,caption:'Strona 118: przytoczone świadectwa wizytacji z okresu reformacji.',credit:SOURCE.book.label},
+    '1647': {image:'assets/archiwum/kotuszow-1929-s124.png',page:124,caption:'Testament Katarzyny Lanckorońskiej — oryginalny tekst w wydaniu z 1929 r.',credit:SOURCE.book.label},
+    '1681': {image:'assets/archiwum/kotuszow-1929-s118.png',page:118,caption:'Zapis konsekracji z datą 11 listopada 1681 r.',credit:SOURCE.book.label},
+    sapinski: {image:'assets/archiwum/kotuszow-1929-s122.png',page:122,caption:'Epitafium ks. Wawrzyńca Sapińskiego — świadectwo pozostawione przez proboszcza.',credit:SOURCE.book.label},
+    sosinski: {image:'assets/archiwum/kotuszow-1929-s123.png',page:123,caption:'Informacje o ks. Pawle Sosińskim i jego fundacjach.',credit:SOURCE.book.label},
+    '1818': {image:'assets/archiwum/kotuszow-1929-s121.png',page:121,caption:'Strona 121: zapis o kradzieży z 1818 r.',credit:SOURCE.book.label},
+    '1944': {image:'assets/szkola-zniszczenia.webp',caption:'Zniszczony budynek szkoły w Kotuszowie. Fotografia ze zbiorów prezentowanych w lokalnej historii; dokładna data i autor niepodani.',credit:'Kotuszow.pl · opracowanie historii: Tomasz Skuza',source:SOURCE.local.url},
+    sobczyk: {image:'assets/odbudowa-transport-drewna.webp',caption:'Drewno na nowy dach kościoła transportowano przy pomocy krów. Źródło nie podaje autora fotografii ani dokładnego dnia wykonania.',credit:'Powiat Buski 1939–1945 · fotografia archiwalna',source:'https://www.powiatbuski1939-1945.pl/straty-materialne-kosciola/'},
+    '1983': {image:'assets/walesa-materski-sobczyk.webp',caption:'Lech Wałęsa, biskup Edward Materski i ks. Antoni Sobczyk. W źródle fotografia towarzyszy opisowi wizyty z 1983 r.; autor niepodany.',credit:'Kotuszow.pl · opracowanie historii: Tomasz Skuza',source:SOURCE.local.url},
+    camino: {image:'assets/muszla-jakubowa.svg',caption:'Muszla — znak pielgrzymów św. Jakuba. Ilustracja symbolu, nie fotografia inauguracji szlaku.',credit:'Maxxl2 / Jürgen Krause · CC BY-SA 3.0',source:'https://commons.wikimedia.org/wiki/File:Escallop.svg'}
+  };
+  if (illustrations[id]) body.append(makeHistoryFigure(illustrations[id]));
+  const chapterIds = { '1647':'testament', '1661':'testament', sapinski:'sapinski', sosinski:'proboszczowie', '1818':'wspolnota' };
   const chapter = historyChapters.find(chapter => chapter.id === chapterIds[id]);
   if (chapter) {
-    body.append(makeHistoryFigure(chapter));
     const subtitle = document.createElement('h3');
     subtitle.textContent = 'Szerszy kontekst w źródle z 1929 roku';
     body.append(subtitle);
     chapter.paragraphs.forEach(text => { const p = document.createElement('p'); p.textContent = text; body.append(p); });
-  } else {
-    body.append(makeHistoryFigure(historyChapters[2]));
   }
   const sources = document.querySelector("#historyDialogSources");
   sources.replaceChildren(...entry.sources.map((source) => {
@@ -201,7 +214,20 @@ function openHistory(id) {
     li.append(link);
     return li;
   }));
-  historyDialog.showModal();
+  appendDialogJourney(historyEntries.indexOf(entry), historyEntries.length, index => openHistory(historyEntries[index].id));
+  if (!historyDialog.open) historyDialog.showModal();
+  historyDialog.scrollTop = 0;
+}
+
+function appendDialogJourney(index, total, open) {
+  historyDialog.querySelector('.dialog-journey')?.remove();
+  const nav = document.createElement('div'); nav.className='dialog-journey';
+  const prev=document.createElement('button'); prev.type='button'; prev.textContent='← Poprzednia opowieść'; prev.disabled=index===0;
+  prev.addEventListener('click',()=>open(index-1));
+  const counter=document.createElement('span');counter.textContent=`${index+1} / ${total}`;
+  const next=document.createElement('button');next.type='button';next.textContent=index===total-1?'Wróć do wyboru':'Odkryj kolejną →';
+  next.addEventListener('click',()=>index===total-1?historyDialog.close():open(index+1));
+  nav.append(prev,counter,next);historyDialog.append(nav);
 }
 
 historyEntries.forEach((entry) => {
@@ -286,40 +312,40 @@ function makeHistoryFigure(chapter) {
   return figure;
 }
 historyChapters.forEach((chapter,index) => {
-  const article = document.createElement('article');
-  article.className = 'history-chapter'; article.id = `chapter-${chapter.id}`;
-  const copy = document.createElement('div'); copy.className = 'chapter-copy';
-  const era = document.createElement('p'); era.className = 'eyebrow'; era.textContent = `${String(index+1).padStart(2,'0')} · ${chapter.era}`;
-  const heading = document.createElement('h3'); heading.textContent = chapter.title;
-  copy.append(era,heading);
-  chapter.paragraphs.forEach(text => { const p = document.createElement('p'); p.textContent = text; copy.append(p); });
-  const credit = document.createElement('p'); credit.className = 'article-source';
-  const link = document.createElement('a'); link.href = SOURCE.book.url; link.target = '_blank'; link.rel = 'noopener';
-  link.textContent = `Źródło: ks. Jan Wiśniewski, „Historyczny opis kościołów, miast, zabytków i pamiątek w stopnickiem”, 1929, s. ${chapter.pages}. Biblioteka Cyfrowa UMCS · domena publiczna.`;
-  credit.append('Opracowanie własne na podstawie źródła; cytaty zachowują pisownię autora. ',link);
-  const scanButton = document.createElement('button'); scanButton.type = 'button'; scanButton.className = 'text-link';
-  scanButton.textContent = `Przeczytaj oryginał · strona ${chapter.page}`;
-  scanButton.addEventListener('click', () => showScan(chapter.page));
-  copy.append(credit,scanButton);
-  article.append(makeHistoryFigure(chapter),copy);
-  document.querySelector('#historyChapters').append(article);
+  const button=document.createElement('button');button.type='button';button.className='chapter-tile';
+  const image=document.createElement('img');image.src=chapter.image;image.alt='';image.loading='lazy';
+  const copy=document.createElement('span');
+  const era=document.createElement('small');era.textContent=chapter.era;
+  const title=document.createElement('strong');title.textContent=chapter.title;
+  const more=document.createElement('em');more.textContent='Wejdź w opowieść →';
+  copy.append(era,title,more);button.append(image,copy);
+  button.addEventListener('click',()=>openChapter(index));document.querySelector('#historyChapters').append(button);
 });
+
+function openChapter(index) {
+  const chapter=historyChapters[index];
+  document.querySelector('#historyDialogYear').textContent=chapter.era;
+  document.querySelector('#historyDialogTitle').textContent=chapter.title;
+  const body=document.querySelector('#historyDialogBody');body.replaceChildren(makeHistoryFigure(chapter));
+  chapter.paragraphs.forEach(text=>{const p=document.createElement('p');p.textContent=text;body.append(p)});
+  const note=document.createElement('p');note.className='article-source';note.textContent='Współczesne opracowanie źródła autorstwa ks. Jana Wiśniewskiego. Oryginalną pisownię zachowano w cytatach. Pełny tekst dostępny w skanie.';
+  const button=document.createElement('button');button.type='button';button.className='text-link';button.textContent=`Przeczytaj oryginał · strona ${chapter.page}`;button.addEventListener('click',()=>showScan(chapter.page));
+  body.append(note,button);
+  const li=document.createElement('li');const link=document.createElement('a');link.href=SOURCE.book.url;link.target='_blank';link.rel='noopener';link.textContent=`Jan Wiśniewski, 1929, s. ${chapter.pages}. Biblioteka Cyfrowa UMCS · domena publiczna.`;li.append(link);document.querySelector('#historyDialogSources').replaceChildren(li);
+  appendDialogJourney(index,historyChapters.length,openChapter);
+  if(!historyDialog.open)historyDialog.showModal();historyDialog.scrollTop=0;
+}
 
 const scenes = [
   { image: "assets/kosciol-brama.webp", alt: "Widok kościoła przez zabytkową bramę", kicker: "Przystanek pierwszy", title: "Brama i dziedziniec", description: "Kamienna brama otwiera widok na barokową bryłę i wysoką wieżę kościoła.", position: "50% 45%", source: "https://commons.wikimedia.org/wiki/File:Kotuszow_kosciol_brama_p8212242.jpg" },
   { image: "assets/kosciol-fasada.webp", alt: "Fasada i wieża kościoła św. Jakuba", kicker: "Przystanek drugi", title: "Fasada i wieża", description: "Czterokondygnacyjna wieża kryje w przyziemiu kruchtę. Ośmioboczny hełm z latarenką góruje nad Kotuszowem.", position: "50% 27%", source: "https://commons.wikimedia.org/wiki/File:Ko%C5%9Bci%C3%B3%C5%82_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" },
   { image: "assets/kosciol-detal-wejscia.webp", alt: "Kamienny portal wejściowy kościoła", kicker: "Przystanek trzeci", title: "Portal i detal kamieniarski", description: "Zatrzymaj się przy wejściu. Jasny kamień, łuk portalu i ślady czasu pokazują materialną historię świątyni.", position: "50% 50%", source: "https://commons.wikimedia.org/wiki/File:Kotuszow_kosciol_zdobienie_wejscia_p8212244.jpg" },
   { image: "assets/kosciol-wnetrze.webp", alt: "Nawa i prezbiterium kościoła św. Jakuba", kicker: "Przystanek czwarty", title: "Nawa i ołtarz", description: "Wnętrze prowadzi wzrok ku ołtarzowi głównemu z obrazem Matki Bożej Łaskawej, zwanej Kotuszowską.", position: "50% 38%", source: "https://commons.wikimedia.org/wiki/File:Wn%C4%99trze_ko%C5%9Bcio%C5%82a_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" },
-  { image: "assets/krzyz-kotuszow.webp", alt: "Przydrożny krzyż w Kotuszowie", kicker: "Przystanek piąty", title: "Krzyż przy drodze", description: "Mała architektura sakralna rozszerza opowieść poza mury kościoła i prowadzi przez krajobraz parafii.", position: "50% 38%", source: "https://commons.wikimedia.org/wiki/File:Kotuszow_krzyz_p8212240.jpg" },
-  { image: "assets/sady-kotuszow.webp", alt: "Sady między Szydłowem a Kotuszowem", title: "Droga przez sady", description: "Sady między Szydłowem a Kotuszowem — krajobraz okolicy parafii sfotografowany w 2024 roku.", position: "50% 48%", source: "https://commons.wikimedia.org/wiki/File:Sady_mi%C4%99dzy_Szyd%C5%82owem_a_Kotuszowem_2024.jpg", credit: 'A.Budz., 2024 · CC BY-SA 4.0' },
+  {image:'assets/kosciol-z-lotu-ptaka.webp',alt:'Kościół św. Jakuba w Kotuszowie widziany z lotu ptaka',title:'Świątynia z lotu ptaka',description:'Spójrz na kościół z góry. Widać układ bryły, dachów i otoczenia świątyni. Fotografię publikuje oficjalny serwis parafii; nie podano autora ani daty wykonania.',source:'https://parafiakotuszow.pl',credit:'Serwis parafii Kotuszów · autor zdjęcia niepodany'}
 ];
-scenes.push(
-  { image:'assets/chancza-wies.webp', alt:'Droga w stronę jeziora w Chańczy', title:'Chańcza — w granicach parafii', description:'Chańcza należy do parafii Kotuszów. Fotografia Michała Dereli z 2009 roku pokazuje drogę w stronę jeziora, nie kaplicę.', position:'50% 50%', source:'https://commons.wikimedia.org/wiki/File:Chancza_P1000541.JPG', credit:'Michał Derela (Pibwl), 2009 · CC BY-SA 4.0' },
-  { image:'assets/zalew-chancza.webp', alt:'Widok zalewu koło Chańczy', title:'Krajobraz nad Czarną', description:'Zalew Chańcza widziany z drogi na lewym brzegu Czarnej, w pobliżu Chańczy. Zdjęcie z 2011 roku.', position:'50% 55%', source:'https://commons.wikimedia.org/wiki/File:Zalew_Cha%C5%84cza_01.jpg', credit:'Agnieszka Kwiecień, Nova, 2011 · CC BY-SA 3.0' },
-  { image:'assets/zalew-zyciny.webp', alt:'Zalew Chańcza przy Życinach', title:'Chwila nad wodą', description:'Wiosenny widok zalewu Chańcza przy Życinach — szersza okolica parafii, nie widok Kotuszowa. Fotografia z kwietnia 2024 roku.', position:'50% 50%', source:'https://commons.wikimedia.org/wiki/File:20240413_171746_Cha%C5%84cza_02.jpg', credit:'Dwxn, 2024 · CC BY-SA 4.0' }
-);
+['EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL', 'EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL'].forEach((credit,index) => { scenes[index].credit = credit; });
+scenes.splice(4,0,...additionalChurchPhotos);
 const baseSceneCount = scenes.length;
-['EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL', 'EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL', 'EwaRóża, 2015 · CC BY-SA 3.0'].forEach((credit,index) => { scenes[index].credit = credit; });
 
 const tourStage = document.querySelector("#tourStage");
 const tourImage = document.querySelector("#tourImage");
@@ -340,14 +366,14 @@ let panY = 0;
 let dragStart = null;
 let autoTourTimer = null;
 let sceneTimer = null;
-let fitView = false;
+let fitView = true;
 const fitViewButton = document.querySelector('#fitViewButton');
 
 function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
 function renderTransform() {
-  const maxPan = Math.max(0, (zoom - 1) * 180);
-  panX = clamp(panX, -maxPan, maxPan);
-  panY = clamp(panY, -maxPan, maxPan);
+  panX = clamp(panX, -(zoom-1)*tourStage.clientWidth/2, (zoom-1)*tourStage.clientWidth/2);
+  panY = clamp(panY, -(zoom-1)*tourStage.clientHeight/2, (zoom-1)*tourStage.clientHeight/2);
+  tourStage.classList.toggle('is-zoomed',zoom>1);
   tourImage.style.transform = `translate3d(${panX}px, ${panY}px, 0) scale(${zoom})`;
 }
 function renderScenePicker() {
@@ -371,7 +397,7 @@ function renderScenePicker() {
   tourTotal.textContent = String(scenes.length).padStart(2, "0");
 }
 function resetView() {
-  zoom = fitView ? 1 : activeScene === 0 ? 1.08 : 1.12;
+  zoom = 1;
   zoomRange.value = String(zoom);
   panX = 0;
   panY = 0;
@@ -390,7 +416,7 @@ function setScene(index) {
     tourTitle.textContent = scene.title;
     tourDescription.textContent = scene.description;
     tourSource.href = safeSourceUrl(scene.source) || scene.image;
-    tourSource.textContent = scene.credit ? `${scene.credit} · źródło i licencja` : 'Zdjęcie i licencja';
+    tourSource.textContent = scene.credit ? `${scene.credit} · źródło fotografii` : 'Źródło fotografii';
     tourIndex.textContent = String(activeScene + 1).padStart(2, "0");
     resetView();
     tourImage.style.opacity = "1";
@@ -406,7 +432,7 @@ function stopAutoTour() {
   window.clearInterval(autoTourTimer);
   autoTourTimer = null;
   autoTourButton.setAttribute("aria-pressed", "false");
-  autoTourButton.textContent = "▶ Auto";
+  autoTourButton.textContent = "Pokaz zdjęć";
 }
 document.querySelector("#tourPrev").addEventListener("click", () => setScene(activeScene - 1));
 document.querySelector("#tourNext").addEventListener("click", () => setScene(activeScene + 1));
@@ -426,7 +452,7 @@ autoTourButton.addEventListener("click", () => {
 });
 zoomRange.addEventListener("input", () => { zoom = Number(zoomRange.value); renderTransform(); });
 tourStage.addEventListener("pointerdown", (event) => {
-  if (event.target.closest("button")) return;
+  if (event.target.closest("button") || zoom<=1) return;
   dragStart = { x: event.clientX - panX, y: event.clientY - panY };
   tourStage.setPointerCapture(event.pointerId);
   dragHint.classList.add("is-hidden");
@@ -445,8 +471,9 @@ function endDrag(event) {
 tourStage.addEventListener("pointerup", endDrag);
 tourStage.addEventListener("pointercancel", endDrag);
 tourStage.addEventListener("wheel", (event) => {
+  if (!event.ctrlKey) return;
   event.preventDefault();
-  zoom = clamp(zoom + (event.deltaY > 0 ? -0.05 : 0.05), 1, 1.7);
+  zoom = clamp(zoom + (event.deltaY > 0 ? -0.05 : 0.05), 1, 2.5);
   zoomRange.value = String(zoom);
   renderTransform();
 }, { passive: false });
@@ -472,6 +499,7 @@ function formatDate(value) {
 }
 function renderLiveNews(articles) {
   const grid = document.querySelector("#liveNewsGrid");
+  grid.hidden = false;
   grid.replaceChildren(...articles.map((article) => {
     const card = document.createElement("article");
     card.className = "news-card live-news-card";
@@ -511,6 +539,7 @@ function renderLiveNews(articles) {
 }
 async function loadLiveNews() {
   const status = document.querySelector("#feedStatus");
+  status.textContent = 'Pobieranie wiadomości ze źródła…';
   try {
     const response = await fetch("/api/aktualnosci", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
@@ -519,9 +548,11 @@ async function loadLiveNews() {
     renderLiveNews(data.articles);
     status.textContent = `Pobrano ${formatDate(data.fetchedAt)}`;
     status.classList.add("is-online");
+    return true;
   } catch (_) {
-    status.textContent = "Kanał chwilowo niedostępny. Poniżej wiadomości wybrane przez redakcję.";
+    status.textContent = "Kanał chwilowo niedostępny. Otwórz oficjalny serwis gminy.";
     document.querySelector("#liveNewsGrid").hidden = true;
+    return false;
   }
 }
 
@@ -536,25 +567,40 @@ function safeSourceUrl(value) {
     return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
   } catch { return ''; }
 }
+function renderHomeNews(announcements) {
+  const list=document.querySelector('#homeNewsList');
+  const entries=announcements.length?announcements.slice(0,3).map(n=>({title:n.title,summary:`${formatDate(n.date)} · ${n.category||'Ogłoszenie parafialne'}`})):[
+    {title:'Ogłoszenia naszej wspólnoty',summary:'Sprawdź komunikaty parafialne i informacje u źródła.'},
+    {title:'Przed wizytą w parafii',summary:'Kontakt, najważniejsze sprawy i przydatne odnośniki.'}
+  ];
+  list.replaceChildren(...entries.map(entry=>{
+    const a=document.createElement('a');a.className='home-news-item';a.href='#aktualnosci';
+    const title=document.createElement('strong');title.textContent=entry.title;
+    const summary=document.createElement('small');summary.textContent=entry.summary;
+    const arrow=document.createElement('span');arrow.textContent='→';arrow.setAttribute('aria-hidden','true');
+    a.append(title,summary,arrow);return a;
+  }));
+}
 function renderAdminContent(data) {
   dailyWords = Array.isArray(data.dailyWords) ? data.dailyWords : [];
   renderDailyWord();
   localIntentions = Array.isArray(data.intentions) ? data.intentions : [];
   renderIntentions();
-  const announcements = Array.isArray(data.announcements) ? data.announcements : [];
+  const announcements = Array.isArray(data.announcements) ? [...data.announcements].sort((a,b)=>Number(b.pinned===true)-Number(a.pinned===true)||new Date(b.date)-new Date(a.date)) : [];
+  renderHomeNews(announcements);
   const noticeList = document.querySelector("#adminNoticeList");
   if (!announcements.length) {
     const empty = document.createElement('p');
     empty.className = 'empty-state';
-    empty.textContent = 'Nie opublikowano jeszcze ogłoszeń parafialnych. Porządek nabożeństw znajdziesz w zakładce Wydarzenia.';
+    empty.textContent = 'Nie opublikowano jeszcze nowych ogłoszeń. Zobacz msze i intencje lub sprawdź oficjalny serwis parafii.';
     noticeList.replaceChildren(empty);
   } else {
     noticeList.replaceChildren(...announcements.map((notice) => {
       const article = document.createElement("article");
-      article.className = "notice-card";
+      article.className = "notice-card"+(notice.pinned?' notice-important':'');
       const meta = document.createElement("p");
       meta.className = "notice-meta";
-      meta.textContent = `${notice.category || "Ogłoszenie"} · ${formatDate(notice.date)}`;
+      meta.textContent = `${notice.pinned?'Ważne · ':''}${notice.category || "Ogłoszenie"} · ${formatDate(notice.date)}`;
       const title = document.createElement("h3");
       title.textContent = notice.title;
       const summary = document.createElement("p");
@@ -630,6 +676,7 @@ async function loadAdminContent() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     renderAdminContent(await response.json());
   } catch (_) {
+    renderHomeNews([]);
     renderScenePicker();
     setScene(0);
   }
@@ -648,8 +695,11 @@ function renderDailyWord() {
   document.querySelector('#dailyWordDate').textContent = formatDate(selected.date);
   document.querySelector('#dailyWordReadings').href = selected.url;
   document.querySelector('#dailyWordContent').hidden = !selected.entry;
+  document.querySelector('#homeWelcome').hidden = !!selected.entry;
+  document.querySelector('#dailyWordLabel').textContent = selected.entry ? 'Słowo otuchy na dziś' : 'Dobrze, że jesteś z nami';
   if (!selected.entry) {
-    for (const id of ['dailyWordDay','dailyWordHeading','dailyWordQuote','dailyWordReference','dailyWordReflection']) document.getElementById(id).textContent = '';
+    document.querySelector('#dailyWordHeading').textContent='Zatrzymaj się.\nJesteś u siebie.';
+    for (const id of ['dailyWordDay','dailyWordQuote','dailyWordReference','dailyWordReflection']) document.getElementById(id).textContent = '';
     return;
   }
   const entry = selected.entry;
@@ -740,7 +790,11 @@ async function loadIntentions() {
 showPage(currentRoute());
 renderScenePicker();
 setScene(0);
-loadLiveNews();
+let municipalLoaded=false;
+document.querySelector('#municipalNews').addEventListener('toggle',event=>{
+  if(event.currentTarget.open&&!municipalLoaded){municipalLoaded=true;loadLiveNews().then(success=>{municipalLoaded=success})}
+});
+setupJourney({openHistory,openChapter});
 loadAdminContent();
 loadIntentions();
 renderDailyWord();

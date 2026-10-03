@@ -40,7 +40,7 @@ async function readCollection(name) {
     if (record.source && !/^https?:\/\//.test(record.source)) throw new Error(`Źródło musi być linkiem http(s): ${filename}`);
     entries.push(record);
   }
-  return entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+  return entries.sort((a, b) => (name === 'ogloszenia' ? Number(b.pinned === true) - Number(a.pinned === true) : 0) || new Date(b.date) - new Date(a.date));
 }
 
 const data = {
@@ -53,7 +53,7 @@ await mkdir(join(root, 'data'), { recursive: true });
 await writeFile(join(root, 'data', 'admin-content.json'), JSON.stringify(data, null, 2) + '\n');
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
-for (const filename of ['index.html', 'styles.css', 'script.js', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md']) {
+for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'script.js', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
   await cp(join(root, filename), join(output, filename));
 }
 for (const folder of ['assets', 'admin', 'data']) {
