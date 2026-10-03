@@ -100,5 +100,5 @@ test('Late previous-day response cannot replace the current-day response',async(
 });
 test('Deployed public assets and admin use the automatic endpoint, not exposed server credentials',async()=>{
   const root=new URL('../',import.meta.url);for(const file of ['dist/daily-word-client.mjs','dist/admin/panel.mjs','dist/script.js']){const text=await readFile(new URL(file,root),'utf8');assert.ok(text.includes('daily-word')||text.includes('/api/slowo-na-dzis'));assert.ok(!/GITHUB_TOKEN|ADMIN_PASSWORD_HASH|process\.env/.test(text));}
-  const config=await readFile(new URL('netlify.toml',root),'utf8');assert.ok(config.includes('/.netlify/functions/daily-word'));assert.equal(GENERATOR_VERSION,'liturgical-rules-v1');
+  const config=await readFile(new URL('netlify.toml',root),'utf8');assert.ok(config.includes('/.netlify/functions/daily-word'));assert.equal(GENERATOR_VERSION,'liturgical-rules-v2');
 });
