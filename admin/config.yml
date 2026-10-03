@@ -1,1 +1,97 @@
+backend:
+  name: github
+  repo: TWOJ_LOGIN_GITHUB/parafia-kotuszow
+  branch: main
 
+locale: pl
+media_folder: assets/uploads
+public_folder: /assets/uploads
+slug:
+  encoding: ascii
+  clean_accents: true
+  sanitize_replacement: '-'
+
+collections:
+  - name: slowo-na-dzis
+    label: Słowo na dziś
+    label_singular: Wpis na konkretny dzień
+    folder: content/slowo-na-dzis
+    create: true
+    format: json
+    extension: json
+    slug: '{{year}}-{{month}}-{{day}}'
+    summary: '{{date}} — {{title}}'
+    fields:
+      - {name: date, label: Dokładna data, widget: datetime, date_format: 'DD.MM.YYYY', time_format: false, format: 'YYYY-MM-DD'}
+      - {name: title, label: Krótki tytuł, widget: string}
+      - {name: liturgicalDay, label: Dzień liturgiczny, widget: string}
+      - {name: quote, label: Dosłowny cytat biblijny, widget: text, hint: 'Krótki fragment bez zewnętrznych cudzysłowów. Zachowaj pisownię źródła.'}
+      - {name: reference, label: Księga i werset, widget: string}
+      - {name: reflection, label: Myśl na dziś — refleksja autorska, widget: text}
+      - {name: readingsUrl, label: Czytania z właściwej daty, widget: string, pattern: ['^https://.+', 'Wpisz pełny bezpieczny link https://.']}
+      - {name: cycle, label: Rok i cykl czytań, widget: string}
+      - {name: calendarScope, widget: hidden, default: PL-SANDOMIERZ-KOTUSZOW}
+      - {name: calendarNote, label: Weryfikacja kalendarza lokalnego i źródła, widget: text, hint: 'Sprawdź kalendarz Polski, Ordo diecezji sandomierskiej oraz obchody własne parafii. Zapisz źródło weryfikacji.'}
+      - {name: verifiedAt, label: Data sprawdzenia, widget: datetime, date_format: 'DD.MM.YYYY', time_format: false, format: 'YYYY-MM-DD'}
+      - {name: reviewed, label: Sprawdzono cytat i treść, widget: boolean, default: false}
+      - {name: localCalendarVerified, label: Potwierdzono właściwe obchody diecezji i parafii, widget: boolean, default: false}
+      - {name: published, label: Gotowe do publikacji w przypisanym dniu, widget: boolean, default: false}
+  - name: intencje
+    label: Msze i intencje
+    label_singular: Dzień nabożeństw
+    folder: content/intencje
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: '{{year}}-{{month}}-{{day}}'
+    summary: '{{date}} — {{title}}'
+    fields:
+      - {name: title, label: Nazwa dnia lub święta, widget: string}
+      - {name: date, label: Dzień nabożeństw, widget: datetime, date_format: 'DD.MM.YYYY', time_format: false, format: 'YYYY-MM-DD'}
+      - {name: published, label: Widoczne na stronie, widget: boolean, default: true}
+      - name: masses
+        label: Msze święte
+        widget: list
+        min: 1
+        fields:
+          - {name: time, label: Godzina, widget: string, pattern: ['^([01]?[0-9]|2[0-3]):[0-5][0-9]$', 'Wpisz godzinę w formacie 17:00.']}
+          - {name: place, label: Miejsce, widget: select, options: [Kościół w Kotuszowie, Kaplica w Chańczy], default: Kościół w Kotuszowie}
+          - {name: intention, label: Intencja, widget: text}
+  - name: ogloszenia
+    label: Ogłoszenia parafialne
+    label_singular: Ogłoszenie
+    folder: content/ogloszenia
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{date}} — {{title}}'
+    fields:
+      - {name: title, label: Tytuł, widget: string}
+      - {name: date, label: Data, widget: datetime, date_format: 'DD.MM.YYYY', time_format: false, format: 'YYYY-MM-DD'}
+      - {name: published, label: Widoczne na stronie, widget: boolean, default: true}
+      - {name: category, label: Rodzaj, widget: select, options: [Ogłoszenia, Nabożeństwa, Wydarzenia, Wspólnota], default: Ogłoszenia}
+      - {name: summary, label: Krótki opis, widget: text}
+      - {name: body, label: Pełna treść, widget: text, required: false, hint: 'Każdy akapit zacznij od nowej linii.'}
+      - {name: image, label: Zdjęcie lub plakat, widget: image, required: false}
+  - name: galeria
+    label: Zdjęcia i spacer
+    label_singular: Zdjęcie
+    folder: content/galeria
+    create: true
+    delete: true
+    format: json
+    extension: json
+    slug: '{{slug}}'
+    fields:
+      - {name: title, label: Tytuł zdjęcia, widget: string}
+      - {name: date, label: Data publikacji, widget: datetime, date_format: 'DD.MM.YYYY', time_format: false, format: 'YYYY-MM-DD'}
+      - {name: published, label: Widoczne na stronie, widget: boolean, default: true}
+      - {name: image, label: Fotografia, widget: image}
+      - {name: description, label: Opis, widget: text}
+      - {name: author, label: Autor lub właściciel zbiorów, widget: string}
+      - {name: license, label: Licencja lub zgoda na publikację, widget: string, hint: 'Np. zdjęcie własne parafii lub CC BY-SA 4.0. Dodawaj materiały z prawem do publikacji.'}
+      - {name: source, label: Link do źródła, widget: string, required: false, pattern: ['^https?://.+', 'Podaj pełny adres https:// lub http://.']}
+      - {name: w_spacerze, label: Dodaj także jako przystanek spaceru, widget: boolean, default: false}

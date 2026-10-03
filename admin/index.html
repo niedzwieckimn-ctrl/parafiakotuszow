@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Panel parafii — Kotuszów</title>
+  <style>
+    body { margin:0; background:#f5f2eb; color:#17202b; font:16px/1.6 system-ui,sans-serif; }
+    .setup { width:min(640px,calc(100% - 48px)); margin:10vh auto; }
+    h1 { font:400 42px/1.15 Georgia,serif; }
+    .label { color:#806239; font-size:14px; text-transform:uppercase; letter-spacing:.12em; }
+    code { background:#eae4d9; padding:.15em .3em; overflow-wrap:anywhere; }
+    a { color:#132235; text-underline-offset:4px; }
+    li { margin-block:.8rem; }
+    #setupStatus { padding:1rem; border:1px solid #d4cbbd; }
+  </style>
+</head>
+<body>
+  <main class="setup" id="setupScreen">
+    <p class="label">Parafia św. Jakuba w Kotuszowie</p>
+    <h1>Panel administratora</h1>
+    <p id="setupStatus" role="status">Sprawdzanie konfiguracji panelu…</p>
+    <div id="setupInstructions" hidden>
+      <p>Panel zapisuje ogłoszenia i zdjęcia w repozytorium strony. Przed pierwszym logowaniem właściciel strony musi:</p>
+      <ol>
+        <li>Wpisać nazwę repozytorium w <code>admin/config.yml</code> w polu <code>repo</code>.</li>
+        <li>Połączyć repozytorium z Netlify i uruchomić publikację.</li>
+        <li>Włączyć logowanie GitHub w Netlify według instrukcji <code>README.md</code> dołączonej do paczki.</li>
+      </ol>
+      <p>Po konfiguracji zalogujesz się swoim kontem GitHub. Dostęp do edycji mają tylko osoby z prawem zapisu do repozytorium.</p>
+    </div>
+    <p><a href="../">Wróć na stronę parafii</a></p>
+  </main>
+  <script>
+    window.CMS_MANUAL_INIT = true;
+    (async () => {
+      const status = document.getElementById('setupStatus');
+      try {
+        const response = await fetch('config.yml', { cache: 'no-cache' });
+        if (!response.ok) throw new Error('Nie można odczytać konfiguracji.');
+        const config = await response.text();
+        if (config.includes('TWOJ_LOGIN_GITHUB')) {
+          status.textContent = 'Panel jest przygotowany. Wymaga jednorazowego połączenia z repozytorium i logowaniem GitHub.';
+          document.getElementById('setupInstructions').hidden = false;
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/decap-cms@3.16.0/dist/decap-cms.js';
+        script.onload = () => {
+          document.getElementById('setupScreen').remove();
+          window.CMS.init();
+        };
+        script.onerror = () => { status.textContent = 'Nie udało się wczytać panelu. Sprawdź połączenie i odśwież stronę.'; };
+        document.head.append(script);
+      } catch (error) { status.textContent = error.message; }
+    })();
+  </script>
+</body>
+</html>
