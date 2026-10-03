@@ -1,1 +1,6 @@
-
+{
+  "title": "Przykładowy dzień — edytuj datę i intencje",
+  "date": "2026-10-03",
+  "published": false,
+  "masses": [{"time":"17:00", "place":"Kościół w Kotuszowie", "intention":"Wpisz intencję potwierdzoną przez parafię."}]
+}
