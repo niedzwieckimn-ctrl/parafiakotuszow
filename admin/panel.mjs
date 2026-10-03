@@ -2,6 +2,7 @@ import {collections,places} from './schema.mjs';
 import {warsawDay,readingsUrl} from '../calendar.mjs';
 import {validAutomaticWord,DAILY_WORD_ENDPOINT} from '../daily-word-client.mjs';
 import {preparePhoto,checkPhoto,MAX_ALBUM_PHOTOS} from './photos.mjs';
+import {massSchedule} from '../mass-schedule.mjs';
 const $=selector=>document.querySelector(selector);
 const el=(tag,properties={})=>Object.assign(document.createElement(tag),properties);
 const state={csrf:'',expiresAt:0,collection:'ogloszenia',files:[],nextOffset:null,filename:null,sha:null,dirty:false,busy:false,objects:[],photos:[]};
@@ -52,13 +53,13 @@ function renderList(){
 $('#entrySearch').addEventListener('input',renderList);
 $('#moreEntries').addEventListener('click',async()=>{if(state.busy)return;busy(true);try{await loadList(true);}catch(error){message(error.message,true);}finally{busy(false);}});
 async function openEntry(filename){if(state.busy||!allowLeaving())return;busy(true);try{const result=await api(`content?collection=${encodeURIComponent(state.collection)}&filename=${encodeURIComponent(filename)}`);edit(result.data,filename,result.sha);message('Możesz poprawić treść i opublikować zmiany.');}catch(error){message(error.message,true);}finally{busy(false);}}
-function newEntry(){if(state.busy||!allowLeaving())return;const date=warsawDay();edit({date,published:false,verifiedAt:date,calendarScope:'PL-SANDOMIERZ-KOTUSZOW',readingsUrl:readingsUrl(date),masses:[{time:'',place:places[0],intention:''}]});message('');}
+function newEntry(){if(state.busy||!allowLeaving())return;const date=warsawDay();edit({date,published:false,verifiedAt:date,calendarScope:'PL-SANDOMIERZ-KOTUSZOW',readingsUrl:readingsUrl(date),masses:massSchedule([],[],date,1)[0].masses.map(mass=>({...mass,intention:''}))});message('');}
 $('#newEntry').addEventListener('click',newEntry);
 for(const b of document.querySelectorAll('[data-new]'))b.addEventListener('click',async()=>{if(state.busy)return;if(state.collection===b.dataset.new)newEntry();else if(await choose(b.dataset.new))newEntry();});
 function massRow(data={}){
   const row=el('div',{className:'mass-row'}),top=el('div',{className:'mass-row-top'});
   for(const [name,label,type] of [['time','Godzina','time'],['place','Miejsce','select']]){const wrap=el('label',{textContent:label});let input;if(type==='select'){input=el('select',{name});for(const place of places)input.append(el('option',{value:place,textContent:place}));}else input=el('input',{name,type,required:true});input.value=data[name]||(name==='place'?places[0]:'');wrap.append(input);top.append(wrap);}
-  const label=el('label',{textContent:'Intencja'});label.append(el('textarea',{name:'intention',value:data.intention||'',required:true,maxLength:4000,placeholder:'Wpisz intencję tej Mszy świętej'}));
+  const label=el('label',{textContent:'Intencja (możesz zostawić puste)'});label.append(el('textarea',{name:'intention',value:data.intention||'',maxLength:4000,placeholder:'Za parafian — dopóki nie wpiszesz innej intencji'}));
   const remove=el('button',{type:'button',textContent:'Usuń tę Mszę'});remove.addEventListener('click',()=>{row.remove();state.dirty=true;});row.append(top,label,remove);return row;
 }
 const validImage=path=>/^\/?assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:jpe?g|png|webp|gif|avif)$/i.test(path||'');
@@ -112,6 +113,14 @@ function edit(data,filename=null,sha=null){
     (advanced.has(field.name)?details:$('#editorFields')).append(wrap);
   }
   if(details.children.length>1)$('#editorFields').append(details);
+  if(state.collection==='intencje'){
+    const dateInput=$('#field-date');dateInput.addEventListener('change',()=>{
+      if(state.filename)return;
+      const list=$('#massList');if([...list.querySelectorAll('[name="intention"]')].some(input=>input.value.trim())){message('Zmieniono dzień. Sprawdź godziny Mszy — wpisane intencje zostały zachowane.');return;}
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(dateInput.value))return;
+      list.replaceChildren(...massSchedule([],[],dateInput.value,1)[0].masses.map(mass=>massRow({...mass,intention:''})));state.dirty=true;
+    });
+  }
   renderAlbum();renderList();state.dirty=false;$('.workspace').classList.add('is-editing');if(matchMedia('(max-width:800px)').matches)$('#editorTitle').scrollIntoView({block:'start',behavior:'instant'});
 }
 $('#editorForm').addEventListener('input',()=>{state.dirty=true;});
