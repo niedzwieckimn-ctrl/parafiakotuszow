@@ -4,57 +4,33 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex,nofollow">
-  <title>Panel parafii — Kotuszów</title>
-  <style>
-    body { margin:0; background:#f5f2eb; color:#17202b; font:16px/1.6 system-ui,sans-serif; }
-    .setup { width:min(640px,calc(100% - 48px)); margin:10vh auto; }
-    h1 { font:400 42px/1.15 Georgia,serif; }
-    .label { color:#806239; font-size:14px; text-transform:uppercase; letter-spacing:.12em; }
-    code { background:#eae4d9; padding:.15em .3em; overflow-wrap:anywhere; }
-    a { color:#132235; text-underline-offset:4px; }
-    li { margin-block:.8rem; }
-    #setupStatus { padding:1rem; border:1px solid #d4cbbd; }
-  </style>
+  <title>Panel administratora — Parafia św. Jakuba w Kotuszowie</title>
+  <link rel="stylesheet" href="panel.css">
+  <script type="module" src="panel.mjs"></script>
 </head>
 <body>
-  <main class="setup" id="setupScreen">
-    <p class="label">Parafia św. Jakuba w Kotuszowie</p>
-    <h1>Panel administratora</h1>
-    <p id="setupStatus" role="status">Sprawdzanie konfiguracji panelu…</p>
-    <div id="setupInstructions" hidden>
-      <p>Panel zapisuje ogłoszenia i zdjęcia w repozytorium strony. Przed pierwszym logowaniem właściciel strony musi:</p>
-      <ol>
-        <li>Wpisać nazwę repozytorium w <code>admin/config.yml</code> w polu <code>repo</code>.</li>
-        <li>Połączyć repozytorium z Netlify i uruchomić publikację.</li>
-        <li>Włączyć logowanie GitHub w Netlify według instrukcji <code>README.md</code> dołączonej do paczki.</li>
-      </ol>
-      <p>Po konfiguracji zalogujesz się swoim kontem GitHub. Dostęp do edycji mają tylko osoby z prawem zapisu do repozytorium.</p>
-    </div>
-    <p><a href="../">Wróć na stronę parafii</a></p>
+  <header class="admin-header"><a href="/" class="brand"><img src="/assets/muszla-jakubowa.svg" alt="" width="34" height="34"><span>Parafia św. Jakuba w Kotuszowie<small>Panel administratora</small></span></a><a href="/">Wróć na stronę ↗</a></header>
+  <main>
+    <section class="login-card" id="loginScreen" aria-labelledby="loginTitle">
+      <p class="eyebrow">W trosce o naszą wspólnotę</p><h1 id="loginTitle">Panel administratora</h1><p>Zaloguj się, aby przygotować ogłoszenia, intencje i słowo otuchy.</p>
+      <form id="loginForm">
+        <label for="email">E-mail</label><input id="email" name="email" type="email" autocomplete="username" maxlength="254" required>
+        <label for="password">Hasło</label><div class="password-field"><input id="password" name="password" type="password" autocomplete="current-password" maxlength="256" required><button type="button" id="showPassword" aria-label="Pokaż hasło" aria-pressed="false">Pokaż</button></div>
+        <button class="primary" type="submit" id="loginButton">Zaloguj</button>
+      </form><p id="loginStatus" class="status" role="status" aria-live="polite">Sprawdzanie sesji…</p>
+    </section>
+    <section id="dashboard" class="dashboard" hidden>
+      <div class="dashboard-heading"><div><p class="eyebrow">Przestrzeń redakcyjna</p><h1>Dobrze, że jesteś.</h1><p id="sessionInfo"></p></div><button id="logout" type="button">Wyloguj</button></div>
+      <nav id="collectionTabs" class="tabs" aria-label="Rodzaj treści"></nav>
+      <p class="status dashboard-status" id="dashboardStatus" role="status" aria-live="polite"></p>
+      <div class="workspace">
+        <aside class="entries"><div class="entries-heading"><h2 id="collectionTitle">Ogłoszenia</h2><button id="newEntry" type="button" class="primary">+ Nowy wpis</button></div><label for="entrySearch" class="sr-only">Szukaj wpisu</label><input type="search" id="entrySearch" placeholder="Szukaj po nazwie pliku…"><div id="entryList"></div><p class="hint">Zapis uruchamia publikację strony. Zmiany pojawią się po zakończeniu budowania w Netlify.</p></aside>
+        <section class="editor" aria-labelledby="editorTitle"><h2 id="editorTitle">Wybierz wpis lub dodaj nowy</h2><p id="editorHint">Szkice pozostają w repozytorium i nie są publikowane na stronie.</p>
+          <form id="editorForm" hidden><div id="editorFields"></div><div class="editor-actions"><button type="submit" id="saveEntry" class="primary">Zapisz zmiany</button><button type="button" id="deleteEntry" class="danger" hidden>Usuń wpis</button></div></form>
+        </section>
+      </div>
+    </section>
   </main>
-  <script>
-    window.CMS_MANUAL_INIT = true;
-    (async () => {
-      const status = document.getElementById('setupStatus');
-      try {
-        const response = await fetch('config.yml', { cache: 'no-cache' });
-        if (!response.ok) throw new Error('Nie można odczytać konfiguracji.');
-        const config = await response.text();
-        if (config.includes('TWOJ_LOGIN_GITHUB')) {
-          status.textContent = 'Panel jest przygotowany. Wymaga jednorazowego połączenia z repozytorium i logowaniem GitHub.';
-          document.getElementById('setupInstructions').hidden = false;
-          return;
-        }
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/decap-cms@3.16.0/dist/decap-cms.js';
-        script.onload = () => {
-          document.getElementById('setupScreen').remove();
-          window.CMS.init();
-        };
-        script.onerror = () => { status.textContent = 'Nie udało się wczytać panelu. Sprawdź połączenie i odśwież stronę.'; };
-        document.head.append(script);
-      } catch (error) { status.textContent = error.message; }
-    })();
-  </script>
+  <dialog id="deleteDialog"><h2>Usunąć ten wpis?</h2><p id="deleteDescription"></p><p>Zdjęcie pozostanie w bibliotece. Wpis można odzyskać z historii repozytorium.</p><div class="editor-actions"><button id="cancelDelete" type="button">Anuluj</button><button id="confirmDelete" type="button" class="danger">Usuń wpis</button></div></dialog>
 </body>
 </html>

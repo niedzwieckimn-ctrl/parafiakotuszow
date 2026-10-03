@@ -1,7 +1,5 @@
-backend:
-  name: github
-  repo: niedzwieckim-ctrl/parafia-kotuszow
-  branch: main
+# Archiwalna definicja pól poprzedniego panelu. Nie jest publikowana ani uruchamiana.
+# Aktualny panel: admin/index.html, panel.mjs, schema.mjs + Netlify Functions.
 
 locale: pl
 media_folder: assets/uploads
