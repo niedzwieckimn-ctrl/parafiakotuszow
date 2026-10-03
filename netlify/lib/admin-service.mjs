@@ -1,4 +1,4 @@
-import {randomUUID} from 'node:crypto';
+import {createHash} from 'node:crypto';
 import {configuration,createAuth,requireOrigin,readJSON,bodyBytes,json,fail,safeHandler,sessionCookie,withWriteLock} from './admin-security.mjs';
 import {collections} from '../../admin/schema.mjs';
 import {collection,contentPath,mediaPath,validateContent,newFilename} from './admin-content.mjs';
@@ -47,13 +47,26 @@ export function createService({env=process.env,getStore,fetcher=fetch,imageProce
       // Decode and re-encode. Extension and browser MIME alone are never trusted.
       const clean=await imageProcessor(bytes,type);
       if(clean.length>MAX_IMAGE_BYTES) fail(413,'Zdjęcie po przetworzeniu jest za duże.');
-      const filename=`${new Date().toISOString().slice(0,10)}-${randomUUID()}.${allowed[type]}`;
+      // Content-addressed filename makes a retry after connection loss idempotent.
+      const filename=`photo-${createHash('sha256').update(clean).digest('hex')}.${allowed[type]}`;
       return withWriteLock(store,async()=>json(await github.upload(filename,clean),201));
     }
     if(method==='GET') {
       const query=new URL(request.url).searchParams,name=query.get('collection'),filename=query.get('filename');
       collection(name);
-      return json(filename ? await github.read(name,filename) : {files:await github.list(name)});
+      if(filename)return json(await github.read(name,filename));
+      const files=(await github.list(name)).sort((a,b)=>b.filename.localeCompare(a.filename,'pl'));
+      if(query.get('summaries')!=='1')return json({files});
+      const rawOffset=query.get('offset')||'0';
+      if(!/^\d{1,4}$/.test(rawOffset)||Number(rawOffset)>files.length)fail(400,'Nieprawidłowa strona listy.');
+      const offset=Number(rawOffset),page=files.slice(offset,offset+20),summaries=[];
+      for(let i=0;i<page.length;i+=4) {
+        summaries.push(...await Promise.all(page.slice(i,i+4).map(async item=>{
+          const {data}=await github.read(name,item.filename);
+          return {...item,title:typeof data.title==='string'?data.title:'Wpis parafialny',date:data.date,published:data.published===true};
+        })));
+      }
+      return json({files:summaries,nextOffset:offset+20<files.length?offset+20:null});
     }
     if(!['POST','DELETE'].includes(method)) fail(405,'Użyj GET, POST lub DELETE.');
     const input=await readJSON(request),name=input.collection;
@@ -75,7 +88,11 @@ export function createService({env=process.env,getStore,fetcher=fetch,imageProce
       // Preserve fields introduced outside this panel, including provenance.
       merged={...current.data,...data};
     } else if(input.sha) fail(422,'Nowy wpis nie może zawierać SHA.');
-    if(data.image && !await github.exists(data.image)) fail(422,'Nie znaleziono zdjęcia w repozytorium. Najpierw prześlij plik.');
+    const images=[...new Set([data.image,...(data.photos||[])].filter(Boolean))];
+    for(let i=0;i<images.length;i+=4) {
+      const found=await Promise.all(images.slice(i,i+4).map(path=>github.exists(path)));
+      if(found.some(value=>!value))fail(422,'Nie znaleziono zdjęcia. Wybierz je ponownie i spróbuj opublikować.');
+    }
     if(['intencje','slowo-na-dzis'].includes(name) && data.published) {
       // Canonical dated files cannot change their date. Legacy non-dated filenames remain editable.
       if(/^\d{4}-\d{2}-\d{2}\.json$/.test(filename) && filename!==`${data.date}.json`) fail(422,'Ten plik jest przypisany do konkretnej daty. Dodaj nowy dzień zamiast zmieniać datę tego wpisu.');

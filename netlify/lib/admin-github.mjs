@@ -2,17 +2,17 @@ import {fail,HttpError} from './admin-security.mjs';
 import {contentPath,mediaPath} from './admin-content.mjs';
 export function createGithub(env,fetcher=fetch) {
   const {GITHUB_TOKEN:token,GITHUB_OWNER:owner,GITHUB_REPO:repo,GITHUB_BRANCH:branch}=env;
-  if(!token || !/^[a-zA-Z0-9_-]+$/.test(owner || '') || !/^[a-zA-Z0-9_.-]+$/.test(repo || '') || !branch || branch.length>200 || /[\s\x00-\x1f?\[\\]/.test(branch)) fail(503,'Uzupełnij konfigurację repozytorium w Netlify.');
+  if(!token || !/^[a-zA-Z0-9_-]+$/.test(owner || '') || !/^[a-zA-Z0-9_.-]+$/.test(repo || '') || !branch || branch.length>200 || /[\s\x00-\x1f?\[\\]/.test(branch)) fail(503,'Zapis nie jest jeszcze gotowy. Skontaktuj się z osobą opiekującą się stroną.');
   const base=`https://api.github.com/repos/${owner}/${repo}`;
   const deadline=AbortSignal.timeout(25000);
   async function api(path,options={}) {
     const {raw=false,...fetchOptions}=options;
-    let response;try {response=await fetcher(base+path,{...fetchOptions,headers:{Accept:raw?'application/vnd.github.raw+json':'application/vnd.github+json',Authorization:`Bearer ${token}`,'X-GitHub-Api-Version':'2022-11-28','User-Agent':'Parafia-Kotuszow-Admin','Content-Type':'application/json',...options.headers},signal:AbortSignal.any([deadline,AbortSignal.timeout(15000)]),redirect:'error'});}catch{fail(502,'Brak połączenia z repozytorium. Spróbuj ponownie.');}
-    if(response.status===404) fail(404,'Nie znaleziono pliku lub repozytorium.');
-    if([409,422].includes(response.status)) fail(409,'Plik zmienił się od ostatniego odczytu albo gałąź blokuje zapis. Otwórz wpis ponownie; Twoja treść pozostała w formularzu.');
-    if([401,403].includes(response.status)) fail(502,'Repozytorium odmówiło dostępu. Sprawdź token, jego ważność i uprawnienia do main.');
-    if(response.status===429) fail(429,'Repozytorium ograniczyło liczbę zapytań. Spróbuj później.');
-    if(!response.ok) fail(502,'Nie udało się wykonać operacji w repozytorium.');
+    let response;try {response=await fetcher(base+path,{...fetchOptions,headers:{Accept:raw?'application/vnd.github.raw+json':'application/vnd.github+json',Authorization:`Bearer ${token}`,'X-GitHub-Api-Version':'2022-11-28','User-Agent':'Parafia-Kotuszow-Admin','Content-Type':'application/json',...options.headers},signal:AbortSignal.any([deadline,AbortSignal.timeout(15000)]),redirect:'error'});}catch{fail(502,'Nie udało się połączyć. Spróbuj ponownie.');}
+    if(response.status===404) fail(404,'Nie znaleziono wpisu lub zdjęcia.');
+    if([409,422].includes(response.status)) fail(409,'Nie można teraz zapisać zmian. Wpis mógł być zmieniony w innym miejscu. Twoja treść pozostała w formularzu.');
+    if([401,403].includes(response.status)) fail(502,'Zapis jest niedostępny. Skontaktuj się z osobą opiekującą się stroną.');
+    if(response.status===429) fail(429,'Zbyt wiele zapytań. Spróbuj za chwilę.');
+    if(!response.ok) fail(502,'Nie udało się wykonać tej czynności. Spróbuj ponownie.');
     return response.status===204 ? null : raw ? Buffer.from(await response.arrayBuffer()) : response.json();
   }
   const encoded=path=>path.split('/').map(encodeURIComponent).join('/');
@@ -53,6 +53,7 @@ export function createGithub(env,fetcher=fetch) {
     },
     async upload(filename,bytes) {
       const path=mediaPath(`assets/uploads/${filename}`);
+      try{const existing=await file(path);if(!existing.bytes.equals(bytes))fail(409,'Zdjęcie zmieniło się od poprzedniego przesłania.');return {path:`/${path}`,commit:'',alreadyUploaded:true};}catch(error){if(!(error instanceof HttpError&&error.status===404))throw error;}
       const result=await api(`/contents/${encoded(path)}`,{method:'PUT',body:JSON.stringify({branch,message:`Panel parafii: zdjęcie ${filename} [skip netlify]`,content:bytes.toString('base64')})});
       return {path:`/${path}`,commit:result.commit.sha};
     }

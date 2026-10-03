@@ -26,6 +26,13 @@ export function validateContent(name,input) {
   const result={};
   for(const field of schema.fields) {
     let value=input[field.name] ?? field.default;
+    if(field.type==='photos') {
+      if(value===undefined)continue;
+      if(!Array.isArray(value)||value.length>30||value.some(path=>typeof path!=='string'))fail(422,'Album może zawierać do 30 zdjęć.');
+      value.forEach(mediaPath);
+      if(new Set(value.map(mediaPath)).size!==value.length)fail(422,'To samo zdjęcie dodano więcej niż raz.');
+      result.photos=value;continue;
+    }
     if(field.type==='checkbox') {if(value !== undefined && typeof value!=='boolean') fail(422,`${field.label}: oczekiwano przełącznika.`);result[field.name]=value ?? false;continue;}
     if(field.type==='masses') {
       if(!Array.isArray(value) || !value.length || value.length>30) fail(422,'Dodaj od 1 do 30 Mszy w jednym dniu.');
@@ -46,6 +53,11 @@ export function validateContent(name,input) {
       if(!['http:','https:'].includes(url.protocol) || url.username || url.password || (field.name==='readingsUrl' && url.protocol!=='https:')) fail(422,`Niebezpieczny link: ${field.label}.`);
     }
     result[field.name]=value;
+  }
+  if(name==='intencje'&&!result.title)result.title=`Msze i intencje — ${result.date.split('-').reverse().join('.')}`;
+  if(name==='galeria'&&result.photos?.length) {
+    if(!result.photos.includes(result.image))fail(422,'Zdjęcie główne musi należeć do albumu.');
+    if(result.photos.length>1&&result.w_spacerze)fail(422,'Album uroczystości nie jest częścią zwiedzania kościoła. Dodaj tam osobne zdjęcie wnętrza lub detalu.');
   }
   if(name==='slowo-na-dzis') {
     if(result.calendarScope!=='PL-SANDOMIERZ-KOTUSZOW') fail(422,'Wymagany jest właściwy kalendarz parafii.');

@@ -12,7 +12,7 @@ export function json(data, status = 200, headers = {}) {
 }
 export function parseHash(value) {
   const parts = String(value || '').split('$');
-  if (parts.length !== 6 || parts[0] !== 'scrypt' || parts[1] !== '131072' || parts[2] !== '8' || parts[3] !== '1' || !/^[a-f0-9]{32}$/.test(parts[4]) || !/^[a-f0-9]{128}$/.test(parts[5])) fail(503,'Panel wymaga konfiguracji administratora w Netlify.');
+  if (parts.length !== 6 || parts[0] !== 'scrypt' || parts[1] !== '131072' || parts[2] !== '8' || parts[3] !== '1' || !/^[a-f0-9]{32}$/.test(parts[4]) || !/^[a-f0-9]{128}$/.test(parts[5])) fail(503,'Panel nie jest jeszcze gotowy. Skontaktuj się z osobą opiekującą się stroną.');
   return {salt:Buffer.from(parts[4],'hex'),key:Buffer.from(parts[5],'hex')};
 }
 export async function passwordHash(password) {
@@ -32,10 +32,10 @@ function equalText(a,b) {
 }
 export function configuration(env) {
   const email = env.ADMIN_EMAIL?.trim().toLowerCase();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !/^[a-f0-9]{64,128}$/i.test(env.SESSION_SECRET || '')) fail(503,'Panel wymaga konfiguracji administratora w Netlify.');
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !/^[a-f0-9]{64,128}$/i.test(env.SESSION_SECRET || '')) fail(503,'Panel nie jest jeszcze gotowy. Skontaktuj się z osobą opiekującą się stroną.');
   parseHash(env.ADMIN_PASSWORD_HASH);
   const origin = (()=>{try { return new URL(env.ADMIN_ORIGIN || env.URL).origin; } catch { return ''; }})();
-  if (!origin.startsWith('https://')) fail(503,'Ustaw prawidłowy ADMIN_ORIGIN (adres https strony).');
+  if (!origin.startsWith('https://')) fail(503,'Nie można otworzyć panelu pod tym adresem. Skontaktuj się z osobą opiekującą się stroną.');
   return {email,origin,hash:env.ADMIN_PASSWORD_HASH,secret:env.SESSION_SECRET};
 }
 export function requireOrigin(request, cfg) {
@@ -117,6 +117,6 @@ export async function safeHandler(callback) {
   try {return await callback();} catch(error) {
     if(error instanceof HttpError) return json({error:error.message},error.status);
     // Never include upstream bodies, credentials, request data or exception text.
-    return json({error:'Usługa chwilowo niedostępna. Spróbuj ponownie. Jeśli problem trwa, sprawdź konfigurację Netlify.'},503);
+    return json({error:'Usługa chwilowo niedostępna. Spróbuj ponownie. Jeśli problem trwa, skontaktuj się z osobą opiekującą się stroną.'},503);
   }
 }
