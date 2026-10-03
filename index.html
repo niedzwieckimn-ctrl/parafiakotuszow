@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#132235">
+  <meta name="theme-color" content="#f7f8f4">
   <meta name="description" content="Parafia pw. św. Jakuba Starszego Apostoła w Kotuszowie — wydarzenia, aktualności, historia i wirtualne zwiedzanie kościoła.">
   <title>Parafia św. Jakuba w Kotuszowie</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23132235'/%3E%3Cpath d='M32 9v46M20 21h24' stroke='%23c7a36d' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M14 52c5-8 11-12 18-12s13 4 18 12' fill='none' stroke='%23f3eee4' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
@@ -50,25 +50,36 @@
     <section class="page-view is-active" id="page-start" data-page="start" aria-labelledby="dailyWordHeading">
       <section class="home-opening shell-width" aria-label="Powitanie i słowo na dziś">
         <div class="opening-copy">
-          <p class="opening-kicker"><img src="assets/muszla-jakubowa.svg" alt="" width="28" height="28"><span id="dailyWordLabel">Słowo otuchy na dziś</span></p>
+          <p class="opening-kicker"><img src="assets/muszla-jakubowa.svg" alt="" width="28" height="28"><span id="dailyWordLabel">Słowo na dziś</span></p>
+          <time id="dailyWordDate" class="opening-date"></time>
             <h1 id="dailyWordHeading">Słowo na dziś</h1>
             <p id="dailyWordNotice" class="daily-word-provenance" hidden></p>
           <div class="opening-word" id="dailyWordContent" hidden>
             <p class="liturgical-day" id="dailyWordDay"></p>
             <figure class="opening-quote"><blockquote id="dailyWordQuote"></blockquote><figcaption id="dailyWordReference"></figcaption></figure>
-            <div class="opening-reflection"><h2>Myśl na dziś <small id="dailyWordReflectionLabel">· refleksja autorska</small></h2><p id="dailyWordReflection"></p></div>
+            <div class="opening-reflection"><h2>Myśl na dziś</h2><p id="dailyWordReflection"></p></div>
             <p class="daily-word-provenance" id="dailyWordProvenance" hidden>Źródła: <a id="dailyWordTextSource" target="_blank" rel="noopener">czytania — Mateusz</a> · <a id="dailyWordCalendarSource" target="_blank" rel="noopener">kalendarz Sandomierza — GCatholic</a></p>
           </div>
-          <div class="opening-readings"><time id="dailyWordDate"></time><a id="dailyWordReadings" href="https://mateusz.pl/czytania/" target="_blank" rel="noopener">Przeczytaj dzisiejsze czytania</a></div>
-          <div class="opening-actions">
-            <a class="home-action home-action-primary" href="#aktualnosci" data-page-link="aktualnosci">Aktualności i ogłoszenia</a>
-            <a class="home-action home-action-secondary" href="#wydarzenia" data-page-link="wydarzenia">Msze i intencje</a>
-          </div>
+          <div class="opening-readings"><a id="dailyWordReadings" href="https://mateusz.pl/czytania/" target="_blank" rel="noopener">Przeczytaj dzisiejsze czytania ↗</a></div>
         </div>
         <figure class="opening-photo">
           <img src="assets/kosciol-wnetrze.webp" alt="Wnętrze kościoła św. Jakuba w Kotuszowie, widok ku ołtarzowi" width="1800" height="1200" fetchpriority="high">
           <figcaption><span>Kościół św. Jakuba w Kotuszowie</span><a href="https://commons.wikimedia.org/wiki/File:Wn%C4%99trze_ko%C5%9Bcio%C5%82a_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" target="_blank" rel="noopener">Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</a></figcaption>
         </figure>
+      </section>
+
+      <nav class="opening-actions shell-width" aria-label="Najważniejsze sprawy parafialne">
+        <a class="home-action home-action-primary" href="#aktualnosci" data-page-link="aktualnosci"><span><strong>Aktualności i ogłoszenia</strong><small>Co dzieje się w naszej parafii</small></span><span aria-hidden="true">↗</span></a>
+        <a class="home-action home-action-secondary" href="#wydarzenia" data-page-link="wydarzenia"><span><strong>Msze i intencje</strong><small>Plan nabożeństw i wspólnej modlitwy</small></span><span aria-hidden="true">↗</span></a>
+      </nav>
+
+      <section class="home-discover shell-width" aria-labelledby="home-story-title">
+        <div class="home-section-heading"><div><p class="eyebrow">Poznaj nasze miejsce</p><h2 id="home-story-title">Poznaj historię naszej parafii</h2></div></div>
+        <div class="invitation-grid">
+          <a class="invitation" href="#historia" data-page-link="historia"><img src="assets/kosciol-fasada.webp" alt="Wieża i wejście do kościoła" width="1192" height="1800" loading="lazy"><div class="invitation-copy"><h3>Historia parafii</h3><p>Ludzie, wydarzenia i ślady dawnych lat.</p><strong>Odkryj historię ↗</strong><small>Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</small></div></a>
+          <a class="invitation" href="#zwiedzanie" data-page-link="zwiedzanie"><img src="assets/kosciol-wnetrze.webp" alt="Nawa i ołtarz kościoła" width="1800" height="1200" loading="lazy"><div class="invitation-copy"><h3>Wejdź do kościoła</h3><p>Rozejrzyj się i poznaj jego piękne detale.</p><strong>Rozpocznij zwiedzanie ↗</strong><small>Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</small></div></a>
+          <a class="invitation invitation-memory" href="#cmentarz" data-page-link="cmentarz"><div class="memory-art" aria-hidden="true"><span>✝</span><img src="assets/muszla-jakubowa.svg" alt="" width="64" height="64"></div><div class="invitation-copy"><h3>Cmentarz parafialny</h3><p>Miejsce pamięci o naszych bliskich.</p><strong>Wyszukaj grób ↗</strong></div></a>
+        </div>
       </section>
 
       <section class="home-current shell-width" aria-label="Bieżące informacje dla parafian">
@@ -84,17 +95,13 @@
         </aside>
       </section>
 
-      <section class="home-story shell-width" aria-labelledby="home-story-title">
-        <figure><img src="assets/kosciol-fasada.webp" alt="Fasada i wieża kościoła św. Jakuba w Kotuszowie" width="1192" height="1800" loading="lazy"><figcaption>Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</figcaption></figure>
-        <div><p class="eyebrow">Dla tych, którzy są tu pierwszy raz</p><h2 id="home-story-title">Miejsce z historią.<br>Wspólnota w drodze.</h2><p>Od najstarszej wzmianki z 1326 roku, przez wojenną ruinę i wspólną odbudowę, po dzisiejszy przystanek na Drodze św. Jakuba. Poznaj ludzi i wydarzenia, które tworzą historię Kotuszowa.</p><div class="home-story-links"><a class="home-action home-action-secondary" href="#historia" data-page-link="historia">Poznaj historię parafii</a><a class="home-story-tour" href="#zwiedzanie" data-page-link="zwiedzanie">Wejdź do kościoła</a></div></div>
-      </section>
     </section>
 
     <section class="page-view inner-page" id="page-wydarzenia" data-page="wydarzenia" aria-labelledby="events-title" hidden>
       <div class="page-hero shell-width">
         <div>
           <p class="eyebrow">Kalendarz wspólnoty</p>
-          <h1 id="events-title">Wydarzenia</h1>
+          <h1 id="events-title">Msze i intencje</h1>
           <p>Stały rytm modlitwy i najważniejsze uroczystości parafialne.</p>
         </div>
         <div class="page-number" aria-hidden="true">01</div>
@@ -181,11 +188,15 @@
             <p class="eyebrow">Ogłoszenia parafialne</p>
             <h2 id="admin-notices-title">Z życia naszej wspólnoty</h2>
           </div>
-          <a class="admin-shortcut" href="admin/">Panel administratora</a>
         </div>
         <div class="notice-list" id="adminNoticeList">
-          <p class="empty-state">Nie opublikowano jeszcze ogłoszeń parafialnych. Porządek nabożeństw znajdziesz w zakładce Wydarzenia.</p>
+          <p class="empty-state">Nie opublikowano jeszcze ogłoszeń parafialnych. Porządek nabożeństw znajdziesz w zakładce Msze i intencje.</p>
         </div>
+      </section>
+
+      <section class="community-gallery shell-width" id="communityGallery" aria-labelledby="community-gallery-title" hidden>
+        <div class="section-heading compact"><p class="eyebrow">Razem przeżywamy ważne chwile</p><h2 id="community-gallery-title">Zdjęcia z życia parafii</h2></div>
+        <div class="community-gallery-grid" id="communityGalleryGrid"></div>
       </section>
 
       <details class="municipal-news shell-width" id="municipalNews">
@@ -307,9 +318,16 @@
           <div class="section-heading maps-heading">
             <p class="eyebrow light">Kotuszów na dawnych arkuszach</p>
             <h2 id="maps-title">Czytelnia map</h2>
-            <p>Trzy warstwy czasu pozwalają zobaczyć, jak zmieniały się zapis miejscowości, drogi i krajobraz. Otwieramy oryginalne repozytoria, aby zachować pełną jakość i opis pochodzenia.</p>
+            <p>Zobacz Kotuszów na dawnych mapach. Porównaj drogi, nazwy i krajobraz z różnych okresów.</p>
           </div>
           <div class="map-cards">
+            <article class="map-card aerial-history">
+              <a href="https://odkrywaj.szydlow.pl/wp-content/uploads/2026/06/nara_19440918_kotuszow-scaled.jpg" target="_blank" rel="noopener"><img src="https://odkrywaj.szydlow.pl/wp-content/uploads/2026/06/nara_19440918_kotuszow-945x942.jpg" alt="Archiwalna fotografia lotnicza Kotuszowa z września 1944 roku, ze zbiorów NARA" width="945" height="942" loading="lazy" referrerpolicy="no-referrer"></a>
+              <span class="map-year">1944</span><h3>Kotuszów widziany z nieba</h3>
+              <p>Jak wyglądały drogi, pola i zabudowania Kotuszowa w czasie wojny? Niemieckie zdjęcie rozpoznawcze z września 1944 roku pozwala przyjrzeć się miejscowości z zupełnie innej perspektywy. W publikacji „Odkrywaj Szydłów” można również zobaczyć zestawienie historycznej fotografii z widokiem współczesnym.</p>
+              <p class="aerial-credit">Zbiory: NARA. Materiały odnalazł Marcin Zmarzlik. Publikacja: Odkrywaj Szydłów, 11 czerwca 2026 r.</p>
+              <a href="https://odkrywaj.szydlow.pl/gmina-szydlow-na-niemieckich-zdjeciach-lotniczych-z-1944-roku/" target="_blank" rel="noopener">Poznaj historię zdjęć i zobacz porównanie ↗</a>
+            </article>
             <article class="map-card map-card-1915">
               <span class="map-year">1915</span>
               <h3>Arkusz „Staszów” H 39</h3>
@@ -354,7 +372,7 @@
             <a href="https://repozytorium.kul.pl/server/api/core/bitstreams/64662f35-e045-4560-96ac-0e9d8ed6e7d4/content" target="_blank" rel="noopener"><strong>Kościół i organy w opracowaniu naukowym</strong><span>Rozdział poświęcony historii świątyni, zniszczeniom wojennym i powojennej odbudowie.</span></a>
           </div>
         </div>
-        <p class="rights-note">Każda fotografia ma podpis i źródło. Przy archiwalnych zdjęciach, których autor nie został podany, nie przypisujemy autorstwa redaktorowi opracowania. Wykaz praw i warunki publikacji znajdują się w dokumentacji materiałów.</p>
+        <p class="rights-note">Podpisy przy fotografiach wskazują ich źródła oraz znanych autorów. Nieznane autorstwo dawnych zdjęć zaznaczamy w opisach.</p>
       </section>
 
       <section class="heritage-strip" aria-label="Dziedzictwo kościoła" data-journey-panel="temple" hidden>
@@ -455,11 +473,7 @@
         </div>
 
         <div class="scene-picker" id="scenePicker" role="list" aria-label="Wybierz przystanek zwiedzania"></div>
-        <div class="community-gallery" id="communityGallery" hidden>
-          <div class="section-heading compact"><p class="eyebrow">Dodane przez parafię</p><h2>Galeria wspólnoty</h2></div>
-          <div class="community-gallery-grid" id="communityGalleryGrid"></div>
-        </div>
-        <p class="tour-note">Klikaj strzałki bezpośrednio w widoku, aby przechodzić między miejscami. Punkty „i” odkrywają detale. Spacer wykorzystuje fotografie — nie jest panoramą 360° ani modelem 3D. Przybliżanie: suwak lub Ctrl + przewijanie.</p>
+        <p class="tour-note">Klikaj strzałki na zdjęciu, aby przechodzić między miejscami. Punkty „i” odkrywają detale kościoła. Suwakiem przybliżysz wybrany widok.</p>
       </section>
     </section>
   </main>
@@ -497,7 +511,6 @@
         <a href="https://diecezjasandomierska.pl/kotuszow-sw-jakuba-starszego-apostola/" target="_blank" rel="noopener">Diecezja Sandomierska</a>
         <a href="https://www.szydlow.pl/arch/node/127" target="_blank" rel="noopener">Miasto i Gmina Szydłów</a>
         <a href="https://commons.wikimedia.org/wiki/Category:Saint_James_church_in_Kotusz%C3%B3w" target="_blank" rel="noopener">Wikimedia Commons</a>
-        <a href="admin/">Panel administratora</a>
       </div>
     </div>
     <div class="footer-bottom shell-width">

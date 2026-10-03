@@ -1,5 +1,7 @@
 # Własny panel administratora — instalacja i obsługa
 
+W wersji 6 formularze są uproszczone; najnowsza instrukcja obsługi i albumów znajduje się w `POPRAWKI-3-WDROZENIE.md`. Konfiguracja sekretów i logowania opisana poniżej pozostaje bez zmian. Na publicznej stronie nie ma odnośników do panelu; otwórz adres `/admin/` bezpośrednio.
+
 Panel działa pod `/admin/`, bez Decap i bez logowania redaktora do GitHub. GitHub działa tylko jako repozytorium w tle. Dostępny jest jeden administrator określony przez ENV; nie ma publicznej rejestracji ani formularza resetu hasła.
 
 ## Przed podmianą

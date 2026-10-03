@@ -1,4 +1,19 @@
-# Weryfikacja lokalna wersji 5 — 3 października 2026
+# Weryfikacja lokalna wersji 6 — Poprawki 3, 3 października 2026
+
+- Build `node build.mjs` oraz 64 testy Node zaliczone. Dodatkowo 22 starsze kontrole kalendarza i importu zaliczone. Kontrola składni obejmuje wszystkie źródłowe pliki JS/MJS, bez zależności i `dist`.
+- Testy zabezpieczeń: poprawne i błędne logowanie, brak dostępu bez sesji, cookie HttpOnly/Secure/SameSite=Strict, wygaśnięcie i wylogowanie, CSRF/Origin, walidacja ścieżek, typów i wielkości zdjęć, zachowanie istniejących danych, konflikty SHA. GitHub i sesje w testach są izolowane, nie produkcyjne.
+- Test 20 rzeczywistych obrazów przetworzonych przez sharp: zapis jako jeden album, walidacja istnienia wszystkich zdjęć przed zapisem, jedna publikacja wpisu i idempotentne ponowienie uploadu. Nowa tablica `photos` jest opcjonalna; dotychczasowe pojedyncze fotografie nadal działają.
+- W przeglądarce na lokalnym panelu: logowanie, wpisanie intencji bez obowiązkowego tytułu, wybór wielu plików i publikacja 20 zdjęć po przetworzeniu przez canvas, ponowne otwarcie panelu z sesją, wylogowanie i brak powrotu do panelu po odświeżeniu. Dane nie trafiły do prawdziwego repozytorium ani `content/`.
+- Publiczny album w aktualnościach: otwarcie, przycisk następnego zdjęcia, klawiatura, licznik i zamknięcie sprawdzone w przeglądarce. Gest przesuwania jest zaimplementowany, ale nie był sprawdzony na fizycznym telefonie. Albumy wielozdjęciowe nie dodają przystanków spaceru.
+- Widoki strony głównej 390 i 320 px, albumu i formularza intencji 320 px: brak poziomego przepełnienia. Przy 320 px szerokość dokumentu wynosiła 305 px, pozostałe 15 px to pasek przewijania. Sprawdzono menu mobilne i przejście do wnętrza kościoła; spacer zachowuje 15 istniejących ujęć.
+- Nowy materiał w „Historia → Czytelnia map”: podgląd zdjęcia Kotuszowa z 1944 r. ładuje się ze źródła i ma szerokość naturalną 945 px. Poprawiono kontrast opisu sekcji map. Link prowadzi do podanej publikacji Odkrywaj Szydłów. Nie potwierdzono licencji na lokalne kopiowanie materiału.
+- Rzeczywiste źródła: generowanie wersją `liturgical-rules-v2` dla 3, 4 i 10 października 2026 dało różne, związane z czytaniami teksty. Próba dla 3 kwietnia 2027 nie miała dostępnego źródła i zwróciła brak wpisu, nie poprzedni tekst. Nie gwarantujemy tekstu za pół roku, jeśli źródła pozostają niedostępne. Nowa ścieżka API `/api/slowo-na-dzis/v2` oddziela frontend od trwałego cache poprzedniej wersji.
+- Publiczna strona nie ma linków do administratora ani technicznego dopisku przy refleksji. Nie ma sekretów w wynikowym frontendzie. Nie zmieniono dotychczasowych plików `content/`, `data/` ani fotografii.
+- **Ograniczenia:** nie wykonano prawdziwego zapisu GitHub, push ani deployu Netlify. Zapis do rzeczywistego repozytorium, produkcyjne bundlowanie Functions, Blobs i limity konta wymagają testu właściciela po wgraniu paczki. Nie zmieniono ENV ani hasła administratora. Kalendarz GCatholic nie zastępuje oficjalnego Ordo; nieznane obchody lokalne wymagają sprawdzonej poprawki.
+
+Instrukcja wgrania, obsługi i wycofania: `POPRAWKI-3-WDROZENIE.md`. Paczka obejmuje wyłącznie różnice względem zweryfikowanego ZIP-a wersji 5.
+
+## Archiwalna weryfikacja lokalna wersji 5 — 3 października 2026
 
 - Publiczny build i 54 testy Node zaliczone: 32 dotychczasowe oraz 22 dotyczące automatycznego słowa. Dodatkowo 22 starsze kontrole i kontrola zasobów/historii zaliczone.
 - W rzeczywistych źródłach sprawdzono generowanie dla 3, 4 i 5 października 2026: różne czytania i teksty; 5 października nazwa wspomnienia Faustyny Kowalskiej pochodzi z kalendarza Sandomierza, tekst z czytań powszednich. Sprawdzono też wspomnienie Wincentego Kadłubka 9 października oraz brak automatycznie zgadywanych czytań w miejscową rocznicę poświęcenia 11 listopada.

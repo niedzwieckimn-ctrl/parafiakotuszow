@@ -9,12 +9,12 @@ export function setupJourney({openHistory}) {
     {id:'maps',title:'Znajdź Kotuszów na mapie',era:'Dawne drogi i granice',image:'assets/mapa-front-1944.webp',description:'Zobacz historyczne arkusze i mapy działań wojennych w okolicy.'},
     {id:'timeline',title:'Podróż przez daty',era:'1326–2021',image:'assets/muszla-jakubowa.svg',document:true,description:'Wybierz moment — od pierwszego proboszcza po powrót na szlak św. Jakuba.'},
     {id:'archive',title:'Zajrzyj do rodzinnej pamięci',era:'Archiwum',image:'assets/walesa-plebania-1983.webp',description:'Dawne fotografie, ludzie na plebanii i oryginalne strony historycznej księgi.'},
-    {id:'landscape',title:'Jeszcze krok dalej',era:'W krajobrazie parafii',image:'assets/sady-kotuszow.webp',description:'Osobna opowieść o sadach, Chańczy i krajobrazie. Nie część zwiedzania kościoła.'}
+    {id:'landscape',title:'Jeszcze krok dalej',era:'W krajobrazie parafii',image:'assets/sady-kotuszow.webp',description:'Odkryj sady, Chańczę i krajobraz, który otacza naszą parafię.'}
   ];
   const overview=document.querySelector('#historyOverview');
   const intro=document.createElement('div');intro.className='journey-intro';
   const h=document.createElement('h2');h.textContent='Od czego zaczniemy?';
-  const p=document.createElement('p');p.textContent='Wybierz opowieść. Zdjęcia, szczegóły i źródła czekają w środku. Możesz też przejść całą drogę, krok po kroku.';intro.append(h,p);
+  const p=document.createElement('p');p.textContent='Wybierz opowieść i odkrywaj Kotuszów krok po kroku.';intro.append(h,p);
   const grid=document.createElement('div');grid.className='journey-grid';
   chapters.forEach((chapter,i)=>{
     const b=document.createElement('button');b.type='button';b.className='journey-card'+(chapter.document?' document':'');b.dataset.journey=chapter.id;
@@ -64,7 +64,6 @@ export function setupJourney({openHistory}) {
       const following=chapters[index+1];next.textContent=following?following.title+' →':'Wejdź do kościoła →';next.onclick=()=>location.hash=following?`historia/${following.id}`:'zwiedzanie';}
   }
   window.addEventListener('hashchange',sync);sync();
-  addHomeInvitations();
   // Temat parafialny ma pierwszeństwo nawet wtedy, gdy relację opublikowała gmina.
   const archive=document.createElement('section');archive.className='shell-width parish-news-archive';
   const archiveTitle=document.createElement('h2');archiveTitle.className='history-panel-title';archiveTitle.textContent='Z pamięci naszej wspólnoty';

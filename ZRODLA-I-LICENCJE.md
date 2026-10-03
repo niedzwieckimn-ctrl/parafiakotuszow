@@ -111,3 +111,14 @@ Sześć obszernych rozdziałów stanowi współczesne opracowanie treści Wiśni
 - Do paczki pobrano wersję pomniejszoną do 1920 px szerokości przez mechanizm Wikimedia Commons; treść fotografii nie została zmieniona.
 
 Fotografie zachowują swoje licencje CC BY-SA. Kod i pozostałe materiały strony mogą być modyfikowane na potrzeby parafii.
+
+## Zdjęcie lotnicze Kotuszowa, wrzesień 1944
+
+- Źródło opracowania: https://odkrywaj.szydlow.pl/gmina-szydlow-na-niemieckich-zdjeciach-lotniczych-z-1944-roku/
+- Publikacja: Odkrywaj Szydłów, 11 czerwca 2026 r.; konto redakcyjne „admin” (nie utożsamiane z fotografem).
+- Zbiory wskazane w opracowaniu: NARA — National Archives and Records Administration.
+- Odnalezienie i opracowanie materiałów: Marcin Zmarzlik; autor oryginalnej fotografii nie wskazany imiennie w artykule.
+- Podgląd z serwera źródła: https://odkrywaj.szydlow.pl/wp-content/uploads/2026/06/nara_19440918_kotuszow-945x942.jpg
+- Oryginalna reprodukcja: https://odkrywaj.szydlow.pl/wp-content/uploads/2026/06/nara_19440918_kotuszow-scaled.jpg
+- Nie dodano lokalnej kopii ani nie przypisano niepotwierdzonej licencji. Przed dalszym wykorzystaniem należy ustalić prawa do fotografii i opracowania u źródła. Współczesne porównanie z Google Maps nie jest kopiowane.
+- Data w opisie ograniczona do września 1944: tekst artykułu podaje 6 września, a nazwa fotografii Kotuszowa zawiera 18 września. Wymaga to metryki oryginału przed ustaleniem dokładnego dnia.

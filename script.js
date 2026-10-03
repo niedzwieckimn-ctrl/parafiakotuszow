@@ -4,10 +4,11 @@ import { historyChapters } from './history-chapters.mjs';
 import { setupJourney } from './journey.mjs';
 import { additionalChurchPhotos, suppliedChurchPhotos } from './church-photos.mjs';
 import { setupHotspots } from './tour-hotspots.mjs';
+import {albumImages,openAlbum,photoCount} from './community-album.mjs';
 
 const pageTitles = {
   start: "Parafia św. Jakuba w Kotuszowie",
-  wydarzenia: "Wydarzenia — Parafia św. Jakuba w Kotuszowie",
+  wydarzenia: "Msze i intencje — Parafia św. Jakuba w Kotuszowie",
   aktualnosci: "Aktualności — Parafia św. Jakuba w Kotuszowie",
   historia: "Historia — Parafia św. Jakuba w Kotuszowie",
   cmentarz: "Cmentarz — Parafia św. Jakuba w Kotuszowie",
@@ -567,7 +568,7 @@ async function loadLiveNews() {
 function safeAssetPath(value) {
   if (typeof value !== "string") return "";
   const normalized = value.replace(/^\//, "");
-  return normalized.startsWith("assets/") && !normalized.includes("..") ? normalized : "";
+  return /^assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:jpe?g|png|webp|gif|avif)$/i.test(normalized) ? normalized : "";
 }
 function safeSourceUrl(value) {
   try {
@@ -668,9 +669,12 @@ function renderAdminContent(data) {
       link.textContent = 'Źródło fotografii';
       caption.append(link);
     }
-    figure.append(image, caption);
+    const photos=albumImages(entry);
+    const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',`Otwórz: ${entry.title||'Album parafialny'} — ${photoCount(photos.length)}`);button.append(image);button.addEventListener('click',()=>openAlbum(entry));
+    if(photos.length>1){const count=document.createElement('small');count.className='album-count';count.textContent=`${photoCount(photos.length)} · Otwórz album`;caption.prepend(count);}
+    figure.append(button, caption);
     galleryGrid.append(figure);
-    if (entry.w_spacerze) {
+    if (entry.w_spacerze && photos.length<=1) {
       scenes.push({ image: imagePath, alt: entry.title || "Fotografia parafialna", title: entry.title || "Galeria parafialna", description: entry.description || "", position: "50% 50%", source: source || imagePath, credit: credit.textContent });
     }
   });
@@ -704,10 +708,9 @@ function renderDailyWord() {
   document.querySelector('#dailyWordDate').textContent = formatDate(selected.date);
   document.querySelector('#dailyWordReadings').href = selected.url;
   document.querySelector('#dailyWordContent').hidden = !selected.entry;
-  document.querySelector('#dailyWordLabel').textContent = selected.entry ? 'Słowo otuchy na dziś' : 'Czytania na dziś';
+  document.querySelector('#dailyWordLabel').textContent = 'Słowo na dziś';
   document.querySelector('#dailyWordProvenance').hidden=selected.mode!=='automatic';
-  document.querySelector('#dailyWordNotice').hidden=selected.mode!=='readings'||!automaticWord.notice;
-  document.querySelector('#dailyWordNotice').textContent=automaticWord.notice;
+  document.querySelector('#dailyWordNotice').hidden=true;
   if (!selected.entry) {
     document.querySelector('#dailyWordHeading').textContent='Dzisiejsze czytania';
     for (const id of ['dailyWordDay','dailyWordQuote','dailyWordReference','dailyWordReflection']) document.getElementById(id).textContent = '';
@@ -719,7 +722,6 @@ function renderDailyWord() {
   document.querySelector('#dailyWordQuote').textContent = `„${entry.quote}”`;
   document.querySelector('#dailyWordReference').textContent = entry.reference;
   document.querySelector('#dailyWordReflection').textContent = entry.reflection;
-  document.querySelector('#dailyWordReflectionLabel').textContent=selected.mode==='automatic'?'· refleksja autorska, opracowana automatycznie':'· refleksja autorska';
   if(selected.mode==='automatic') {
     document.querySelector('#dailyWordTextSource').href=entry.readingsUrl;
     document.querySelector('#dailyWordCalendarSource').href=entry.calendarUrl;

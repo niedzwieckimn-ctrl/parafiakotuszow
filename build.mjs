@@ -17,11 +17,13 @@ async function readCollection(name) {
     if (!record.title?.trim() || !record.date || Number.isNaN(Date.parse(record.date))) {
       throw new Error(`Uzupełnij tytuł i datę: content/${name}/${filename}`);
     }
-    if (record.image) {
-      if (typeof record.image !== 'string' || !/^\/?assets\//.test(record.image) || record.image.includes('..') || record.image.includes('\\') || !/\.(jpe?g|png|webp|gif|avif)$/i.test(record.image)) {
+    if(record.photos!==undefined&&(!Array.isArray(record.photos)||record.photos.length>30))throw new Error(`Nieprawidłowy album: ${filename}`);
+    if(record.photos?.length&&(!record.photos.includes(record.image)||new Set(record.photos).size!==record.photos.length))throw new Error(`Uzupełnij zdjęcie główne albumu: ${filename}`);
+    for(const image of [record.image,...(record.photos||[])].filter(Boolean)) {
+      if (typeof image !== 'string' || !/^\/?assets\//.test(image) || image.includes('..') || image.includes('\\') || !/\.(jpe?g|png|webp|gif|avif)$/i.test(image)) {
         throw new Error(`Nieprawidłowa ścieżka zdjęcia: ${filename}. Użyj biblioteki mediów (JPG, PNG, WebP, GIF lub AVIF).`);
       }
-      const path = resolve(root, record.image.replace(/^\//, ''));
+      const path = resolve(root, image.replace(/^\//, ''));
       if (!path.startsWith(join(root, 'assets') + sep)) throw new Error(`Zdjęcie spoza biblioteki: ${filename}`);
       await readFile(path);
     }
@@ -53,14 +55,14 @@ await mkdir(join(root, 'data'), { recursive: true });
 await writeFile(join(root, 'data', 'admin-content.json'), JSON.stringify(data, null, 2) + '\n');
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
-for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'script.js', 'daily-word-client.mjs', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
+for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'script.js', 'community-album.mjs', 'daily-word-client.mjs', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
   await cp(join(root, filename), join(output, filename));
 }
 for (const folder of ['assets', 'data']) {
   await cp(join(root, folder), join(output, folder), { recursive: true });
 }
 await mkdir(join(output,'admin'),{recursive:true});
-for (const filename of ['index.html','panel.css','panel.mjs','schema.mjs']) {
+for (const filename of ['index.html','panel.css','panel.mjs','schema.mjs','photos.mjs']) {
   await cp(join(root,'admin',filename),join(output,'admin',filename));
 }
 console.log(`Gotowe: dist/ — ${data.announcements.length} ogłoszeń, ${data.gallery.length} zdjęć, ${data.intentions.length} dni intencji.`);

@@ -1,5 +1,7 @@
 # Parafia św. Jakuba w Kotuszowie
 
+**Aktualna wersja 6 — Poprawki 3:** jasna strona główna „Fotografia i emocje”, uproszczony panel, albumy do 30 zdjęć i generator Słowa v2. Instrukcja aktualizacji oraz obsługi: [POPRAWKI-3-WDROZENIE.md](POPRAWKI-3-WDROZENIE.md). Zachowano dane i zdjęcia wersji 5. Nowa paczka nie wymaga zmian ENV.
+
 Strona przygotowana do repozytorium GitHub i publikacji przez Netlify. Publiczny frontend nie wymaga bibliotek. Budowanie używa Node.js 22 i polecenia `node build.mjs`. Netlify instaluje zależności serwerowego panelu z `package.json` i pliku blokady. Nie wysyłaj `node_modules` do repozytorium.
 
 **Wersja 4: własny panel administratora i punkty spaceru.** Przed publiczną publikacją należy potwierdzić prawa do 13 materiałów wizualnych wersji 3 oraz pięciu dostarczonych fotografii (wykaz w `PRAWA-DO-NOWYCH-ZDJEC.md` i `ZRODLA-I-LICENCJE.md`). Publiczna dostępność zdjęcia i podpis autora nie zastępują zgody. Nie wykonano push do GitHub ani wdrożenia na koncie właściciela.
