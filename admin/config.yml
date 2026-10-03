@@ -1,6 +1,6 @@
 backend:
   name: github
-  repo: TWOJ_LOGIN_GITHUB/parafia-kotuszow
+  repo: niedzwieckim-ctrl/parafia-kotuszow
   branch: main
 
 locale: pl
