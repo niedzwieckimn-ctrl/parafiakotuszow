@@ -66,10 +66,9 @@ export function setupJourney({openHistory}) {
   window.addEventListener('hashchange',sync);sync();
   // Temat parafialny ma pierwszeństwo nawet wtedy, gdy relację opublikowała gmina.
   const archive=document.createElement('section');archive.className='shell-width parish-news-archive';
-  const archiveTitle=document.createElement('h2');archiveTitle.className='history-panel-title';archiveTitle.textContent='Z pamięci naszej wspólnoty';
-  const archiveNote=document.createElement('p');archiveNote.textContent='Materiały archiwalne. Nowe ogłoszenia parafialne znajdziesz powyżej.';
+  const archiveTitle=document.createElement('h2');archiveTitle.className='history-panel-title';archiveTitle.textContent='Archiwum parafialne';
   const newsGrid=document.querySelector('#fallbackNewsGrid');
-  archive.append(archiveTitle,archiveNote,newsGrid);document.querySelector('#municipalNews').before(archive);
+  archive.append(archiveTitle,newsGrid);document.querySelector('#municipalNews').before(archive);
   document.querySelector('.curated-heading').remove();
 }
 

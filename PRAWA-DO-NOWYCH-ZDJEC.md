@@ -18,7 +18,7 @@ Pierwszy plik `098` jest dostępny pod `https://www.szydlow.pl/wp-content/upload
 
 ## Widok kościoła z lotu ptaka
 
-`assets/kosciol-z-lotu-ptaka.webp` pochodzi z [tego źródła](https://parafiakotuszow.pl). Plik źródłowy: `https://assets.tina.io/4e848699-0617-4a97-b806-cdf972169eed/glowne.JPG`. Autor i data wykonania nie zostali podani. Potwierdzenie praw należy uzyskać od parafii lub fotografa; samo umieszczenie na stronie nie jest licencją.
+`assets/kosciol-z-lotu-ptaka.webp` pochodzi z archiwalnej strony parafii (parafiakotuszow.pl). Plik źródłowy: `https://assets.tina.io/4e848699-0617-4a97-b806-cdf972169eed/glowne.JPG`. Autor i data wykonania nie zostali podani. Potwierdzenie praw należy uzyskać od parafii lub fotografa; samo umieszczenie na stronie nie jest licencją.
 
 ## Fotografie i mapy z lokalnej historii
 

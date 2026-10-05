@@ -10,6 +10,7 @@ import {attachPhotoGestures,openPhoto,setupPhotoLinks} from './photo-viewer.mjs'
 import {setupMobileHome} from './mobile-layout.mjs';
 import {setupPriests} from './priests.mjs';
 import {setupMobileMenu} from './mobile-menu.mjs';
+import {safeSourceUrl} from './public-links.mjs';
 
 const mobileHome=setupMobileHome();
 setupPhotoLinks();
@@ -345,7 +346,7 @@ const scenes = [
   { image: "assets/kosciol-fasada.webp", alt: "Fasada i wieża kościoła św. Jakuba", kicker: "Przystanek drugi", title: "Fasada i wieża", description: "Czterokondygnacyjna wieża kryje w przyziemiu kruchtę. Ośmioboczny hełm z latarenką góruje nad Kotuszowem.", position: "50% 27%", source: "https://commons.wikimedia.org/wiki/File:Ko%C5%9Bci%C3%B3%C5%82_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" },
   { image: "assets/kosciol-detal-wejscia.webp", alt: "Kamienny portal wejściowy kościoła", kicker: "Przystanek trzeci", title: "Portal i detal kamieniarski", description: "Zatrzymaj się przy wejściu. Jasny kamień, łuk portalu i ślady czasu pokazują materialną historię świątyni.", position: "50% 50%", source: "https://commons.wikimedia.org/wiki/File:Kotuszow_kosciol_zdobienie_wejscia_p8212244.jpg" },
   { image: "assets/kosciol-wnetrze.webp", alt: "Nawa i prezbiterium kościoła św. Jakuba", kicker: "Przystanek czwarty", title: "Nawa i ołtarz", description: "Wnętrze prowadzi wzrok ku ołtarzowi głównemu z obrazem Matki Bożej Łaskawej, zwanej Kotuszowską.", position: "50% 38%", source: "https://commons.wikimedia.org/wiki/File:Wn%C4%99trze_ko%C5%9Bcio%C5%82a_par._pw._%C5%9Bw._Jakuba_Starszego_w_Kotuszowie.jpg" },
-  {image:'assets/kosciol-z-lotu-ptaka.webp',alt:'Kościół św. Jakuba w Kotuszowie widziany z lotu ptaka',title:'Świątynia z lotu ptaka',description:'Widok z góry pokazuje układ bryły, dachów i otoczenia świątyni. Autor i data wykonania nie zostali podani u źródła.',source:'https://parafiakotuszow.pl',credit:'Źródło fotografii · autor niepodany'}
+  {image:'assets/kosciol-z-lotu-ptaka.webp',alt:'Kościół św. Jakuba w Kotuszowie widziany z lotu ptaka',title:'Świątynia z lotu ptaka',description:'Bryła kościoła, dachy i otoczenie świątyni widziane z góry.',source:'',credit:'Archiwalne materiały parafii · autor i data niepodani'}
 ];
 ['EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL', 'EwaRóża, 2015 · CC BY-SA 3.0', 'Łukasz Bakuła, 2014 · CC BY-SA 3.0 PL'].forEach((credit,index) => { scenes[index].credit = credit; });
 scenes.splice(4,0,...additionalChurchPhotos);
@@ -413,7 +414,7 @@ function setScene(index) {
     tourTitle.textContent = scene.title;
     tourDescription.textContent = scene.description;
     tourSource.href = safeSourceUrl(scene.source) || scene.image;
-    tourSource.textContent = scene.credit ? `${scene.credit} · źródło fotografii` : 'Źródło fotografii';
+    tourSource.textContent = scene.credit || 'Źródło fotografii';
     tourIndex.textContent = String(activeScene + 1).padStart(2, "0");
     resetView();
     tourImage.style.opacity = "1";
@@ -514,18 +515,18 @@ function renderLiveNews(articles) {
 }
 async function loadLiveNews() {
   const status = document.querySelector("#feedStatus");
-  status.textContent = 'Pobieranie wiadomości ze źródła…';
+  status.textContent = 'Wczytywanie…';
   try {
     const response = await fetch("/api/aktualnosci", { headers: { Accept: "application/json" } });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data.articles) || !data.articles.length) throw new Error("Pusty kanał");
     renderLiveNews(data.articles);
-    status.textContent = `Pobrano ${formatDate(data.fetchedAt)}`;
+    status.textContent = '';
     status.classList.add("is-online");
     return true;
   } catch (_) {
-    status.textContent = "Kanał chwilowo niedostępny. Otwórz oficjalny serwis gminy.";
+    status.textContent = 'Wiadomości chwilowo niedostępne.';
     document.querySelector("#liveNewsGrid").hidden = true;
     return false;
   }
@@ -535,12 +536,6 @@ function safeAssetPath(value) {
   if (typeof value !== "string") return "";
   const normalized = value.replace(/^\//, "");
   return /^assets\/(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:jpe?g|png|webp|gif|avif)$/i.test(normalized) ? normalized : "";
-}
-function safeSourceUrl(value) {
-  try {
-    const url = new URL(value);
-    return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
-  } catch { return ''; }
 }
 function renderAdminContent(data) {
   dailyWords = Array.isArray(data.dailyWords) ? data.dailyWords : [];
@@ -552,7 +547,7 @@ function renderAdminContent(data) {
   if (!announcements.length) {
     const empty = document.createElement('p');
     empty.className = 'empty-state';
-    empty.textContent = 'Nie opublikowano jeszcze nowych ogłoszeń. Zobacz msze i intencje.';
+    empty.textContent = 'Brak nowych ogłoszeń.';
     noticeList.replaceChildren(empty);
   } else {
     noticeList.replaceChildren(...announcements.map((notice) => {
@@ -703,7 +698,7 @@ function renderIntentions() {
   const home = document.querySelector('#homeIntentions');
   list.replaceChildren();
   if (days.length) {
-    status.textContent = 'Msze według stałego porządku i opublikowanych zmian. Bez wpisanej intencji: „Za parafian”. W święta sprawdź ogłoszenia parafialne.';
+    status.textContent = '';
     for (const day of days) {
       const visibleMasses=day.masses.filter(mass=>matchesIntention(mass,query));
       if(!visibleMasses.length)continue;
@@ -711,7 +706,7 @@ function renderIntentions() {
       const article = document.createElement('article');
       article.className = 'intention-day';
       const heading = document.createElement('h3');
-      heading.textContent = `${formatDate(day.date)} · ${day.title||''}`;
+      heading.textContent = `${formatDate(day.date)}${day.title ? ` · ${day.title}` : ''}`;
       article.append(heading);
       const masses = visibleMasses;
       for (const mass of masses) {
@@ -729,25 +724,29 @@ function renderIntentions() {
         row.append(time, copy);
         article.append(row);
       }
-      if (day.sourceUrl) {
+      const sourceUrl = safeSourceUrl(day.sourceUrl);
+      if (sourceUrl) {
         const link = document.createElement('a');
-        link.href = safeSourceUrl(day.sourceUrl);
-        link.textContent = 'Źródło: serwis parafii';
+        link.href = sourceUrl;
+        link.textContent = 'Źródło';
         link.target = '_blank'; link.rel = 'noopener';
         article.append(link);
       }
       list.append(article);
     }
-    home.textContent = `${formatDate(days[0].date)}: ${(days[0].masses || []).map(mass => mass.time).join(' · ')}. Zobacz intencje i pełny plan.`;
+    home.textContent = `${formatDate(days[0].date)}: ${(days[0].masses || []).map(mass => mass.time).join(' · ')}`;
   } else if (remoteIntentions) {
-    status.textContent = `Serwis parafii nie udostępnia jeszcze bieżących intencji. Ostatnia dostępna publikacja: ${remoteIntentions.latestTitle} — materiał archiwalny. Aktualne terminy można potwierdzić w parafii.`;
-    home.textContent = 'Bieżące intencje nie zostały jeszcze opublikowane.';
+    status.textContent = 'Brak zaplanowanych Mszy.';
+    home.textContent = status.textContent;
   } else if (intentionsFailed) {
-    status.textContent = 'Nie udało się teraz sprawdzić intencji. Skorzystaj z odnośnika do serwisu parafii lub skontaktuj się telefonicznie.';
-    home.textContent = 'Sprawdź intencje w serwisie parafii.';
+    status.textContent = 'Brak zaplanowanych Mszy.';
+    home.textContent = status.textContent;
   }
-  document.querySelector('#intentionSearchCount').textContent=`Znaleziono: ${found} ${found===1?'Msza':found%10>=2&&found%10<=4&&(found%100<12||found%100>14)?'Msze':'Mszy'}`;
-  if(!found){const empty=document.createElement('p');empty.className='empty-state';empty.textContent='Nie znaleziono Mszy. Spróbuj wpisać krótszy fragment intencji.';list.append(empty);}
+  status.hidden = !status.textContent;
+  const count = document.querySelector('#intentionSearchCount');
+  count.hidden = !query.trim();
+  count.textContent=query.trim()?`Znaleziono: ${found} ${found===1?'Msza':found%10>=2&&found%10<=4&&(found%100<12||found%100>14)?'Msze':'Mszy'}`:'';
+  if(!found && query.trim()){const empty=document.createElement('p');empty.className='empty-state';empty.textContent='Brak wyników. Spróbuj wpisać krótszy fragment intencji.';list.append(empty);}
 }
 document.querySelector('#intentionSearch').addEventListener('input',renderIntentions);
 async function loadIntentions() {

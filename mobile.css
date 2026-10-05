@@ -15,6 +15,16 @@
 .home-current{grid-template-columns:1fr}
 #page-wydarzenia .events-layout{grid-template-columns:1fr;padding-block:24px 0}
 #page-wydarzenia>.feast-panel{padding-block:24px 48px}
+/* Jeden nagłówek strony; krótsze bloki godzin, intencji i odpustów. */
+#page-wydarzenia .page-hero{min-height:0;padding-block:28px 20px}
+#page-wydarzenia .page-hero h1{margin:0;font-size:clamp(2rem,4vw,3rem)}
+#page-wydarzenia .section-heading.compact h2,#page-wydarzenia .intentions-intro h2{margin:0;font:600 clamp(1.25rem,2.5vw,1.6rem)/1.35 var(--sans)}
+#page-wydarzenia .service-list,#page-wydarzenia .feast-list{margin-top:16px}
+#page-wydarzenia .service-item{padding-block:16px}
+#page-wydarzenia .intentions-section{padding-block:32px 16px}
+#page-wydarzenia .intention-search-label{margin-top:16px}
+#page-wydarzenia .feast-item{align-items:center;padding-block:16px}
+#page-wydarzenia .page-number{display:none}
 @media(min-width:961px) and (max-width:1100px){.site-nav{gap:.4rem}.site-nav a:not(.nav-featured){padding-inline:.65rem}}
 /* Pełnoekranowe, wyśrodkowane menu z witryny Niedźwieccy, w barwach parafii. */
 @media(max-width:960px){

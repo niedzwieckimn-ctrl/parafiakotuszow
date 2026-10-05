@@ -6,7 +6,7 @@ Stan opracowania: 3 października 2026 r.
 
 Dodano 13 nowych zasobów: 11 różnych fotografii oraz 2 reprodukcje map. W zwiedzaniu jest teraz 10 różnych ujęć kościoła i jego detali, bez krajobrazów. Fotografie z jubileuszu mają datę 2025, nie są przedstawiane jako dzisiejsze. Archiwalne materiały przypisano do odpowiadających im tematów.
 
-Nowe źródła: [fotorelacja jubileuszu Bractwa](https://www.szydlow.pl/10-lat-bractwa-jakubowego-w-sluzbie-spolecznosci-lokalnej/) (tekst: Anna Wołczyńska, fotorelacja: Michał Kaczmarczyk wg artykułu), [historia Tomasza Skuzy](https://www.kotuszow.pl/index.php/historia), [Powiat Buski 1939–1945](https://www.powiatbuski1939-1945.pl/straty-materialne-kosciola/) oraz [źródło fotografii lotniczej](https://parafiakotuszow.pl).
+Nowe źródła: [fotorelacja jubileuszu Bractwa](https://www.szydlow.pl/10-lat-bractwa-jakubowego-w-sluzbie-spolecznosci-lokalnej/) (tekst: Anna Wołczyńska, fotorelacja: Michał Kaczmarczyk wg artykułu), [historia Tomasza Skuzy](https://www.kotuszow.pl/index.php/historia), [Powiat Buski 1939–1945](https://www.powiatbuski1939-1945.pl/straty-materialne-kosciola/) oraz archiwalna strona parafii (fotografia lotnicza).
 
 ## Materiały przekazane przez użytkownika 3 października 2026
 
@@ -16,8 +16,8 @@ Pięć fotografii: `obraz-maryi-detal.webp`, `liturgia-przy-oltarzu.webp`, `nawa
 
 ## Uzupełnienia wersji 2
 
-- Strona parafii i godziny: https://www.parafiakotuszow.pl/
-- Intencje: https://www.parafiakotuszow.pl/intencje — w dniu opracowania ostatni dostępny wpis obejmuje grudzień 2025; jest traktowany jako archiwalny.
+- Stały porządek nabożeństw: archiwalna strona parafii (parafiakotuszow.pl).
+- Archiwalne intencje: dział intencji poprzedniej strony parafii — w dniu opracowania ostatni dostępny wpis obejmuje grudzień 2025; jest traktowany jako archiwalny.
 - Cmentarz: https://polskie-cmentarze.info/?fara_cmentarze_container_id=4520 (odnośnik podany przez parafię).
 - Ks. Jan Wiśniewski, *Historyczny opis kościołów, miast, zabytków i pamiątek w stopnickiem*, 1929, s. 118–124: https://bc.umcs.pl/dlibra/publication/1783/edition/1625 — domena publiczna.
 - Historia miejscowości: https://www.kotuszow.pl/index.php/historia
