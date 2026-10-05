@@ -542,27 +542,12 @@ function safeSourceUrl(value) {
     return ['https:', 'http:'].includes(url.protocol) ? url.href : '';
   } catch { return ''; }
 }
-function renderHomeNews(announcements) {
-  const list=document.querySelector('#homeNewsList');
-  const entries=announcements.length?announcements.slice(0,3).map(n=>({title:n.title,summary:`${formatDate(n.date)} · ${n.category||'Ogłoszenie parafialne'}`})):[
-    {title:'Ogłoszenia naszej wspólnoty',summary:'Sprawdź komunikaty parafialne i informacje u źródła.'},
-    {title:'Przed wizytą w parafii',summary:'Kontakt, najważniejsze sprawy i przydatne odnośniki.'}
-  ];
-  list.replaceChildren(...entries.map(entry=>{
-    const a=document.createElement('a');a.className='home-news-item';a.href='#aktualnosci';
-    const title=document.createElement('strong');title.textContent=entry.title;
-    const summary=document.createElement('small');summary.textContent=entry.summary;
-    const arrow=document.createElement('span');arrow.textContent='→';arrow.setAttribute('aria-hidden','true');
-    a.append(title,summary,arrow);return a;
-  }));
-}
 function renderAdminContent(data) {
   dailyWords = Array.isArray(data.dailyWords) ? data.dailyWords : [];
   renderDailyWord();
   localIntentions = Array.isArray(data.intentions) ? data.intentions : [];
   renderIntentions();
   const announcements = Array.isArray(data.announcements) ? [...data.announcements].sort((a,b)=>Number(b.pinned===true)-Number(a.pinned===true)||new Date(b.date)-new Date(a.date)) : [];
-  renderHomeNews(announcements);
   const noticeList = document.querySelector("#adminNoticeList");
   if (!announcements.length) {
     const empty = document.createElement('p');
@@ -654,7 +639,6 @@ async function loadAdminContent() {
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     renderAdminContent(await response.json());
   } catch (_) {
-    renderHomeNews([]);
     renderScenePicker();
     setScene(0);
   }

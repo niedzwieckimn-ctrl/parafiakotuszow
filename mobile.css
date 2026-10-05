@@ -12,6 +12,10 @@
 .priest-period{display:block;font:.85rem/1.5 var(--sans);color:#526c46}.priests-chronology button{display:block;min-height:44px;width:100%;border:0;background:transparent;text-align:left;color:var(--ink);font:600 1.15rem/1.5 var(--sans);padding:8px 0;cursor:pointer;overflow-wrap:anywhere}
 .priest-dialog p{font:1rem/1.8 var(--sans)}.priest-close{display:block;min-height:44px;margin:0 0 24px auto;border:1px solid var(--line);padding:10px 14px;border-radius:10px;background:white;color:var(--ink);cursor:pointer}.priest-source{display:block;margin:12px 0;font-size:.9rem;overflow-wrap:anywhere}.priest-dialog .priest-source-note{font-size:.8rem;color:var(--ink-soft)}
 .tour-stage{touch-action:none}.tour-hotspots{pointer-events:none}.tour-stage.is-zoomed .tour-hotspot{visibility:hidden}
+.home-current{grid-template-columns:1fr}
+#page-wydarzenia .events-layout{grid-template-columns:1fr;padding-block:24px 0}
+#page-wydarzenia>.feast-panel{padding-block:24px 48px}
+@media(min-width:961px) and (max-width:1100px){.site-nav{gap:.4rem}.site-nav a:not(.nav-featured){padding-inline:.65rem}}
 /* Pełnoekranowe, wyśrodkowane menu z witryny Niedźwieccy, w barwach parafii. */
 @media(max-width:960px){
   body.menu-open .site-header{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--paper)}

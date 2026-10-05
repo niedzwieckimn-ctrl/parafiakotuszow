@@ -41,6 +41,7 @@
         <a href="#aktualnosci" data-page-link="aktualnosci">Aktualności</a>
         <a href="#wydarzenia" data-page-link="wydarzenia">Msze i intencje</a>
         <a href="#historia" data-page-link="historia">Historia</a>
+        <a href="#camino" data-page-link="camino">Dla pielgrzymów</a>
         <a href="#cmentarz" data-page-link="cmentarz">Cmentarz</a>
         <a href="#zwiedzanie" data-page-link="zwiedzanie" class="nav-featured">Zwiedzanie kościoła</a>
       </nav>
@@ -84,10 +85,6 @@
       </section>
 
       <section class="home-current shell-width" aria-label="Bieżące informacje dla parafian">
-        <div class="home-news">
-          <div class="home-section-heading"><div><p class="eyebrow">Z życia wspólnoty</p><h2>Aktualności</h2></div><a href="#aktualnosci" data-page-link="aktualnosci">Wszystkie informacje</a></div>
-          <div class="home-news-list" id="homeNewsList"><p class="home-news-empty">Ładowanie najnowszych informacji…</p></div>
-        </div>
         <aside class="home-services" aria-labelledby="home-services-title">
           <p class="eyebrow">Spotkajmy się na modlitwie</p><h2 id="home-services-title">Msze święte</h2>
           <dl class="home-mass-times"><div><dt>Niedziela · Kotuszów</dt><dd>9:00 · 12:00 · 16:00</dd></div><div><dt>Kaplica w Chańczy</dt><dd>10:30</dd></div></dl>
@@ -107,18 +104,6 @@
         </div>
         <div class="page-number" aria-hidden="true">01</div>
       </div>
-
-      <section class="intentions-section shell-width" aria-labelledby="intentions-title">
-        <div class="intentions-intro">
-          <div><p class="eyebrow">Najbliższe dni</p><h2 id="intentions-title">Msze święte i intencje</h2></div>
-          <a class="text-link" href="https://www.parafiakotuszow.pl/intencje" target="_blank" rel="noopener">Intencje w serwisie parafii</a>
-        </div>
-        <p class="intentions-status" id="intentionsStatus" role="status">Sprawdzanie najnowszych intencji…</p>
-        <label class="intention-search-label" for="intentionSearch">Szukaj w intencjach</label>
-        <input type="search" class="intention-search" id="intentionSearch" placeholder="Nazwisko lub fragment intencji" autocomplete="off">
-        <p id="intentionSearchCount" class="intentions-status" aria-live="polite"></p>
-        <div class="intentions-list" id="intentionsList"></div>
-      </section>
 
       <div class="events-layout shell-width">
         <section class="service-panel" aria-labelledby="services-title">
@@ -143,7 +128,21 @@
           <p class="verification-note">Stały porządek według <a href="https://www.parafiakotuszow.pl/" target="_blank" rel="noopener">serwisu parafii</a>. W święta i okresach szczególnych obowiązuje opublikowany plan intencji; zmiany można potwierdzić pod numerem <a href="tel:+48413540766">41 354 07 66</a>.</p>
         </section>
 
-        <section class="feast-panel" aria-labelledby="feasts-title">
+      </div>
+
+      <section class="intentions-section shell-width" aria-labelledby="intentions-title">
+        <div class="intentions-intro">
+          <div><p class="eyebrow">Najbliższe dni</p><h2 id="intentions-title">Msze święte i intencje</h2></div>
+          <a class="text-link" href="https://www.parafiakotuszow.pl/intencje" target="_blank" rel="noopener">Intencje w serwisie parafii</a>
+        </div>
+        <p class="intentions-status" id="intentionsStatus" role="status">Sprawdzanie najnowszych intencji…</p>
+        <label class="intention-search-label" for="intentionSearch">Szukaj w intencjach</label>
+        <input type="search" class="intention-search" id="intentionSearch" placeholder="Nazwisko lub fragment intencji" autocomplete="off">
+        <p id="intentionSearchCount" class="intentions-status" aria-live="polite"></p>
+        <div class="intentions-list" id="intentionsList"></div>
+      </section>
+
+        <section class="feast-panel shell-width" aria-labelledby="feasts-title">
           <div class="section-heading compact">
             <p class="eyebrow">Święta patronalne</p>
             <h2 id="feasts-title">Odpusty parafialne</h2>
@@ -159,8 +158,17 @@
             </article>
           </div>
         </section>
-      </div>
+    </section>
 
+    <section class="page-view inner-page" id="page-camino" data-page="camino" aria-labelledby="camino-title" hidden>
+      <div class="page-hero shell-width">
+        <div>
+          <p class="eyebrow">Dla pielgrzymów</p>
+          <h1 id="camino-title">El Camino</h1>
+          <p>Witaj na Drodze św. Jakuba. Zatrzymaj się w Kotuszowie.</p>
+        </div>
+        <img src="assets/muszla-jakubowa.svg" alt="" width="64" height="64">
+      </div>
       <section class="event-feature shell-width" aria-labelledby="camino-event-title">
         <img src="assets/kosciol-fasada.webp" alt="Fasada i wieża kościoła św. Jakuba w Kotuszowie" width="3083" height="4655" loading="lazy">
         <div class="event-feature-copy">
@@ -170,6 +178,11 @@
           <a class="button button-light" href="https://camino-europe.eu/en/eu/polen-en-US/jakobswege-en-US/swietokrzyska-droga-sw-jakuba-warszawa-kotuszow/swietokrzyska-droga-sw-jakuba-warszawa-stare-miasto-powsin" target="_blank" rel="noopener">Zobacz szlak</a>
         </div>
       </section>
+      <nav class="important-grid shell-width" aria-label="Przydatne dla pielgrzyma">
+        <a href="#wydarzenia" data-page-link="wydarzenia"><strong>Msze i intencje →</strong><span>Zaplanuj chwilę modlitwy w naszej świątyni.</span></a>
+        <a href="#zwiedzanie" data-page-link="zwiedzanie"><strong>Poznaj kościół →</strong><span>Rozejrzyj się i odkryj jego detale.</span></a>
+        <a href="tel:+48413540766"><strong>Kontakt z parafią →</strong><span>41 354 07 66 · Kotuszów 82</span></a>
+      </nav>
     </section>
 
     <section class="page-view inner-page" id="page-aktualnosci" data-page="aktualnosci" aria-labelledby="news-title" hidden>
