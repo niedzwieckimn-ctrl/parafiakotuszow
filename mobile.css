@@ -12,6 +12,23 @@
 .priest-period{display:block;font:.85rem/1.5 var(--sans);color:#526c46}.priests-chronology button{display:block;min-height:44px;width:100%;border:0;background:transparent;text-align:left;color:var(--ink);font:600 1.15rem/1.5 var(--sans);padding:8px 0;cursor:pointer;overflow-wrap:anywhere}
 .priest-dialog p{font:1rem/1.8 var(--sans)}.priest-close{display:block;min-height:44px;margin:0 0 24px auto;border:1px solid var(--line);padding:10px 14px;border-radius:10px;background:white;color:var(--ink);cursor:pointer}.priest-source{display:block;margin:12px 0;font-size:.9rem;overflow-wrap:anywhere}.priest-dialog .priest-source-note{font-size:.8rem;color:var(--ink-soft)}
 .tour-stage{touch-action:none}.tour-hotspots{pointer-events:none}.tour-stage.is-zoomed .tour-hotspot{visibility:hidden}
+/* Pełnoekranowe, wyśrodkowane menu z witryny Niedźwieccy, w barwach parafii. */
+@media(max-width:960px){
+  body.menu-open .site-header{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--paper)}
+  body.menu-open .header-inner>.brand,body.menu-open .menu-toggle{position:relative;z-index:2}
+  .site-nav{inset:0;z-index:0;display:grid;place-content:safe center;justify-items:center;gap:16px;height:100dvh;padding:calc(var(--header-height) + 24px) 24px max(32px,env(safe-area-inset-bottom));background:var(--paper);border:0;overflow-y:auto;overscroll-behavior:contain;transform:none;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s ease,visibility .25s}
+  .site-nav.is-open{transform:none;opacity:1;visibility:visible;pointer-events:auto}
+  .site-nav a,.site-nav .nav-featured{display:block;width:100%;min-height:44px;margin:0;padding:4px 10px;border:0;border-radius:0;background:transparent;color:var(--ink);font:400 clamp(1.7rem,6.8vw,2.6rem)/1.25 var(--serif);letter-spacing:-.025em;text-align:center;text-transform:none}
+  .site-nav a:hover,.site-nav a.is-active,.site-nav .nav-featured:hover,.site-nav .nav-featured.is-active{color:#637659;background:transparent;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:8px}
+  .site-nav a:focus-visible,.menu-toggle:focus-visible{outline:2px solid #637659;outline-offset:6px}
+  .menu-toggle{border:0;background:transparent;gap:6px;width:44px;height:44px}
+  .menu-toggle span:not(.sr-only){width:24px;height:1px;transition:transform .25s ease}
+  .menu-toggle span:nth-of-type(4){display:none}
+  .menu-toggle[aria-expanded="true"] span:nth-of-type(2){transform:translateY(3.5px) rotate(45deg)}
+  .menu-toggle[aria-expanded="true"] span:nth-of-type(3){opacity:1;transform:translateY(-3.5px) rotate(-45deg)}
+}
+@media(max-width:960px) and (max-height:600px){.site-nav{place-content:start center;gap:4px;padding-top:calc(var(--header-height) + 12px)}.site-nav a,.site-nav .nav-featured{font-size:1.5rem}}
+@media(prefers-reduced-motion:reduce){.site-nav,.menu-toggle span:not(.sr-only){transition:none}}
 @media(max-width:700px){
   .home-opening{display:flex;flex-direction:column;margin-top:0;padding:22px 0 26px;gap:18px;border-radius:0;isolation:auto;background:transparent}
   .opening-copy{width:100%;padding:4px 4px 0;border:0;border-radius:0;background:transparent;box-shadow:none}
@@ -27,6 +44,7 @@
   .history-dialog .chapter-figure img,.history-photo img,.archive-layout>img,.discover-grid img,.landscape-grid img,.history-photo-grid img,.source-gallery img,.historical-gallery img,.history-cover img,.map-card img,.aerial-history img{height:auto;max-height:none;object-fit:contain}
   .history-photo-grid figure,.source-gallery figure{min-width:0}.history-dialog{max-height:calc(100dvh - 20px);width:calc(100% - 20px);padding:24px 18px}.history-dialog h2{font-size:24px}
   .invitation{display:block}.invitation>img{height:auto;min-height:0;max-height:300px;object-fit:contain;background:#edf0e7}.memory-art{min-height:0;height:140px;flex-direction:row}.invitation small{font-size:11px}
+  #page-camino .event-feature>img{height:auto;max-height:none;object-fit:contain}
   .tour-stage{height:520px}.zoom-control{display:none}.tour-controls{grid-template-columns:48px 48px;justify-content:center}.drag-hint{display:none}.tour-note{font-size:14px;line-height:1.65}.tour-toolset .tour-text-button{font-size:12px}.scene-card img,.scene-card:last-child img{object-fit:contain;background:#e9eee3}
   .photo-viewer{width:calc(100% - 12px);max-height:calc(100dvh - 12px);padding:12px}.photo-viewer h2{font-size:15px}.photo-viewer-stage{height:65dvh}.photo-viewer header{align-items:flex-start}.photo-viewer footer p{font-size:11px}
   .intentions-section{padding-top:24px}.intention-day{padding:18px}.intention-row{grid-template-columns:64px minmax(0,1fr);gap:12px}.intention-row time{font-size:19px}.intention-row p{font-size:16px;line-height:1.7}.intention-row small{font-size:13px;margin-top:6px}

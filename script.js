@@ -9,6 +9,7 @@ import {massSchedule,matchesIntention} from './mass-schedule.mjs';
 import {attachPhotoGestures,openPhoto,setupPhotoLinks} from './photo-viewer.mjs';
 import {setupMobileHome} from './mobile-layout.mjs';
 import {setupPriests} from './priests.mjs';
+import {setupMobileMenu} from './mobile-menu.mjs';
 
 const mobileHome=setupMobileHome();
 setupPhotoLinks();
@@ -18,16 +19,18 @@ const pageTitles = {
   wydarzenia: "Msze i intencje — Parafia św. Jakuba w Kotuszowie",
   aktualnosci: "Aktualności — Parafia św. Jakuba w Kotuszowie",
   historia: "Historia — Parafia św. Jakuba w Kotuszowie",
+  camino: "El Camino — Parafia św. Jakuba w Kotuszowie",
   cmentarz: "Cmentarz — Parafia św. Jakuba w Kotuszowie",
   zwiedzanie: "Wirtualne zwiedzanie — Parafia św. Jakuba w Kotuszowie",
 };
 
-const pageLabels = { start: "Strona główna", wydarzenia: "Wydarzenia", aktualnosci: "Aktualności", historia: "Historia", cmentarz: "Cmentarz", zwiedzanie: "Wirtualne zwiedzanie" };
+const pageLabels = { start: "Strona główna", wydarzenia: "Wydarzenia", aktualnosci: "Aktualności", historia: "Historia", camino: "El Camino", cmentarz: "Cmentarz", zwiedzanie: "Wirtualne zwiedzanie" };
 const views = [...document.querySelectorAll("[data-page]")];
 const pageLinks = [...document.querySelectorAll("[data-page-link]")];
 const menuToggle = document.querySelector(".menu-toggle");
 const siteNav = document.querySelector("#siteNav");
 const routeAnnouncer = document.querySelector(".route-announcer");
+const mobileMenu = setupMobileMenu({button:menuToggle,nav:siteNav});
 
 function currentRoute() {
   const route = window.location.hash.slice(1).toLowerCase().split('/')[0];
@@ -35,10 +38,7 @@ function currentRoute() {
 }
 
 function closeMenu() {
-  siteNav.classList.remove("is-open");
-  menuToggle.setAttribute("aria-expanded", "false");
-  menuToggle.querySelector(".sr-only").textContent = "Otwórz menu";
-  document.body.classList.remove("menu-open");
+  mobileMenu.close();
 }
 
 function showPage(route, { focus = false } = {}) {
@@ -71,13 +71,6 @@ pageLinks.forEach((link) => {
   });
 });
 window.addEventListener("hashchange", () => showPage(currentRoute(), { focus: true }));
-menuToggle.addEventListener("click", () => {
-  const open = menuToggle.getAttribute("aria-expanded") !== "true";
-  menuToggle.setAttribute("aria-expanded", String(open));
-  menuToggle.querySelector(".sr-only").textContent = open ? "Zamknij menu" : "Otwórz menu";
-  siteNav.classList.toggle("is-open", open);
-  document.body.classList.toggle("menu-open", open);
-});
 document.querySelector("#backTop").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
 
 const SOURCE = {
