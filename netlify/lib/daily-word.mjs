@@ -1,7 +1,8 @@
 import {plainText} from '../functions/news.mjs';
 import {warsawDay,readingsUrl,CALENDAR_SCOPE} from '../../calendar.mjs';
+import {MEMORIAL_SOURCE,parseMemorialConfirmation,matchingReadingReferences} from './memorial-readings.mjs';
 
-export const GENERATOR_VERSION='liturgical-rules-v2';
+export const GENERATOR_VERSION='liturgical-rules-v3';
 const MONTHS=['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
 export const calendarUrl=year=>`https://gcatholic.org/calendar/${year}/PL-sand1-pl`;
 export const calendarFeed=year=>`https://gcatholic.org/calendar/ics/${year}-pl-PL-sand1.ics?v=3`;
@@ -51,10 +52,11 @@ export function parseReadings(html,date) {
   const blocks=[];let current=null;
   for(const part of body.matchAll(/<p\b[^>]*>([\s\S]*?)(?=<p\b|$)/gi)) {
     const text=plainText(part[1]);
-    const parsed=readReference(text);
+    const acclamation=/^Aklamacja\b/i.test(text);
+    const parsed=readReference(acclamation?text.replace(/^Aklamacja\s*/i,''):text);
     if(parsed) {
       if(!/^(?:[1-3]\s*)?[A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż]+\s+\d/.test(parsed.reference))throw new Error('Unexpected reference');
-      current={reference:parsed.reference,parts:[]};blocks.push(current);
+      current={reference:parsed.reference,parts:[],kind:acclamation?'acclamation':'reading'};blocks.push(current);
       if(parsed.text)current.parts.push(parsed.text.replace(/^REFREN:\s*/i,''));
     } else if(current&&text)current.parts.push(text);
   }
@@ -72,13 +74,17 @@ export function compatibleDays(calendarDay,readingsDay) {
   const required=tokens(a),source=tokens(b);
   return required.length>0&&required.every(word=>source.includes(word));
 }
-export function readingUse(day,readings,date) {
+export function readingUse(day,readings,date,confirmation=null) {
   if(compatibleDays(day.title,readings.title))return 'matching-day';
   // OWMR 358 permits weekday readings for memorials without proper NT readings.
   // A deliberately explicit allowlist: never extrapolate this rule to every memorial.
   const withoutProperNT=/faustyn.*kowalsk|wincent.*kadlubk|teres.*dzieciatka|teres.*jezusa|ignac.*antioch|jan.*kant|franciszk.*ksawer|ambroz|franciszk.*salez/;
   const weekday=['niedziela','poniedzialek','wtorek','sroda','czwartek','piatek','sobota'][new Date(date+'T12:00:00Z').getUTCDay()];
-  if(day.rank==='W'&&withoutProperNT.test(fold(day.title))&&weekday!=='niedziela'&&fold(readings.title).startsWith(weekday+' ')&&/tygodnia/.test(readings.title))return 'weekday-memorial';
+  const weekdayReadings=weekday!=='niedziela'&&fold(readings.title).startsWith(weekday+' ')&&/tygodnia/.test(readings.title);
+  if(day.rank==='W'&&weekdayReadings) {
+    if(withoutProperNT.test(fold(day.title)))return 'weekday-memorial';
+    if(confirmation?.date===date&&/^Wspomnienie\b/i.test(confirmation.title)&&compatibleDays(day.title,confirmation.title)&&matchingReadingReferences(readings,confirmation))return 'confirmed-memorial';
+  }
   return null;
 }
 export function localRestriction(date) {
@@ -169,7 +175,7 @@ export function createDailyWordService({fetcher=fetch,getStore=()=>null,now=()=>
   return async request=>{
     const today=warsawDay(now()),year=Number(today.slice(0,4));
     const headers={'Content-Type':'application/json; charset=utf-8','Cache-Control':'public, max-age=60','Netlify-CDN-Cache-Control':'public, durable, max-age=1800','Netlify-Vary':'query=date','X-Content-Type-Options':'nosniff'};
-    const respond=(body,status=200)=>new Response(request.method==='HEAD'?null:JSON.stringify(body),{status,headers:status===200?headers:{...headers,'Cache-Control':'no-store','Netlify-CDN-Cache-Control':'no-store'}});
+    const respond=(body,status=200)=>new Response(request.method==='HEAD'?null:JSON.stringify(body),{status,headers:status===200&&body.entry?headers:{...headers,'Cache-Control':'no-store','Netlify-CDN-Cache-Control':'no-store'}});
     const fallback=reason=>({date:today,entry:null,readingsUrl:readingsUrl(today),calendarUrl:calendarUrl(year)+`#${today.slice(5).replace('-','')}`,reason});
     if(!['GET','HEAD'].includes(request.method))return respond({error:'Użyj GET.'},405);
     const requested=new URL(request.url).searchParams.get('date');
@@ -189,10 +195,14 @@ export function createDailyWordService({fetcher=fetch,getStore=()=>null,now=()=>
         const [days,source]=await Promise.all([calendarPromise,boundedFetch(readingsUrl(today),fetcher,signal)]);
         const day=days[today];if(!day)throw new Error('Missing calendar day');
         const readings=parseReadings(source,today);
-        const use=readingUse(day,readings,today);
+        let use=readingUse(day,readings,today),confirmation=null;
+        if(!use&&day.rank==='W') {
+          confirmation=parseMemorialConfirmation(await boundedFetch(MEMORIAL_SOURCE,fetcher,signal),today);
+          use=readingUse(day,readings,today,confirmation);
+        }
         if(!use)return {...fallback('local-calendar-mismatch'),notice:`Kalendarz diecezji: ${day.title}. Nie potwierdzono właściwego zestawu czytań dla tego obchodu.`,fetchedAt:Date.now()};
         const composed=composeWord(readings,day,today);
-        const entry={date:today,liturgicalDay:day.title,...composed,cycle:readingCycle(today),readingsUrl:readingsUrl(today),calendarUrl:calendarUrl(year)+`#${today.slice(5).replace('-','')}`,calendarScope:CALENDAR_SCOPE,generationMethod:GENERATOR_VERSION,generatedAt:now().toISOString(),automated:true,readingUse:use,readingsDay:readings.title,calendarNote:'Automatyczne porównanie daty i głównego obchodu: Mateusz oraz kalendarz Sandomierza GCatholic. W wybranych wspomnieniach bez własnych czytań NT stosowane są czytania dnia powszedniego (OWMR 358). Znane miejscowe uroczystości wymagające własnych czytań są chronione. Nie jest to zatwierdzenie redaktora ani oficjalne Ordo.'};
+        const entry={date:today,liturgicalDay:day.title,...composed,cycle:readingCycle(today),readingsUrl:readingsUrl(today),calendarUrl:calendarUrl(year)+`#${today.slice(5).replace('-','')}`,calendarScope:CALENDAR_SCOPE,generationMethod:GENERATOR_VERSION,generatedAt:now().toISOString(),automated:true,readingUse:use,readingsDay:readings.title,...(use==='confirmed-memorial'?{confirmationUrl:confirmation.sourceUrl}:{}),calendarNote:'Automatyczne porównanie daty i głównego obchodu: Mateusz oraz kalendarz Sandomierza GCatholic. We wspomnieniach zgodność czytań dnia powszedniego jest określana przez rozpoznaną regułę (OWMR 358) lub dodatkowe potwierdzenie daty, nazwy wspomnienia i całego zestawu czytań w Opoce. Znane miejscowe uroczystości wymagające własnych czytań są chronione. Nie jest to zatwierdzenie redaktora ani oficjalne Ordo.'};
         const result={date:today,entry,fetchedAt:Date.now()};
         await store?.setJSON(key,result).catch(()=>{});
         return result;
