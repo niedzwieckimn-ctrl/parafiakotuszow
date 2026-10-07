@@ -78,7 +78,7 @@
       <section class="home-discover shell-width" aria-labelledby="home-story-title">
         <div class="home-section-heading"><div><h2 id="home-story-title">Odkryj naszą parafię</h2></div></div>
         <div class="invitation-grid">
-          <a class="invitation" href="#historia" data-page-link="historia"><img src="assets/kosciol-fasada.webp" alt="Wieża i wejście do kościoła" width="1192" height="1800" loading="lazy"><div class="invitation-copy"><h3>Historia parafii</h3><p>Ludzie, wydarzenia i ślady dawnych lat.</p><strong>Odkryj historię ↗</strong><small>Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</small></div></a>
+          <a class="invitation invitation-history" href="#historia" data-page-link="historia"><img src="assets/historia-ilustracja.webp" alt="Artystyczna ilustracja kościoła i sceny z wozem przewożącym drewno" width="1000" height="500" loading="lazy"><div class="invitation-copy"><h3>Historia parafii</h3><p>Ludzie, wydarzenia i ślady dawnych lat.</p><strong>Odkryj historię ↗</strong><small>Ilustracja</small></div></a>
           <a class="invitation" href="#zwiedzanie" data-page-link="zwiedzanie"><img src="assets/kosciol-wnetrze.webp" alt="Nawa i ołtarz kościoła" width="1800" height="1200" loading="lazy"><div class="invitation-copy"><h3>Wejdź do kościoła</h3><p>Rozejrzyj się i poznaj jego piękne detale.</p><strong>Rozpocznij zwiedzanie ↗</strong><small>Fot. Łukasz Bakuła · CC BY-SA 3.0 PL</small></div></a>
           <a class="invitation invitation-memory" href="#cmentarz" data-page-link="cmentarz"><div class="memory-art" aria-hidden="true"><span>✝</span><img src="assets/muszla-jakubowa.svg" alt="" width="64" height="64"></div><div class="invitation-copy"><h3>Cmentarz parafialny</h3><p>Miejsce pamięci o naszych bliskich.</p><strong>Wyszukaj grób ↗</strong></div></a>
         </div>
@@ -399,7 +399,31 @@
         <div class="page-number" aria-hidden="true">04</div>
       </div>
 
-      <section class="tour-shell shell-width" aria-label="Interaktywny spacer po kościele">
+      <div class="tour-mode-switch shell-width" role="group" aria-label="Sposób zwiedzania" data-google-tour-demo>
+        <button id="photoTourMode" type="button" aria-pressed="true" aria-controls="photoTourPanel">Kościół i wnętrze</button>
+        <button id="googleTourMode" type="button" aria-pressed="false" aria-controls="googleTourPanel">Przed kościołem · 360°</button>
+      </div>
+
+      <section class="google-tour shell-width" id="googleTourPanel" aria-labelledby="googleTourTitle" data-google-tour-demo hidden>
+        <div class="google-tour-heading">
+          <div><h2 id="googleTourTitle">Rozejrzyj się przed kościołem</h2><p>Google Street View · marzec 2024</p></div>
+          <button id="stopGoogleTour" class="google-tour-stop" type="button" hidden>Wyłącz widok Google</button>
+        </div>
+        <div class="google-tour-stage">
+          <div class="google-tour-preview" id="googleTourPreview">
+            <img src="assets/kosciol-brama.webp" alt="Kościół św. Jakuba widziany przez bramę" width="1800" height="1200" loading="lazy">
+            <div><button id="loadGoogleTour" class="button button-primary" type="button">Uruchom panoramę Google</button><p>Uruchomienie widoku łączy z Google.</p></div>
+            <p class="google-preview-credit">Zdjęcie podglądu: EwaRóża · CC BY-SA 3.0</p>
+          </div>
+          <iframe id="googleTourFrame" title="Panorama 360° sprzed kościoła św. Jakuba w Kotuszowie — Google Street View" allowfullscreen referrerpolicy="strict-origin-when-cross-origin" hidden></iframe>
+        </div>
+        <div class="google-tour-links">
+          <a id="googlePanoramaLink" target="_blank" rel="noopener noreferrer">Otwórz panoramę w Google Maps ↗</a>
+          <a id="googleGalleryLink" target="_blank" rel="noopener noreferrer">Zdjęcia kościoła w Google Maps ↗</a>
+        </div>
+      </section>
+
+      <section class="tour-shell shell-width" id="photoTourPanel" aria-label="Interaktywny spacer po kościele">
         <div class="tour-stage" id="tourStage" tabindex="0" aria-label="Widok wirtualnego spaceru. Użyj strzałek w lewo i w prawo, aby zmienić przystanek.">
           <img id="tourImage" src="assets/kosciol-brama.webp" alt="Widok kościoła przez zabytkową bramę" draggable="false">
           <div id="tourHotspots" class="tour-hotspots" aria-label="Klikalne punkty w widoku kościoła"></div>
@@ -441,6 +465,7 @@
 
         <div class="scene-picker" id="scenePicker" role="list" aria-label="Wybierz przystanek zwiedzania"></div>
         <p class="tour-note">Na telefonie powiększaj zdjęcie dwoma palcami.</p>
+        <p class="google-photo-link" data-google-tour-demo><a id="googlePhotoGalleryLink" target="_blank" rel="noopener noreferrer">Zobacz także zdjęcia kościoła w Google Maps ↗</a></p>
       </section>
     </section>
   </main>

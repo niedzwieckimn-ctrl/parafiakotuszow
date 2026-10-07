@@ -27,11 +27,13 @@ Zapis nadal odbywa się wyłącznie server-side. Dotychczasowy fine-grained GitH
 
 ## Słowo na dziś
 
-Generator `liturgical-rules-v2` pozostaje darmowym mechanizmem regułowym, nie zewnętrznym modelem AI. Korzysta z rzeczywistych źródeł właściwej daty w Europe/Warsaw, z porównaniem kalendarza i ochroną znanych obchodów lokalnych. Uwzględnia kilka rozpoznanych tematów Ewangelii, więcej wariantów językowych i treść cytatu. To zwiększa różnorodność; nie jest obietnicą niepowtarzalnego rozważania na każdą datę.
+Generator `liturgical-rules-v3` pozostaje darmowym mechanizmem regułowym, nie zewnętrznym modelem AI. Korzysta z rzeczywistych źródeł właściwej daty w Europe/Warsaw, z porównaniem kalendarza i ochroną znanych obchodów lokalnych. Uwzględnia kilka rozpoznanych tematów Ewangelii, więcej wariantów językowych i treść cytatu. To zwiększa różnorodność; nie jest obietnicą niepowtarzalnego rozważania na każdą datę.
+
+Wersja 13 naprawia brak wpisu 7 października 2026: przy wspomnieniach, których nagłówek różni się od nagłówka czytań dnia powszedniego, dodatkowo sprawdza datę, nazwę wspomnienia i wszystkie sygnatury czytań w [Opoce](https://opoka.org.pl/liturgia). Nie pomija walidacji świąt, uroczystości ani obchodów własnych parafii. Aklamacja jest oddzielona od psalmu, aby cytat nie otrzymał oznaczenia innej księgi. Brak wpisu nie jest przechowywany w CDN jako wynik na pół godziny.
 
 Bez wiarygodnego wpisu pozostaje wyłącznie odnośnik do bieżących czytań. Nie wraca cytat z poprzedniego dnia. Dostępność źródeł na kolejne lata pozostaje warunkiem działania. Sprawdzona ręczna poprawka ma pierwszeństwo. Podpis „Myśl na dziś” oddziela autorską refleksję od dosłownego cytatu; publiczny ekran nie zawiera dopisków technicznych.
 
-Frontend używa nowej ścieżki `/api/slowo-na-dzis/v2`, aby po wdrożeniu nie otrzymać wyniku poprzedniego generatora z trwałego cache CDN. Stary odnośnik API pozostaje kompatybilny. Obie ścieżki są przekierowane w `netlify.toml` do tej samej funkcji; niczego nie trzeba ustawiać ręcznie w panelu Netlify. Zasady cache oparto na [dokumentacji Netlify](https://docs.netlify.com/build/caching/caching-overview/).
+Frontend używa nowej ścieżki `/api/slowo-na-dzis/v3`, aby po wdrożeniu nie otrzymać wyniku poprzedniego generatora z trwałego cache CDN. Starsze ścieżki API pozostają dostępne. Wszystkie ścieżki są przekierowane w `netlify.toml` do tej samej funkcji; nie są potrzebne nowe zmienne ENV ani ręczne wpisy na każdy dzień. Wgraj wszystkie pliki z paczki do repozytorium i zaczekaj na ukończenie deployu Netlify, następnie odśwież stronę. Zasady cache oparto na [dokumentacji Netlify](https://docs.netlify.com/build/caching/caching-overview/).
 
 ## Materiał lotniczy 1944
 

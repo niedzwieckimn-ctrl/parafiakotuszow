@@ -1,7 +1,7 @@
 import {selectDailyWord,warsawDay,readingsUrl,CALENDAR_SCOPE} from './calendar.mjs';
-export const DAILY_WORD_ENDPOINT='/api/slowo-na-dzis/v2';
+export const DAILY_WORD_ENDPOINT='/api/slowo-na-dzis/v3';
 export function validAutomaticWord(entry,date) {
-  return !!(entry&&entry.date===date&&entry.automated===true&&entry.generationMethod==='liturgical-rules-v2'&&entry.calendarScope===CALENDAR_SCOPE&&entry.readingsUrl===readingsUrl(date)&&entry.calendarUrl===`https://gcatholic.org/calendar/${date.slice(0,4)}/PL-sand1-pl#${date.slice(5).replace('-','')}`&&['title','liturgicalDay','quote','reference','reflection','cycle'].every(key=>typeof entry[key]==='string'&&entry[key].trim()&&entry[key].length<=1200)&&entry.quote.split(/\s+/).length<=25);
+  return !!(entry&&entry.date===date&&entry.automated===true&&entry.generationMethod==='liturgical-rules-v3'&&entry.calendarScope===CALENDAR_SCOPE&&entry.readingsUrl===readingsUrl(date)&&entry.calendarUrl===`https://gcatholic.org/calendar/${date.slice(0,4)}/PL-sand1-pl#${date.slice(5).replace('-','')}`&&['title','liturgicalDay','quote','reference','reflection','cycle'].every(key=>typeof entry[key]==='string'&&entry[key].trim()&&entry[key].length<=1200)&&entry.quote.split(/\s+/).length<=25);
 }
 export function displayedWord(manual,automatic,now=new Date()) {
   const selected=selectDailyWord(manual,now);

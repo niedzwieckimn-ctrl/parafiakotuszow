@@ -55,7 +55,7 @@ await mkdir(join(root, 'data'), { recursive: true });
 await writeFile(join(root, 'data', 'admin-content.json'), JSON.stringify(data, null, 2) + '\n');
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });
-for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'mobile.css', 'script.js', 'public-links.mjs', 'photo-viewer.mjs', 'mass-schedule.mjs', 'priests.mjs', 'mobile-layout.mjs', 'mobile-menu.mjs', 'community-album.mjs', 'daily-word-client.mjs', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
+for (const filename of ['index.html', 'styles.css', 'home.css', 'tour.css', 'mobile.css', 'script.js', 'public-links.mjs', 'google-tour.mjs', 'photo-viewer.mjs', 'mass-schedule.mjs', 'priests.mjs', 'mobile-layout.mjs', 'mobile-menu.mjs', 'community-album.mjs', 'daily-word-client.mjs', 'tour-hotspots.mjs', 'journey.mjs', 'church-photos.mjs', 'calendar.mjs', 'history-chapters.mjs', 'robots.txt', 'ZRODLA-I-LICENCJE.md', 'PRAWA-DO-NOWYCH-ZDJEC.md']) {
   await cp(join(root, filename), join(output, filename));
 }
 for (const folder of ['assets', 'data']) {

@@ -11,6 +11,7 @@ import {setupMobileHome} from './mobile-layout.mjs';
 import {setupPriests} from './priests.mjs';
 import {setupMobileMenu} from './mobile-menu.mjs';
 import {safeSourceUrl} from './public-links.mjs';
+import {setupGoogleTour} from './google-tour.mjs';
 
 const mobileHome=setupMobileHome();
 setupPhotoLinks();
@@ -761,6 +762,7 @@ async function loadIntentions() {
 }
 
 showPage(currentRoute());
+setupGoogleTour({onModeChange:()=>stopAutoTour()});
 renderScenePicker();
 setScene(0);
 let municipalLoaded=false;

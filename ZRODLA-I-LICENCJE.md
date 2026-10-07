@@ -1,6 +1,10 @@
 # Źródła informacji i licencje
 
-Stan opracowania: 3 października 2026 r.
+Pierwotne opracowanie: 3 października 2026 r. Ilustrację kafelka historii dodano 7 października 2026 r.
+
+## Ilustracja kafelka historii — 7 października 2026
+
+`assets/historia-ilustracja.webp` jest kopią obrazu PNG przekazanego przez użytkownika (`exec-a8727f81-2eef-4506-a8c4-48891959d0c3.png`, 1774 × 887 px). Mechanicznie zmniejszono go do 1000 × 500 px i zapisano jako WebP dla szybszego ładowania; nie retuszowano ani nie generowano elementów obrazu. Ilustracja jest użyta wyłącznie w kafelku historii na stronie głównej. Nie jest fotografią archiwalną ani dokumentem wyglądu miejscowości w konkretnym okresie. Autor i licencja nie zostali podani; nie przypisano autorstwa fotografa zastąpionego zdjęcia ani licencji CC. Oryginalne zdjęcie fasady zachowano w zasobach i pozostałych miejscach witryny.
 
 ## Uzupełnienia wersji 3
 
